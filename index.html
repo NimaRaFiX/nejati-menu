@@ -2,111 +2,21 @@
 <html lang="fa" dir="rtl">
 
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<meta name="theme-color"
-      content="#6b3908">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#6b3908">
 
 <title>کافه رستوران نجاتی</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap"
+rel="stylesheet">
 
 <style>
-/* ==============================
-   FONT
-============================== */
-
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap');
-
-
-*{
-    font-family: 'Vazirmatn', sans-serif;
-}
-
-
-/* عنوان اصلی */
-
-.page-title h1{
-    font-family:'Vazirmatn', sans-serif;
-    font-weight:800;
-    letter-spacing:-0.5px;
-}
-
-
-/* زیرعنوان */
-
-.page-title p{
-    font-family:'Vazirmatn', sans-serif;
-    font-weight:400;
-}
-
-
-/* عنوان دسته‌بندی */
-
-.section-title{
-    font-family:'Vazirmatn', sans-serif;
-    font-weight:800;
-    letter-spacing:-0.4px;
-}
-
-
-/* اسم غذا */
-
-.food-name{
-    font-family:'Vazirmatn', sans-serif;
-    font-weight:700;
-    letter-spacing:-0.3px;
-}
-
-
-/* توضیحات */
-
-.food-description{
-    font-family:'Vazirmatn', sans-serif;
-    font-weight:400;
-}
-
-
-/* قیمت */
-
-.price{
-    font-family:'Vazirmatn', sans-serif;
-    font-weight:800;
-    letter-spacing:-0.3px;
-}
-
-
-/* دسته‌بندی‌های سمت راست */
-
-.category-title{
-    font-family:'Vazirmatn', sans-serif;
-    font-weight:700;
-}
-
-.category-en{
-    font-family:Arial, sans-serif;
-}
-
-
-/* اینستاگرام */
-
-.instagram-text strong{
-    font-family:'Vazirmatn', sans-serif;
-    font-weight:700;
-}
-
-
-/* فوتر */
-
-.footer{
-    font-family:'Vazirmatn', sans-serif;
-}
-/* =====================================================
-   RESET
-===================================================== */
 
 *{
     margin:0;
@@ -118,1160 +28,637 @@ html{
     scroll-behavior:smooth;
 }
 
-body{
-
-    background:
-        linear-gradient(
-            135deg,
-            #5a2f05 0%,
-            #704000 45%,
-            #5b3005 100%
-        );
-
-    color:#fff;
-
-    font-family:
-        Tahoma,
-        Arial,
-        sans-serif;
-
-    min-height:100vh;
-
-}
-
-
-/* =====================================================
-   VARIABLES
-===================================================== */
-
 :root{
-
     --brown-dark:#4b2603;
-
     --brown:#673604;
-
     --brown-light:#7c4308;
-
     --gold:#e0a84d;
-
     --gold-light:#f0c36b;
-
-    --cream:#fff2d8;
-
-    --muted:#d5b98d;
-
-    --card:#754005;
-
-    --card-hover:#824807;
-
-    --border:rgba(255,218,157,.12);
-
 }
 
+body{
+    background:linear-gradient(
+        135deg,
+        #5a2f05 0%,
+        #704000 45%,
+        #5b3005 100%
+    );
+    color:#fff;
+    font-family:'Vazirmatn',sans-serif;
+    min-height:100vh;
+}
 
-/* =====================================================
-   TOP BAR
-===================================================== */
+/* ================= TOPBAR ================= */
 
 .topbar{
-
     position:fixed;
-
     top:0;
     right:0;
     left:0;
-
     height:74px;
-
-    background:
-        rgba(82,42,3,.96);
-
-    border-bottom:
-        1px solid
-        rgba(255,211,130,.12);
-
+    background:rgba(82,42,3,.96);
+    border-bottom:1px solid rgba(255,211,130,.12);
     display:flex;
-
     align-items:center;
-
     justify-content:center;
-
     z-index:1000;
-
     backdrop-filter:blur(12px);
-
 }
-
-
-/* =====================================================
-   LOGO
-===================================================== */
 
 .logo-box{
-
     position:absolute;
-
     right:50%;
-
-    transform:
-        translateX(50%);
-
+    transform:translateX(50%);
     display:flex;
-
     flex-direction:column;
-
     align-items:center;
-
     justify-content:center;
-
 }
-
 
 .logo{
-
     width:46px;
-
     height:46px;
-
     border-radius:50%;
-
     background:#f7eee0;
-
-    border:
-        3px solid
-        var(--gold);
-
+    border:3px solid var(--gold);
     overflow:hidden;
-
     display:flex;
-
     align-items:center;
-
     justify-content:center;
-
 }
-
 
 .logo img{
-
     width:100%;
-
     height:100%;
-
     object-fit:contain;
-
 }
-
 
 .logo-placeholder{
-
     color:#754005;
-
     font-size:8px;
-
     text-align:center;
-
     line-height:1.5;
-
 }
-
 
 .brand-name{
-
     margin-top:2px;
-
     font-size:9px;
-
-    font-weight:bold;
-
+    font-weight:800;
     color:#fff1d2;
-
 }
 
-
-/* =====================================================
-   SIDE BAR
-===================================================== */
+/* ================= SIDEBAR ================= */
 
 .sidebar{
-
     position:fixed;
-
     top:74px;
-
     right:0;
-
     bottom:0;
-
     width:82px;
-
-    background:
-        rgba(69,34,2,.96);
-
-    border-left:
-        1px solid
-        rgba(255,220,150,.08);
-
+    background:rgba(69,34,2,.96);
+    border-left:1px solid rgba(255,220,150,.08);
     z-index:900;
-
     overflow-y:auto;
-
     scrollbar-width:none;
-
 }
-
 
 .sidebar::-webkit-scrollbar{
-
     display:none;
-
 }
-
 
 .category{
-
     width:100%;
-
     min-height:82px;
-
     border:0;
-
-    border-bottom:
-        1px solid
-        rgba(255,255,255,.035);
-
+    border-bottom:1px solid rgba(255,255,255,.035);
     background:transparent;
-
     color:#fff;
-
     cursor:pointer;
-
     display:flex;
-
     flex-direction:column;
-
     align-items:center;
-
     justify-content:center;
-
     gap:4px;
-
     transition:.2s ease;
-
 }
-
 
 .category:hover{
-
-    background:
-        rgba(255,190,76,.08);
-
+    background:rgba(255,190,76,.08);
 }
-
 
 .category.active{
-
-    background:
-        linear-gradient(
-            180deg,
-            #804706,
-            #6b3804
-        );
-
-    box-shadow:
-        inset -3px 0 0
-        var(--gold);
-
+    background:linear-gradient(
+        180deg,
+        #804706,
+        #6b3804
+    );
+    box-shadow:inset -3px 0 0 var(--gold);
 }
-
 
 .category-icon{
-
     width:35px;
-
     height:35px;
-
     border-radius:11px;
-
     display:flex;
-
     align-items:center;
-
     justify-content:center;
-
     font-size:23px;
-
-    color:#ffd889;
-
 }
-
 
 .category-title{
-
     font-size:10px;
-
-    font-weight:bold;
-
+    font-weight:700;
     white-space:nowrap;
-
 }
-
 
 .category-en{
-
+    font-family:Arial,sans-serif;
     font-size:7px;
-
     color:#bda075;
-
     direction:ltr;
-
 }
 
-
-/* =====================================================
-   MAIN
-===================================================== */
+/* ================= MAIN ================= */
 
 .main{
-
     margin-right:82px;
-
     padding-top:74px;
-
     min-height:100vh;
-
 }
-
 
 .container{
-
     width:100%;
-
     max-width:1050px;
-
     margin:auto;
-
-    padding:
-        26px 28px 45px;
-
+    padding:26px 28px 45px;
 }
 
-
-/* =====================================================
-   PAGE TITLE
-===================================================== */
+/* ================= TITLE ================= */
 
 .page-title{
-
     width:100%;
-
     text-align:center;
-
-    background:
-        rgba(87,43,3,.78);
-
+    background:rgba(87,43,3,.78);
     border-radius:9px;
-
-    border:
-        1px solid
-        rgba(255,220,150,.07);
-
+    border:1px solid rgba(255,220,150,.07);
     padding:8px;
-
     margin-bottom:19px;
-
 }
-
 
 .page-title h1{
-
     font-size:23px;
-
+    font-weight:800;
     color:#fff8e8;
-
 }
-
 
 .page-title p{
-
     margin-top:4px;
-
     color:#c9a878;
-
     font-size:10px;
-
 }
 
-
-/* =====================================================
-   CATEGORY TITLE
-===================================================== */
+/* ================= SECTION ================= */
 
 .menu-section{
-
     margin-bottom:29px;
-
 }
-
 
 .section-title{
-
     height:38px;
-
     display:flex;
-
     align-items:center;
-
     justify-content:center;
-
     border-radius:9px;
-
-    background:
-        rgba(83,41,2,.72);
-
+    background:rgba(83,41,2,.72);
     color:#fff6e4;
-
     font-size:19px;
-
-    font-weight:bold;
-
+    font-weight:800;
     margin-bottom:14px;
-
-    border:
-        1px solid
-        rgba(255,220,150,.06);
-
+    border:1px solid rgba(255,220,150,.06);
 }
 
-
-/* =====================================================
-   MENU GRID
-===================================================== */
+/* ================= GRID ================= */
 
 .menu-grid{
-
     display:grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0,1fr));
-
+    grid-template-columns:repeat(2,minmax(0,1fr));
     gap:18px;
-
 }
 
-
-/* =====================================================
-   MENU CARD
-===================================================== */
+/* ================= NORMAL CARD ================= */
 
 .menu-card{
-
     position:relative;
-
     min-height:135px;
-
     display:flex;
-
     flex-direction:row;
-
     overflow:hidden;
-
     border-radius:13px;
+    background:linear-gradient(
+        135deg,
+        #774006,
+        #683604
+    );
+    border:1px solid rgba(255,214,143,.07);
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+    transition:transform .2s ease, background .2s ease;
+}
 
+.menu-card:hover{
+    transform:translateY(-2px);
+    background:linear-gradient(
+        135deg,
+        #824708,
+        #703a05
+    );
+}
+
+/* ================= NORMAL IMAGE ================= */
+
+.food-image{
+    width:120px;
+    min-width:120px;
+    height:135px;
+    overflow:hidden;
+    background:#492702;
+}
+
+.food-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform .3s ease;
+}
+
+.menu-card:hover .food-image img{
+    transform:scale(1.04);
+}
+
+/* ================= INFO ================= */
+
+.food-info{
+    flex:1;
+    min-width:0;
+    padding:15px 14px 12px;
+    display:flex;
+    flex-direction:column;
+}
+
+.food-name{
+    color:#fff4df;
+    font-size:17px;
+    font-weight:700;
+    line-height:1.5;
+    margin-bottom:6px;
+}
+
+.food-description{
+    color:#d7bb91;
+    font-size:10px;
+    line-height:1.9;
+    flex:1;
+}
+
+.food-bottom{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-top:8px;
+}
+
+.price{
+    color:#fff4d6;
+    font-size:13px;
+    font-weight:800;
+    white-space:nowrap;
+}
+
+.add-button{
+    width:30px;
+    height:30px;
+    border:0;
+    border-radius:7px;
+    background:#4c2904;
+    color:#fff;
+    font-size:20px;
+    line-height:30px;
+    cursor:pointer;
+}
+
+.add-button:hover{
+    background:var(--gold);
+    color:#4d2803;
+}
+
+.add-button:disabled{
+    opacity:.35;
+    cursor:not-allowed;
+}
+
+/* ================= BADGE ================= */
+
+.badge{
+    position:absolute;
+    top:0;
+    right:0;
+    padding:5px 12px;
+    background:#e53030;
+    color:white;
+    font-size:9px;
+    border-radius:0 0 0 8px;
+    z-index:3;
+}
+
+.badge.special{
+    background:#dca33f;
+    color:#432200;
+}
+
+/* ================= HOOKAH CARD ================= */
+/* قلیان بدون عکس */
+
+.hookah-card{
+    position:relative;
+    min-height:115px;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    overflow:hidden;
+    border-radius:13px;
+    padding:18px 22px;
     background:
         linear-gradient(
             135deg,
             #774006,
             #683604
         );
-
-    border:
-        1px solid
-        rgba(255,214,143,.07);
-
-    box-shadow:
-        0 8px 20px
-        rgba(0,0,0,.12);
-
-    transition:
-        transform .2s ease,
-        background .2s ease;
-
+    border:1px solid rgba(255,214,143,.07);
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+    transition:transform .2s ease, background .2s ease;
 }
 
-
-.menu-card:hover{
-
-    transform:
-        translateY(-2px);
-
+.hookah-card:hover{
+    transform:translateY(-2px);
     background:
         linear-gradient(
             135deg,
             #824708,
             #703a05
         );
-
 }
 
-
-/* =====================================================
-   IMAGE
-===================================================== */
-
-.food-image{
-
-    width:120px;
-
-    min-width:120px;
-
-    height:135px;
-
-    overflow:hidden;
-
-    background:#492702;
-
-}
-
-
-.food-image img{
-
+.hookah-card .food-info{
+    padding:0;
     width:100%;
-
-    height:100%;
-
-    object-fit:cover;
-
-    display:block;
-
-    transition:
-        transform .3s ease;
-
 }
 
-
-.menu-card:hover
-.food-image img{
-
-    transform:scale(1.04);
-
-}
-
-
-/* =====================================================
-   INFO
-===================================================== */
-
-.food-info{
-
-    flex:1;
-
-    min-width:0;
-
-    padding:
-        15px 14px
-        12px;
-
-    display:flex;
-
-    flex-direction:column;
-
-}
-
-
-.food-name{
-
-    color:#fff4df;
-
-    font-size:17px;
-
-    font-weight:bold;
-
-    line-height:1.5;
-
+.hookah-card .food-name{
+    font-size:18px;
     margin-bottom:6px;
-
 }
 
-
-.food-description{
-
-    color:#d7bb91;
-
+.hookah-card .food-description{
     font-size:10px;
-
     line-height:1.9;
-
-    flex:1;
-
 }
 
-
-.food-bottom{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    gap:8px;
-
-    margin-top:8px;
-
+.hookah-card .food-bottom{
+    margin-top:12px;
 }
 
-
-.price{
-
-    color:#fff4d6;
-
-    font-size:13px;
-
-    font-weight:bold;
-
-    white-space:nowrap;
-
+.hookah-card .price{
+    font-size:14px;
 }
 
-
-.add-button{
-
-    width:30px;
-
-    height:30px;
-
-    border:0;
-
-    border-radius:7px;
-
-    background:
-        #4c2904;
-
-    color:#fff;
-
-    font-size:20px;
-
-    line-height:30px;
-
-    cursor:pointer;
-
-    transition:.2s ease;
-
-}
-
-
-.add-button:hover{
-
-    background:
-        var(--gold);
-
-    color:#4d2803;
-
-}
-
-
-.add-button:active{
-
-    transform:scale(.9);
-
-}
-
-
-/* =====================================================
-   BADGE
-===================================================== */
-
-.badge{
-
-    position:absolute;
-
-    top:0;
-
-    right:0;
-
-    padding:
-        5px 12px;
-
-    background:#e53030;
-
-    color:white;
-
-    font-size:9px;
-
-    border-radius:
-        0 0 0 8px;
-
-    z-index:3;
-
-}
-
-
-.badge.special{
-
-    background:
-        #dca33f;
-
-    color:#432200;
-
-}
-
-
-/* =====================================================
-   INSTAGRAM
-===================================================== */
+/* ================= INSTAGRAM ================= */
 
 .instagram{
-
-    margin:
-        25px auto 0;
-
+    margin:25px auto 0;
     max-width:400px;
-
     min-height:55px;
-
     border-radius:11px;
-
-    background:
-        rgba(77,38,2,.65);
-
-    border:
-        1px solid
-        rgba(255,211,130,.1);
-
+    background:rgba(77,38,2,.65);
+    border:1px solid rgba(255,211,130,.1);
     color:#fff0d0;
-
     text-decoration:none;
-
     display:flex;
-
     align-items:center;
-
     justify-content:center;
-
     gap:10px;
-
-    transition:.2s ease;
-
 }
-
-
-.instagram:hover{
-
-    background:
-        rgba(104,54,4,.9);
-
-}
-
 
 .instagram-icon{
-
     font-size:22px;
-
     color:#e4ae59;
-
 }
-
 
 .instagram-text{
-
     display:flex;
-
     flex-direction:column;
-
     align-items:center;
-
     gap:2px;
-
 }
-
 
 .instagram-text strong{
-
     font-size:10px;
-
 }
-
 
 .instagram-text span{
-
     direction:ltr;
-
     font-size:10px;
-
     color:#d8b583;
-
 }
-
-
-/* =====================================================
-   FOOTER
-===================================================== */
 
 .footer{
-
     text-align:center;
-
     margin-top:25px;
-
     color:#a78961;
-
     font-size:9px;
-
 }
 
+.loading{
+    text-align:center;
+    padding:30px;
+    color:#e0c49b;
+    font-size:12px;
+}
 
-/* =====================================================
-   MOBILE
-===================================================== */
+.error{
+    text-align:center;
+    padding:25px;
+    color:#ffb0a8;
+    background:rgba(180,30,20,.15);
+    border-radius:10px;
+    font-size:12px;
+}
+
+/* ================= MOBILE ================= */
 
 @media(max-width:700px){
 
-    body{
-
-        background:
-            linear-gradient(
-                135deg,
-                #603205,
-                #713d06
-            );
-
-    }
-
-
     .topbar{
-
         height:65px;
-
     }
-
 
     .main{
-
         margin-right:0;
-
-        padding-top:65px;
-
+        padding-top:141px;
     }
-
-
-    /* ---------------------------------------------
-       MOBILE CATEGORY BAR
-    --------------------------------------------- */
 
     .sidebar{
-
-        position:fixed;
-
         top:65px;
-
         right:0;
-
         left:0;
-
         bottom:auto;
-
         width:100%;
-
         height:76px;
-
         display:flex;
-
         flex-direction:row;
-
         overflow-x:auto;
-
         overflow-y:hidden;
-
         border-left:0;
-
-        border-bottom:
-            1px solid
-            rgba(255,220,150,.08);
-
-        background:
-            rgba(67,33,2,.98);
-
-        scrollbar-width:none;
-
+        border-bottom:1px solid rgba(255,220,150,.08);
     }
-
-
-    .sidebar::-webkit-scrollbar{
-
-        display:none;
-
-    }
-
 
     .category{
-
         min-width:78px;
-
         width:78px;
-
         height:76px;
-
         min-height:76px;
-
         flex-shrink:0;
-
         border-bottom:0;
-
-        border-left:
-            1px solid
-            rgba(255,255,255,.035);
-
+        border-left:1px solid rgba(255,255,255,.035);
     }
-
 
     .category.active{
-
-        box-shadow:
-            inset 0 -3px 0
-            var(--gold);
-
+        box-shadow:inset 0 -3px 0 var(--gold);
     }
-
 
     .category-icon{
-
         width:30px;
-
         height:30px;
-
         font-size:21px;
-
     }
-
 
     .category-title{
-
         font-size:9px;
-
     }
-
 
     .category-en{
-
         font-size:6px;
-
     }
-
-
-    .main{
-
-        padding-top:
-            calc(65px + 76px);
-
-    }
-
 
     .container{
-
-        padding:
-            16px 10px 35px;
-
+        padding:16px 10px 35px;
     }
-
-
-    .page-title{
-
-        margin-bottom:14px;
-
-        padding:8px 5px;
-
-    }
-
 
     .page-title h1{
-
         font-size:20px;
-
     }
-
-
-    .page-title p{
-
-        font-size:9px;
-
-    }
-
 
     .section-title{
-
-        height:36px;
-
         font-size:17px;
-
-        margin-bottom:11px;
-
     }
-
-
-    /* ---------------------------------------------
-       ONE COLUMN ON MOBILE
-    --------------------------------------------- */
 
     .menu-grid{
-
         grid-template-columns:1fr;
-
         gap:10px;
-
     }
-
 
     .menu-card{
-
         min-height:116px;
-
     }
-
 
     .food-image{
-
         width:105px;
-
         min-width:105px;
-
         height:116px;
-
     }
-
 
     .food-info{
-
-        padding:
-            11px 11px 9px;
-
+        padding:11px;
     }
-
 
     .food-name{
-
         font-size:14px;
-
-        margin-bottom:3px;
-
     }
-
 
     .food-description{
-
         font-size:9px;
-
         line-height:1.7;
-
     }
-
 
     .price{
-
         font-size:11px;
-
     }
 
-
-    .add-button{
-
-        width:28px;
-
-        height:28px;
-
-        line-height:28px;
-
-        font-size:18px;
-
+    /* قلیان در موبایل */
+    .hookah-card{
+        min-height:105px;
+        padding:15px;
     }
 
-
-    .badge{
-
-        font-size:8px;
-
-        padding:
-            4px 9px;
-
+    .hookah-card .food-info{
+        padding:0;
     }
 
+    .hookah-card .food-name{
+        font-size:15px;
+    }
 
+    .hookah-card .food-description{
+        font-size:9px;
+    }
+
+    .hookah-card .price{
+        font-size:12px;
+    }
 }
-
-
-/* =====================================================
-   VERY SMALL MOBILE
-===================================================== */
 
 @media(max-width:380px){
 
     .category{
-
         min-width:72px;
-
         width:72px;
-
     }
-
 
     .food-image{
-
         width:92px;
-
         min-width:92px;
-
     }
-
 
     .food-name{
-
         font-size:13px;
-
     }
 
-
-    .food-description{
-
-        font-size:8px;
-
+    .hookah-card .food-name{
+        font-size:14px;
     }
-
-
-    .price{
-
-        font-size:10px;
-
-    }
-
 }
 
 </style>
-
 </head>
-
-
 
 <body>
 
-
-<!-- ==================================================
-     TOP BAR
-================================================== -->
+<!-- ================= TOPBAR ================= -->
 
 <header class="topbar">
-
 
     <div class="logo-box">
 
         <div class="logo">
 
             <img
-                src="logo.jpg"
+                src="images/logo.jpg"
                 alt="لوگوی کافه رستوران نجاتی"
                 onerror="
                     this.style.display='none';
-                    this.parentElement.innerHTML=
-                    '<div class=\'logo-placeholder\'>LOGO<br>نجاتی</div>';
+                    this.parentElement.innerHTML =
+                    '<div class=&quot;logo-placeholder&quot;>LOGO<br>نجاتی</div>';
                 "
             >
 
@@ -1283,1192 +670,131 @@ body{
 
     </div>
 
-
 </header>
 
 
-
-<!-- ==================================================
-     SIDEBAR
-================================================== -->
+<!-- ================= CATEGORIES ================= -->
 
 <nav class="sidebar">
 
-
-    <button
-        class="category active"
-        onclick="showCategory('food')"
-    >
-
-        <div class="category-icon">
-            🍽️
-        </div>
-
-        <div class="category-title">
-            غذای اصلی
-        </div>
-
-        <div class="category-en">
-            Main Food
-        </div>
-
+    <button class="category active"
+        onclick="showCategory('food',this)">
+        <div class="category-icon">🍽️</div>
+        <div class="category-title">غذای اصلی</div>
+        <div class="category-en">Main Food</div>
     </button>
 
-
-
-    <button
-        class="category"
-        onclick="showCategory('fastfood')"
-    >
-
-        <div class="category-icon">
-            🍔
-        </div>
-
-        <div class="category-title">
-            فست‌فود
-        </div>
-
-        <div class="category-en">
-            Fast Food
-        </div>
-
+    <button class="category"
+        onclick="showCategory('fastfood',this)">
+        <div class="category-icon">🍔</div>
+        <div class="category-title">فست‌فود</div>
+        <div class="category-en">Fast Food</div>
     </button>
 
-
-
-    <button
-        class="category"
-        onclick="showCategory('breakfast')"
-    >
-
-        <div class="category-icon">
-            🍳
-        </div>
-
-        <div class="category-title">
-            صبحانه
-        </div>
-
-        <div class="category-en">
-            Breakfast
-        </div>
-
+    <button class="category"
+        onclick="showCategory('breakfast',this)">
+        <div class="category-icon">🍳</div>
+        <div class="category-title">صبحانه</div>
+        <div class="category-en">Breakfast</div>
     </button>
 
-
-
-    <button
-        class="category"
-        onclick="showCategory('pizza')"
-    >
-
-        <div class="category-icon">
-            🍕
-        </div>
-
-        <div class="category-title">
-            پیتزا
-        </div>
-
-        <div class="category-en">
-            Pizza
-        </div>
-
+    <button class="category"
+        onclick="showCategory('pizza',this)">
+        <div class="category-icon">🍕</div>
+        <div class="category-title">پیتزا</div>
+        <div class="category-en">Pizza</div>
     </button>
 
-
-
-    <button
-        class="category"
-        onclick="showCategory('hot')"
-    >
-
-        <div class="category-icon">
-            ☕
-        </div>
-
-        <div class="category-title">
-            نوشیدنی گرم
-        </div>
-
-        <div class="category-en">
-            Hot Drinks
-        </div>
-
+    <button class="category"
+        onclick="showCategory('hot',this)">
+        <div class="category-icon">☕</div>
+        <div class="category-title">نوشیدنی گرم</div>
+        <div class="category-en">Hot Drinks</div>
     </button>
 
-
-
-    <button
-        class="category"
-        onclick="showCategory('cold')"
-    >
-
-        <div class="category-icon">
-            🥤
-        </div>
-
-        <div class="category-title">
-            نوشیدنی سرد
-        </div>
-
-        <div class="category-en">
-            Cold Drinks
-        </div>
-
+    <button class="category"
+        onclick="showCategory('cold',this)">
+        <div class="category-icon">🥤</div>
+        <div class="category-title">نوشیدنی سرد</div>
+        <div class="category-en">Cold Drinks</div>
     </button>
 
-
-
-    <button
-        class="category"
-        onclick="showCategory('dessert')"
-    >
-
-        <div class="category-icon">
-            🍰
-        </div>
-
-        <div class="category-title">
-            دسر
-        </div>
-
-        <div class="category-en">
-            Dessert
-        </div>
-
+    <button class="category"
+        onclick="showCategory('dessert',this)">
+        <div class="category-icon">🍰</div>
+        <div class="category-title">دسر</div>
+        <div class="category-en">Dessert</div>
     </button>
 
-
-
-    <button
-        class="category"
-        onclick="showCategory('hookah')"
-    >
-
-        <div class="category-icon">
-            🫖
-        </div>
-
-        <div class="category-title">
-            قلیان
-        </div>
-
-        <div class="category-en">
-            Hookah
-        </div>
-
+    <button class="category"
+        onclick="showCategory('hookah',this)">
+        <div class="category-icon">🫖</div>
+        <div class="category-title">قلیان</div>
+        <div class="category-en">Hookah</div>
     </button>
-
 
 </nav>
 
 
-
-<!-- ==================================================
-     MAIN
-================================================== -->
+<!-- ================= MAIN ================= -->
 
 <main class="main">
 
-
 <div class="container">
 
-
-    <!-- ==================================================
-         PAGE TITLE
-    ================================================== -->
-
     <div class="page-title">
-
-        <h1>
-            کافه رستوران نجاتی
-        </h1>
-
-        <p>
-            Cafe Resturan
-
-        </p>
-
+        <h1>کافه رستوران نجاتی</h1>
+        <p>Cafe Restaurant</p>
     </div>
 
 
-
-    <!-- ==================================================
-         FOOD
-    ================================================== -->
-
-    <section
-        id="food"
-        class="menu-section"
-    >
-
-        <div class="section-title">
-            غذای اصلی
-        </div>
-
-
-        <div class="menu-grid">
-
-
-            <!-- FOOD 1 -->
-
-            <article class="menu-card">
-
-                <div class="food-image">
-
-                    <img
-                        src="food-01.png"
-                        alt="چلو کباب"
-                        loading="lazy"
-                    >
-
-                </div>
-
-
-                <div class="food-info">
-
-                    <h3 class="food-name">
-                        چلو کباب مخصوص
-                    </h3>
-
-                    <p class="food-description">
-                        کباب مخصوص نجاتی همراه برنج ایرانی،
-                        گوجه کبابی و سبزیجات تازه
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ۳۹۰,۰۰۰ تومان
-                        </span>
-
-                        <button
-                            class="add-button"
-                            aria-label="افزودن"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-
-            <!-- FOOD 2 -->
-
-            <article class="menu-card">
-
-                <div class="food-image">
-
-                    <img
-                        src="food-02.png"
-                        alt="جوجه کباب"
-                        loading="lazy"
-                    >
-
-                </div>
-
-
-                <div class="food-info">
-
-                    <h3 class="food-name">
-                        جوجه کباب ویژه
-                    </h3>
-
-                    <p class="food-description">
-                        جوجه زعفرانی تازه همراه برنج ایرانی
-                        و دورچین مخصوص
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ۳۵۰,۰۰۰ تومان
-                        </span>
-
-                        <button
-                            class="add-button"
-                            aria-label="افزودن"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-
-            <!-- FOOD 3 -->
-
-            <article class="menu-card">
-
-                <div class="food-image">
-
-                    <img
-                        src="food-03.jpg"
-                        alt="استیک مرغ"
-                        loading="lazy"
-                    >
-
-                </div>
-
-
-                <div class="food-info">
-
-                    <h3 class="food-name">
-                        استیک مرغ ژیمی
-                    </h3>
-
-                    <p class="food-description">
-                        استیک مرغ گریل شده با سس قارچ،
-                        سبزیجات و دورچین
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ۳۷۵,۰۰۰ تومان
-                        </span>
-
-                        <button
-                            class="add-button"
-                            aria-label="افزودن"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-
-
-
-
-
-        </div>
-
+    <section id="food" class="menu-section">
+        <div class="section-title">غذای اصلی</div>
+        <div class="menu-grid"></div>
     </section>
 
 
-
-    <!-- ==================================================
-         FAST FOOD
-    ================================================== -->
-
-    <section
-        id="fastfood"
-        class="menu-section"
-    >
-
-        <div class="section-title">
-            فست‌فود
-        </div>
-
-
-        <div class="menu-grid">
-
-
-            <article class="menu-card">
-
-                <div class="food-image">
-
-                    <img
-                        src="food-05.jpeg"
-                        alt="برگر مخصوص"
-                        loading="lazy"
-                    >
-
-                </div>
-
-
-                <div class="food-info">
-
-                    <h3 class="food-name">
-                        برگر مخصوص نجاتی
-                    </h3>
-
-                    <p class="food-description">
-                        گوشت تازه، پنیر، کاهو، گوجه
-                        و سس مخصوص
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ۲۸۰,۰۰۰ تومان
-                        </span>
-
-                        <button
-                            class="add-button"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-
-            <article class="menu-card">
-
-                <div class="food-image">
-
-                    <img
-                        src="food-06.jpg"
-                        alt="سیب زمینی مخصوص"
-                        loading="lazy"
-                    >
-
-                </div>
-
-
-                <div class="food-info">
-
-                    <h3 class="food-name">
-                        سیب‌زمینی مخصوص
-                    </h3>
-
-                    <p class="food-description">
-                        سیب‌زمینی ترد با پنیر،
-                        قارچ و سس مخصوص
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ۱۸۰,۰۰۰ تومان
-                        </span>
-
-                        <button
-                            class="add-button"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-        </div>
-
+    <section id="fastfood" class="menu-section">
+        <div class="section-title">فست‌فود</div>
+        <div class="menu-grid"></div>
     </section>
 
 
-
-    <!-- ==================================================
-         BREAKFAST
-    ================================================== -->
-
-    <section
-        id="breakfast"
-        class="menu-section"
-    >
-
-        <div class="section-title">
-            صبحانه
-        </div>
-
-
-        <div class="menu-grid">
-
-
-            <article class="menu-card">
-
-                <div class="food-image">
-
-                    <img
-                        src="breakfast-01.jpg"
-                        alt="صبحانه ویژه"
-                        loading="lazy"
-                    >
-
-                </div>
-
-
-                <div class="food-info">
-
-                    <h3 class="food-name">
-                        صبحانه ویژه نجاتی
-                    </h3>
-
-                    <p class="food-description">
-                        تخم مرغ، پنیر، کره، مربا،
-                        نان تازه و مخلفات
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ۲۲۰,۰۰۰ تومان
-                        </span>
-
-                        <button
-                            class="add-button"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-            <article class="menu-card">
-
-                <div class="food-image">
-
-                    <img
-                        src="breakfast-02.jpg"
-                        alt="املت"
-                        loading="lazy"
-                    >
-
-                </div>
-
-
-                <div class="food-info">
-
-                    <h3 class="food-name">
-                        املت مخصوص
-                    </h3>
-
-                    <p class="food-description">
-                        املت گوجه تازه همراه نان
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ۱۵۰,۰۰۰ تومان
-                        </span>
-
-                        <button
-                            class="add-button"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-        </div>
-
+    <section id="breakfast" class="menu-section">
+        <div class="section-title">صبحانه</div>
+        <div class="menu-grid"></div>
     </section>
 
 
-
-    <!-- ==================================================
-         PIZZA
-    ================================================== -->
-
-    <section
-        id="pizza"
-        class="menu-section"
-    >
-
-        <div class="section-title">
-            پیتزا
-        </div>
-
-
-        <div class="menu-grid">
-
-
-            <article class="menu-card">
-
-                <div class="food-image">
-
-                    <img
-                        src="pizza-01.jpg"
-                        alt="پیتزا مخصوص"
-                        loading="lazy"
-                    >
-
-                </div>
-
-
-                <div class="food-info">
-
-                    <h3 class="food-name">
-                        پیتزا مخصوص نجاتی
-                    </h3>
-
-                    <p class="food-description">
-                        گوشت، قارچ، فلفل دلمه،
-                        زیتون و پنیر مخصوص
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ۳۲۰,۰۰۰ تومان
-                        </span>
-
-                        <button
-                            class="add-button"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-            <article class="menu-card">
-
-                <div class="food-image">
-
-                    <img
-                        src="pizza-02.jpg"
-                        alt="پیتزا مرغ"
-                        loading="lazy"
-                    >
-
-                </div>
-
-
-                <div class="food-info">
-
-                    <h3 class="food-name">
-                        پیتزا مرغ و قارچ
-                    </h3>
-
-                    <p class="food-description">
-                        مرغ گریل شده، قارچ تازه
-                        و پنیر کشدار
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ۳۰۰,۰۰۰ تومان
-                        </span>
-
-                        <button
-                            class="add-button"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-        </div>
-
+    <section id="pizza" class="menu-section">
+        <div class="section-title">پیتزا</div>
+        <div class="menu-grid"></div>
     </section>
 
 
-
-    <!-- ==================================================
-         HOT DRINKS
-    ================================================== -->
-
-    <section
-        id="hot"
-        class="menu-section"
-    >
-
-        <div class="section-title">
-            نوشیدنی گرم
-        </div>
-
-
-        <div class="menu-grid">
-
-
-            <article class="menu-card">
-
-                <div class="food-image">
-
-                    <img
-                        src="drink-01.jpg"
-                        alt="اسپرسو"
-                        loading="lazy"
-                    >
-
-                </div>
-
-
-                <div class="food-info">
-
-                    <h3 class="food-name">
-                        اسپرسو
-                    </h3>
-
-                    <p class="food-description">
-                        اسپرسو با دانه تازه و عطر فوق‌العاده
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ۹۰,۰۰۰ تومان
-                        </span>
-
-                        <button
-                            class="add-button"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-            <article class="menu-card">
-
-                <div class="food-image">
-
-                    <img
-                        src="drink-02.jpg"
-                        alt="کاپوچینو"
-                        loading="lazy"
-                    >
-
-                </div>
-
-
-                <div class="food-info">
-
-                    <h3 class="food-name">
-                        کاپوچینو
-                    </h3>
-
-                    <p class="food-description">
-                        اسپرسو، شیر و فوم شیر
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ۱۴۰,۰۰۰ تومان
-                        </span>
-
-                        <button
-                            class="add-button"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-        </div>
-
+    <section id="hot" class="menu-section">
+        <div class="section-title">نوشیدنی گرم</div>
+        <div class="menu-grid"></div>
     </section>
 
 
-
-    <!-- ==================================================
-         COLD DRINKS
-    ================================================== -->
-
-    <section
-        id="cold"
-        class="menu-section"
-    >
-
-        <div class="section-title">
-            نوشیدنی سرد
-        </div>
-
-
-        <div class="menu-grid">
-
-
-            <article class="menu-card">
-
-                <div class="food-image">
-
-                    <img
-                        src="drink-03.jpg"
-                        alt="موهیتو"
-                        loading="lazy"
-                    >
-
-                </div>
-
-
-                <div class="food-info">
-
-                    <h3 class="food-name">
-                        موهیتو
-                    </h3>
-
-                    <p class="food-description">
-                        لیمو، نعناع تازه، سیروپ
-                        و سودا
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ۱۵۰,۰۰۰ تومان
-                        </span>
-
-                        <button
-                            class="add-button"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-            <article class="menu-card">
-
-                <div class="food-image">
-
-                    <img
-                        src="drink-04.jpg"
-                        alt="آیس کافی"
-                        loading="lazy"
-                    >
-
-                </div>
-
-
-                <div class="food-info">
-
-                    <h3 class="food-name">
-                        آیس کافی
-                    </h3>
-
-                    <p class="food-description">
-                        قهوه سرد، شیر و یخ
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ۱۶۰,۰۰۰ تومان
-                        </span>
-
-                        <button
-                            class="add-button"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-        </div>
-
+    <section id="cold" class="menu-section">
+        <div class="section-title">نوشیدنی سرد</div>
+        <div class="menu-grid"></div>
     </section>
 
 
-
-    <!-- ==================================================
-         DESSERT
-    ================================================== -->
-
-    <section
-        id="dessert"
-        class="menu-section"
-    >
-
-        <div class="section-title">
-            دسر
-        </div>
-
-
-        <div class="menu-grid">
-
-
-            <article class="menu-card">
-
-                <div class="food-image">
-
-                    <img
-                        src="dessert-01.jpg"
-                        alt="چیزکیک"
-                        loading="lazy"
-                    >
-
-                </div>
-
-
-                <div class="food-info">
-
-                    <h3 class="food-name">
-                        چیزکیک
-                    </h3>
-
-                    <p class="food-description">
-                        چیزکیک مخصوص با سس توت‌فرنگی
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ۱۵۰,۰۰۰ تومان
-                        </span>
-
-                        <button
-                            class="add-button"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-            <article class="menu-card">
-
-                <div class="food-image">
-
-                    <img
-                        src="dessert-02.jpg"
-                        alt="براونی"
-                        loading="lazy"
-                    >
-
-                </div>
-
-
-                <div class="food-info">
-
-                    <h3 class="food-name">
-                        براونی شکلاتی
-                    </h3>
-
-                    <p class="food-description">
-                        براونی شکلاتی گرم همراه بستنی
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ۱۷۰,۰۰۰ تومان
-                        </span>
-
-                        <button
-                            class="add-button"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-        </div>
-
+    <section id="dessert" class="menu-section">
+        <div class="section-title">دسر</div>
+        <div class="menu-grid"></div>
     </section>
 
 
-
-    <!-- ==================================================
-         HOOKAH
-    ================================================== -->
-
-    <section
-        id="hookah"
-        class="menu-section"
-    >
-
-        <div class="section-title">
-            قلیان
-        </div>
-
-
-        <div class="menu-grid">
-
-
-            <article class="menu-card">
-
-                <div class="food-image">
-
-                    <img
-                        src="images/hookah-01.jpg"
-                        alt="قلیان دو سیب"
-                        loading="lazy"
-                    >
-
-                </div>
-
-
-                <div class="food-info">
-
-                    <h3 class="food-name">
-                        دو سیب
-                    </h3>
-
-                    <p class="food-description">
-                        طعم کلاسیک و محبوب
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ۳۵۰,۰۰۰ تومان
-                        </span>
-
-                        <button
-                            class="add-button"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-            <article class="menu-card">
-
-                <div class="food-image">
-
-                    <img
-                        src="images/hookah-02.jpg"
-                        alt="قلیان نعناع"
-                        loading="lazy"
-                    >
-
-                </div>
-
-
-                <div class="food-info">
-
-                    <h3 class="food-name">
-                        نعناع
-                    </h3>
-
-                    <p class="food-description">
-                        طعم خنک و تازه
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ۳۵۰,۰۰۰ تومان
-                        </span>
-
-                        <button
-                            class="add-button"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-            <article class="menu-card">
-
-                <span class="badge">
-                    ناموجود
-                </span>
-
-                <div class="food-image">
-
-                    <img
-                        src="images/hookah-03.jpg"
-                        alt="قلیان بلوبری"
-                        loading="lazy"
-                    >
-
-                </div>
-
-
-                <div class="food-info">
-
-                    <h3 class="food-name">
-                        بلوبری
-                    </h3>
-
-                    <p class="food-description">
-                        طعم میوه‌ای ویژه
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ۴۰۰,۰۰۰ تومان
-                        </span>
-
-                        <button
-                            class="add-button"
-                            disabled
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-        </div>
-
+    <section id="hookah" class="menu-section">
+        <div class="section-title">قلیان</div>
+        <div class="menu-grid"></div>
     </section>
 
-
-
-    <!-- ==================================================
-         INSTAGRAM
-    ================================================== -->
 
     <a
         class="instagram"
@@ -2496,98 +822,635 @@ body{
     </a>
 
 
-
     <footer class="footer">
-
         کافه رستوران نجاتی
-
     </footer>
-
 
 </div>
 
 </main>
 
 
-
 <script>
 
 /* =====================================================
-   CATEGORY NAVIGATION
+   SUPABASE
 ===================================================== */
 
-function showCategory(id){
+const SUPABASE_URL =
+    "https://hblvegxugacixftvgzfw.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_aT7GnSh-NSbrX6Rbksoe5g_RzyI4LEO";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =====================================================
+   CATEGORY MAP
+===================================================== */
+
+const categoryMap = {
+
+    food:{
+        title:"غذای اصلی"
+    },
+
+    fastfood:{
+        title:"فست‌فود"
+    },
+
+    breakfast:{
+        title:"صبحانه"
+    },
+
+    pizza:{
+        title:"پیتزا"
+    },
+
+    hot:{
+        title:"نوشیدنی گرم"
+    },
+
+    cold:{
+        title:"نوشیدنی سرد"
+    },
+
+    dessert:{
+        title:"دسر"
+    },
+
+    hookah:{
+        title:"قلیان"
+    }
+
+};
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function showCategory(id,button){
 
     const target =
         document.getElementById(id);
 
+    if(!target) return;
 
-    if(!target){
+    const offset =
+        window.innerWidth <= 700
+        ? 150
+        : 90;
+
+    const position =
+        target.getBoundingClientRect().top +
+        window.pageYOffset -
+        offset;
+
+    window.scrollTo({
+        top:position,
+        behavior:"smooth"
+    });
+
+    document
+        .querySelectorAll(".category")
+        .forEach(function(btn){
+
+            btn.classList.remove("active");
+
+        });
+
+    if(button){
+
+        button.classList.add("active");
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD MENU
+===================================================== */
+
+async function loadMenu(){
+
+    const grids =
+        document.querySelectorAll(".menu-grid");
+
+    grids.forEach(function(grid){
+
+        grid.innerHTML =
+            '<div class="loading">در حال دریافت منو...</div>';
+
+    });
+
+
+    console.log("Connecting to Supabase...");
+
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+        .from("menu_items")
+        .select(`
+            id,
+            category_id,
+            name,
+            description,
+            price,
+            badge,
+            image_url,
+            is_available,
+            sort_order,
+            categories (
+                id,
+                title
+            )
+        `)
+        .order(
+            "sort_order",
+            {
+                ascending:true
+            }
+        );
+
+
+    if(error){
+
+        console.error(
+            "SUPABASE ERROR:",
+            error
+        );
+
+        grids.forEach(function(grid){
+
+            grid.innerHTML = `
+
+                <div class="error">
+
+                    دریافت اطلاعات منو با مشکل مواجه شد.
+
+                    <br><br>
+
+                    خطای Supabase:
+
+                    <br>
+
+                    ${escapeHTML(error.message)}
+
+                </div>
+
+            `;
+
+        });
 
         return;
 
     }
 
 
-    const offset =
-        window.innerWidth <= 700
-        ? 155
-        : 90;
-
-
-    const position =
-        target.getBoundingClientRect().top
-        +
-        window.pageYOffset
-        -
-        offset;
-
-
-    window.scrollTo({
-
-        top:position,
-
-        behavior:"smooth"
-
-    });
-
-
-    const buttons =
-        document.querySelectorAll(
-            ".category"
-        );
-
-
-    buttons.forEach(function(button){
-
-        button.classList.remove(
-            "active"
-        );
-
-    });
-
-
-    event.currentTarget.classList.add(
-        "active"
+    console.log(
+        "MENU DATA:",
+        data
     );
+
+
+    if(!data || data.length === 0){
+
+        grids.forEach(function(grid){
+
+            grid.innerHTML =
+                '<div class="loading">هنوز آیتمی در منو ثبت نشده است.</div>';
+
+        });
+
+        return;
+
+    }
+
+
+    /* =================================================
+       DATABASE CATEGORY → SITE CATEGORY
+    ================================================= */
+
+    const categories = {
+
+        "غذای اصلی":"food",
+
+        "فست‌فود":"fastfood",
+
+        "فست فود":"fastfood",
+
+        "صبحانه":"breakfast",
+
+        "پیتزا":"pizza",
+
+        "نوشیدنی گرم":"hot",
+
+        "نوشیدنی سرد":"cold",
+
+        "دسر":"dessert",
+
+        "قلیان":"hookah"
+
+    };
+
+
+    /* خالی کردن بخش‌ها */
+
+    Object.keys(categoryMap).forEach(function(category){
+
+        const section =
+            document.getElementById(category);
+
+        if(!section) return;
+
+        const grid =
+            section.querySelector(".menu-grid");
+
+        if(grid){
+
+            grid.innerHTML = "";
+
+        }
+
+    });
+
+
+    /* =================================================
+       نمایش آیتم‌ها
+    ================================================= */
+
+    data.forEach(function(item){
+
+        if(item.is_available === false){
+
+            return;
+
+        }
+
+
+        const categoryTitle =
+            item.categories &&
+            item.categories.title
+            ? item.categories.title.trim()
+            : "";
+
+
+        const categoryId =
+            categories[categoryTitle];
+
+
+        console.log(
+            "ITEM:",
+            item.name,
+            "CATEGORY:",
+            categoryTitle,
+            "SITE CATEGORY:",
+            categoryId
+        );
+
+
+        if(!categoryId){
+
+            console.warn(
+                "دسته‌بندی ناشناخته:",
+                categoryTitle,
+                item
+            );
+
+            return;
+
+        }
+
+
+        const section =
+            document.getElementById(categoryId);
+
+        if(!section) return;
+
+
+        const grid =
+            section.querySelector(".menu-grid");
+
+        if(!grid) return;
+
+
+        /* قلیان بدون عکس */
+
+        if(categoryId === "hookah"){
+
+            createHookahCard(
+                item,
+                grid
+            );
+
+        }else{
+
+            createMenuCard(
+                item,
+                grid
+            );
+
+        }
+
+    });
+
+
+    /* =================================================
+       بخش‌های خالی
+    ================================================= */
+
+    Object.keys(categoryMap).forEach(function(category){
+
+        const section =
+            document.getElementById(category);
+
+        if(!section) return;
+
+        const grid =
+            section.querySelector(".menu-grid");
+
+        if(!grid) return;
+
+        if(grid.children.length === 0){
+
+            grid.innerHTML =
+                '<div class="loading">فعلاً آیتمی در این بخش ثبت نشده است.</div>';
+
+        }
+
+    });
 
 }
 
 
 /* =====================================================
-   ACTIVE CATEGORY WHILE SCROLLING
+   CREATE NORMAL CARD
+===================================================== */
+
+function createMenuCard(item,grid){
+
+    const card =
+        document.createElement("article");
+
+    card.className =
+        "menu-card";
+
+
+    /* Badge */
+
+    let badgeHTML = "";
+
+    if(item.badge){
+
+        const special =
+            item.badge.trim() === "ویژه"
+            ? "special"
+            : "";
+
+        badgeHTML = `
+
+            <span class="badge ${special}">
+
+                ${escapeHTML(item.badge)}
+
+            </span>
+
+        `;
+
+    }
+
+
+    /* Image */
+
+    const image =
+        item.image_url &&
+        String(item.image_url).trim() !== ""
+        ? item.image_url
+        : "images/no-image.jpg";
+
+
+    /* Price */
+
+    const price =
+        Number(item.price || 0)
+        .toLocaleString("fa-IR");
+
+
+    card.innerHTML = `
+
+        ${badgeHTML}
+
+        <div class="food-image">
+
+            <img
+                src="${escapeAttribute(image)}"
+                alt="${escapeAttribute(item.name || "")}"
+                loading="lazy"
+                onerror="this.src='images/no-image.jpg';"
+            >
+
+        </div>
+
+
+        <div class="food-info">
+
+            <h3 class="food-name">
+
+                ${escapeHTML(item.name || "")}
+
+            </h3>
+
+
+            <p class="food-description">
+
+                ${escapeHTML(item.description || "")}
+
+            </p>
+
+
+            <div class="food-bottom">
+
+                <span class="price">
+
+                    ${price} تومان
+
+                </span>
+
+
+                <button
+                    class="add-button"
+                    aria-label="افزودن"
+                >
+
+                    +
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    grid.appendChild(card);
+
+}
+
+
+/* =====================================================
+   CREATE HOOKAH CARD
+   بدون عکس
+===================================================== */
+
+function createHookahCard(item,grid){
+
+    const card =
+        document.createElement("article");
+
+    card.className =
+        "hookah-card";
+
+
+    /* Badge */
+
+    let badgeHTML = "";
+
+    if(item.badge){
+
+        const special =
+            item.badge.trim() === "ویژه"
+            ? "special"
+            : "";
+
+        badgeHTML = `
+
+            <span class="badge ${special}">
+
+                ${escapeHTML(item.badge)}
+
+            </span>
+
+        `;
+
+    }
+
+
+    /* Price */
+
+    const price =
+        Number(item.price || 0)
+        .toLocaleString("fa-IR");
+
+
+    card.innerHTML = `
+
+        ${badgeHTML}
+
+        <div class="food-info">
+
+            <h3 class="food-name">
+
+                ${escapeHTML(item.name || "")}
+
+            </h3>
+
+
+            <p class="food-description">
+
+                ${escapeHTML(item.description || "")}
+
+            </p>
+
+
+            <div class="food-bottom">
+
+                <span class="price">
+
+                    ${price} تومان
+
+                </span>
+
+
+                <button
+                    class="add-button"
+                    aria-label="افزودن"
+                >
+
+                    +
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    grid.appendChild(card);
+
+}
+
+
+/* =====================================================
+   SECURITY
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(value ?? "")
+
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+function escapeAttribute(value){
+
+    return escapeHTML(value);
+
+}
+
+
+/* =====================================================
+   ACTIVE CATEGORY ON SCROLL
 ===================================================== */
 
 const sections =
-    document.querySelectorAll(
-        ".menu-section"
-    );
+    document.querySelectorAll(".menu-section");
 
 
 const categoryButtons =
-    document.querySelectorAll(
-        ".category"
-    );
+    document.querySelectorAll(".category");
+
+
+const indexMap = {
+
+    food:0,
+    fastfood:1,
+    breakfast:2,
+    pizza:3,
+    hot:4,
+    cold:5,
+    dessert:6,
+    hookah:7
+
+};
 
 
 window.addEventListener(
@@ -2603,8 +1466,7 @@ window.addEventListener(
                     section.offsetTop;
 
                 if(
-                    window.pageYOffset
-                    >=
+                    window.pageYOffset >=
                     top - 180
                 ){
 
@@ -2628,27 +1490,6 @@ window.addEventListener(
         );
 
 
-        const indexMap = {
-
-            food:0,
-
-            fastfood:1,
-
-            breakfast:2,
-
-            pizza:3,
-
-            hot:4,
-
-            cold:5,
-
-            dessert:6,
-
-            hookah:7
-
-        };
-
-
         if(
             current &&
             indexMap[current] !== undefined
@@ -2665,9 +1506,14 @@ window.addEventListener(
     }
 );
 
+
+/* =====================================================
+   START
+===================================================== */
+
+loadMenu();
+
 </script>
 
-
 </body>
-
 </html>
