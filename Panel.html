@@ -1202,6 +1202,80 @@ textarea{
         grid-template-columns:1fr;
     }
 }
+
+
+/* BUSINESS HOURS */
+.business-hours-settings{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+    max-width:760px
+}
+
+.business-hours-field{
+    display:flex;
+    flex-direction:column;
+    gap:8px
+}
+
+.business-hours-field label{
+    color:var(--text);
+    font-size:12px;
+    font-weight:900
+}
+
+.business-hours-field input[type="time"]{
+    width:100%;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:var(--input-bg);
+    color:var(--text);
+    padding:12px;
+    font-family:inherit;
+    font-size:13px;
+    outline:none
+}
+
+.business-hours-field input[type="time"]:focus{
+    border-color:var(--sky-2);
+    box-shadow:0 0 0 3px rgba(37,172,217,.09)
+}
+
+.business-hours-closed{
+    grid-column:1/-1;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding:14px 16px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:var(--card-top);
+    color:var(--muted);
+    font-size:11px;
+    font-weight:900;
+    cursor:pointer
+}
+
+.business-hours-closed input{
+    width:18px;
+    height:18px;
+    accent-color:var(--sky-1);
+    cursor:pointer
+}
+
+.business-hours-note{
+    margin-top:14px;
+    color:var(--muted);
+    font-size:10px;
+    line-height:1.9
+}
+
+@media(max-width:560px){
+    .business-hours-settings{
+        grid-template-columns:1fr
+    }
+}
+
 </style>
 </head>
 
@@ -1266,6 +1340,10 @@ textarea{
             <button class="tab" data-tab="orders">
                 سفارشات
                 <span class="tab-badge hidden" id="pendingBadge">0</span>
+            </button>
+
+            <button class="tab" data-tab="hours">
+                ساعت کاری
             </button>
         </div>
 
@@ -1484,6 +1562,47 @@ textarea{
                 </div>
 
             </div>
+        </section>
+
+        <!-- BUSINESS HOURS -->
+        <section class="section" id="hoursSection">
+
+            <div class="section-head">
+                <div class="section-title">
+                    <h1>ساعت کاری</h1>
+                    <p>ساعت باز و بسته بودن رستوران را وارد کنید.</p>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" id="saveHoursBtn">ذخیره ساعت کاری</button>
+                </div>
+            </div>
+
+            <div class="card" style="padding:18px;">
+                <div class="business-hours-settings" id="businessHoursGrid">
+
+                    <div class="business-hours-field">
+                        <label for="globalOpenTime">از ساعت</label>
+                        <input type="time" id="globalOpenTime" value="10:00">
+                    </div>
+
+                    <div class="business-hours-field">
+                        <label for="globalCloseTime">تا ساعت</label>
+                        <input type="time" id="globalCloseTime" value="23:00">
+                    </div>
+
+                    <label class="business-hours-closed">
+                        <input type="checkbox" id="globalClosed">
+                        تعطیل می‌باشد
+                    </label>
+
+                </div>
+
+                <div class="business-hours-note">
+                    این ساعت برای تمام روزهای هفته اعمال می‌شود.
+                </div>
+            </div>
+
         </section>
 
         <!-- ORDERS -->
@@ -1714,6 +1833,8 @@ let autoRefreshTimer = null;
 let previousPendingIds = new Set();
 let firstOrdersLoad = true;
 let audioContext = null;
+
+let businessHours = [];
 
 /* =========================
    HELPERS
@@ -1984,6 +2105,92 @@ async function logout(){
     toast("با موفقیت خارج شدید.");
 }
 
+async function loadBusinessHours(){
+
+    const openEl = $("globalOpenTime");
+    const closeEl = $("globalCloseTime");
+    const closedEl = $("globalClosed");
+
+    if(!openEl || !closeEl || !closedEl) return;
+
+    try{
+
+        const {data,error} =
+            await supabaseClient
+                .from("business_hours")
+                .select("day_of_week,open_time,close_time,is_closed")
+                .order("day_of_week",{ascending:true});
+
+        if(error) throw error;
+
+        businessHours = data || [];
+
+        const item = businessHours[0] || {
+            open_time:"10:00",
+            close_time:"23:00",
+            is_closed:false
+        };
+
+        openEl.value = String(item.open_time || "10:00").slice(0,5);
+        closeEl.value = String(item.close_time || "23:00").slice(0,5);
+        closedEl.checked = Boolean(item.is_closed);
+
+    }catch(error){
+        console.error(error);
+        toast("خطا در دریافت ساعت کاری.","error");
+    }
+}
+
+async function saveBusinessHours(){
+
+    const openEl = $("globalOpenTime");
+    const closeEl = $("globalCloseTime");
+    const closedEl = $("globalClosed");
+
+    if(!openEl || !closeEl || !closedEl) return;
+
+    const openTime = openEl.value || "10:00";
+    const closeTime = closeEl.value || "23:00";
+    const isClosed = closedEl.checked;
+
+    const values = Array.from({length:7},(_,day)=>({
+        day_of_week:day,
+        open_time:openTime,
+        close_time:closeTime,
+        is_closed:isClosed
+    }));
+
+    const button = $("saveHoursBtn");
+    if(button){
+        button.disabled = true;
+        button.textContent = "در حال ذخیره...";
+    }
+
+    try{
+
+        const {error} =
+            await supabaseClient
+                .from("business_hours")
+                .upsert(values,{onConflict:"day_of_week"});
+
+        if(error) throw error;
+
+        businessHours = values;
+        toast("ساعت کاری با موفقیت ذخیره شد.");
+
+    }catch(error){
+        console.error(error);
+        toast("ذخیره ساعت کاری ناموفق بود.","error");
+
+    }finally{
+
+        if(button){
+            button.disabled = false;
+            button.textContent = "ذخیره ساعت کاری";
+        }
+    }
+}
+
 /* =========================
    LOAD ALL
 ========================= */
@@ -1996,7 +2203,8 @@ async function loadAll(){
         await Promise.all([
             loadCategories(),
             loadProducts(),
-            loadOrders()
+            loadOrders(),
+            loadBusinessHours()
         ]);
 
         updateDashboard();
@@ -3646,6 +3854,11 @@ $("orderStatusFilter").addEventListener(
 $("orderDateFilter").addEventListener(
     "change",
     renderOrders
+);
+
+$("saveHoursBtn").addEventListener(
+    "click",
+    saveBusinessHours
 );
 
 $("productImage").addEventListener(
