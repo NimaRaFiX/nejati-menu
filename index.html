@@ -209,6 +209,45 @@ select{
     )
 }
 
+.business-hours{
+    margin-top:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:row;
+    gap:8px;
+    color:#fff;
+    font-size:12px;
+    font-weight:800;
+    text-shadow:0 3px 14px rgba(0,45,70,.55);
+    direction:rtl;
+    unicode-bidi:isolate;
+    white-space:nowrap;
+}
+
+.business-hours.closed{
+    color:#ffd7d7;
+}
+
+.business-hours .hours-time{
+    direction:ltr;
+    unicode-bidi:isolate;
+    white-space:nowrap;
+}
+
+.business-hours .hours-separator{
+    direction:ltr;
+    unicode-bidi:isolate;
+    opacity:.8;
+}
+
+.business-hours .hours-status{
+    direction:rtl;
+    unicode-bidi:isolate;
+    white-space:nowrap;
+}
+
+
 .slider-arrow{
     position:absolute;
     z-index:7;
@@ -540,7 +579,7 @@ select{
 
 .hookah-card{
     position:relative;
-    min-height:118px;
+    min-height:145px;
     padding:19px 20px;
     overflow:hidden;
     border-radius:16px;
@@ -553,20 +592,10 @@ select{
     box-shadow:0 8px 23px var(--shadow)
 }
 
-.hookah-card::before{
-    content:"🫖";
-    position:absolute;
-    left:16px;
-    top:14px;
-    font-size:27px;
-    opacity:.78
-}
-
 .hookah-name{
     color:var(--blue-dark);
     font-size:17px;
     font-weight:900;
-    padding-left:43px
 }
 
 .hookah-description{
@@ -574,15 +603,44 @@ select{
     color:var(--muted);
     font-size:10px;
     line-height:1.8;
-    padding-left:43px
 }
 
 .hookah-price{
-    margin-top:8px;
+    width:118px;
+    min-width:118px;
+    max-width:118px;
+    height:35px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    padding:0 8px;
+    margin-top:16px;
+    margin-right:0;
+    border-radius:9px;
+    background:rgba(37,172,217,.08);
+    border:1px solid rgba(13,140,185,.12);
+    white-space:nowrap
+}
+
+.hookah-price .price-number{
     color:var(--sky-1);
-    font-size:13px;
-    font-weight:900;
-    padding-left:43px
+    font-size:14px;
+    font-weight:900
+}
+
+.hookah-price .price-currency{
+    width:42px;
+    height:25px;
+    display:flex;
+    align-items:center;
+    justify-content:center
+}
+
+.hookah-price .price-currency img{
+    max-width:100%;
+    max-height:100%;
+    object-fit:contain
 }
 
 .empty,
@@ -1195,8 +1253,11 @@ select{
         font-size:14px
     }
 
-    .price-box{
-        min-width:105px
+    .price-box,
+    .hookah-price{
+        min-width:105px;
+        width:105px;
+        max-width:105px
     }
 
     .theme-toggle{
@@ -1250,8 +1311,11 @@ select{
         min-width:95px
     }
 
-    .price-box{
-        min-width:96px
+    .price-box,
+    .hookah-price{
+        min-width:96px;
+        width:96px;
+        max-width:96px
     }
 
     .price-number{
@@ -1292,6 +1356,12 @@ CAFE RESTAURANT NEJATI
 </div>
 
 <div class="cover-line"></div>
+
+<div class="business-hours" id="businessHours" dir="ltr">
+    <span class="hours-time" dir="ltr" style="unicode-bidi:isolate"></span>
+    <span class="hours-separator" dir="ltr" style="unicode-bidi:isolate">|</span>
+    <span class="hours-status" dir="rtl" style="unicode-bidi:isolate">در خدمت مشتریان عزیز هستیم</span>
+</div>
 
 </div>
 
@@ -1811,6 +1881,69 @@ function normalizeCategory(title=""){
     return null;
 }
 
+
+async function loadBusinessHours(){
+
+    const el = $("businessHours");
+    if(!el) return;
+
+    try{
+        const {data,error} = await supabaseClient
+            .from("business_hours")
+            .select("day_of_week,open_time,close_time,is_closed")
+            .order("day_of_week",{ascending:true});
+
+        if(error) throw error;
+
+        const weekday = new Intl.DateTimeFormat("en-US",{
+            timeZone:"Asia/Tehran",
+            weekday:"short"
+        }).format(new Date());
+
+        const dayMap = {Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6};
+        const today = (data || []).find(item => Number(item.day_of_week) === dayMap[weekday]);
+
+        const timeEl = el.querySelector(".hours-time");
+        const separatorEl = el.querySelector(".hours-separator");
+        const statusEl = el.querySelector(".hours-status");
+
+        if(!today){
+            timeEl.textContent = "";
+            separatorEl.style.display = "none";
+            statusEl.textContent = "ساعت کاری ثبت نشده است";
+            el.classList.remove("closed");
+            return;
+        }
+
+        if(today.is_closed){
+            timeEl.textContent = "";
+            separatorEl.style.display = "none";
+            statusEl.textContent = "تعطیل می‌باشد";
+            el.classList.add("closed");
+            return;
+        }
+
+        const open = String(today.open_time || "").slice(0,5);
+        const close = String(today.close_time || "").slice(0,5);
+
+        const openFa = `${persianNumber(open.split(":")[0])}:${persianNumber(open.split(":")[1])}`;
+        const closeFa = `${persianNumber(close.split(":")[0])}:${persianNumber(close.split(":")[1])}`;
+
+        timeEl.innerHTML = `
+            <span dir="ltr" style="unicode-bidi:isolate">${closeFa}</span>
+            <span dir="rtl" style="unicode-bidi:isolate">&nbsp; تا&nbsp; </span>
+            <span dir="ltr" style="unicode-bidi:isolate">${openFa}</span>
+        `;
+        separatorEl.style.display = "inline";
+        statusEl.textContent = "در خدمت مشتریان عزیز هستیم";
+        el.classList.remove("closed");
+
+    }catch(error){
+        console.error("Business hours:",error);
+        el.querySelector(".hours-time").textContent = ""; el.querySelector(".hours-separator").style.display = "none"; el.querySelector(".hours-status").textContent = "ساعت کاری ثبت نشده است";
+    }
+}
+
 async function loadMenu(){
 
     const container =
@@ -2116,7 +2249,19 @@ function createHookahCard(item){
             </div>
 
             <div class="hookah-price">
-                ${persianNumber(item.price)} تومان
+
+                <span class="price-number">
+                    ${persianNumber(item.price)}
+                </span>
+
+                <span class="price-currency">
+                    <img
+                        src="toman.png"
+                        alt="تومان"
+                        onerror="this.style.display='none';this.parentElement.innerHTML='<span class=&quot;price-currency-text&quot;>تومان</span>'"
+                    >
+                </span>
+
             </div>
 
             <button
@@ -3307,6 +3452,7 @@ initTheme();
 updateCart();
 
 loadMenu();
+loadBusinessHours();
 
 </script>
 
