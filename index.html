@@ -4,15 +4,22 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#249fd0">
+
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0">
+
+<meta name="theme-color"
+      content="#249fd0">
 
 <title>کافه رستوران عموحاجی</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
 
 <link
     href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap"
@@ -21,15 +28,54 @@
 
 <style>
 
+/* ==============================
+   RESET
+============================== */
+
 *{
     margin:0;
     padding:0;
-    box-sizing:border-box
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
 html{
-    scroll-behavior:smooth
+    scroll-behavior:smooth;
 }
+
+body{
+
+    min-height:100vh;
+
+    color:var(--text);
+
+    font-family:'Vazirmatn',sans-serif;
+
+    background:linear-gradient(
+        180deg,
+        var(--body-1),
+        var(--body-2) 45%,
+        var(--body-3)
+    );
+
+    transition:.3s;
+}
+
+body.modal-open{
+    overflow:hidden;
+}
+
+button,
+input,
+textarea,
+select{
+    font-family:inherit;
+}
+
+
+/* ==============================
+   COLORS
+============================== */
 
 :root{
 
@@ -63,6 +109,7 @@ html{
     --shadow:rgba(4,79,111,.14);
 
     --input-bg:#fff;
+
     --modal-bg:#fff;
 
     --danger:#e45167;
@@ -103,34 +150,10 @@ html.dark{
     --modal-bg:#132831;
 }
 
-body{
 
-    min-height:100vh;
-
-    color:var(--text);
-
-    font-family:'Vazirmatn',sans-serif;
-
-    background:linear-gradient(
-        180deg,
-        var(--body-1),
-        var(--body-2) 45%,
-        var(--body-3)
-    );
-
-    transition:.3s;
-}
-
-button,
-input,
-textarea,
-select{
-    font-family:inherit
-}
-
-/* =========================
+/* ==============================
    THEME BUTTON
-========================= */
+============================== */
 
 .theme-toggle{
 
@@ -157,19 +180,43 @@ select{
     align-items:center;
     justify-content:center;
 
-    font-size:20px;
+    font-size:22px;
+
+    line-height:1;
 
     cursor:pointer;
 
     backdrop-filter:blur(12px);
 
+    -webkit-backdrop-filter:blur(12px);
+
     box-shadow:
-        0 5px 18px rgba(0,0,0,.18)
+        0 5px 18px rgba(0,0,0,.18);
+
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        box-shadow .25s ease;
 }
 
-/* =========================
-   COVER
-========================= */
+.theme-toggle:hover{
+
+    transform:scale(1.08);
+
+    background:rgba(3,77,108,.72);
+
+    box-shadow:
+        0 7px 22px rgba(0,0,0,.25);
+}
+
+.theme-toggle:active{
+    transform:scale(.94);
+}
+
+
+/* ==============================
+   COVER / BANNERS
+============================== */
 
 .cover{
 
@@ -177,15 +224,26 @@ select{
 
     width:100%;
 
-    height:430px;
+    /*
+       ابعاد واقعی بنرها:
+       1528 × 333
+       1527 × 332
+       1528 × 337
+
+       نسبت تقریبی:
+       1528 / 335
+    */
+
+    aspect-ratio:1528 / 335;
 
     overflow:hidden;
 
-    background:linear-gradient(
-        135deg,
-        var(--sky-1),
-        var(--sky-3)
-    )
+    background:
+        linear-gradient(
+            135deg,
+            var(--sky-1),
+            var(--sky-3)
+        );
 }
 
 .cover-slide{
@@ -197,22 +255,29 @@ select{
     width:100%;
     height:100%;
 
+    /*
+       عکس بدون کشیدگی
+       و با حفظ نسبت اصلی
+    */
+
     object-fit:cover;
+
+    object-position:center;
 
     opacity:0;
 
-    transform:scale(1.04);
+    transform:scale(1.01);
 
     transition:
         opacity 1s ease,
-        transform 6s ease
+        transform 6s ease;
 }
 
 .cover-slide.active{
 
     opacity:1;
 
-    transform:scale(1)
+    transform:scale(1);
 }
 
 .cover-overlay{
@@ -225,11 +290,20 @@ select{
 
     background:linear-gradient(
         to bottom,
-        rgba(0,65,96,.05),
-        rgba(2,56,83,.18) 40%,
-        rgba(2,35,55,.82)
-    )
+        rgba(0,65,96,.02),
+        rgba(2,56,83,.10) 40%,
+        rgba(2,35,55,.46)
+    );
+
+    pointer-events:none;
 }
+
+
+/*
+   لوگو حذف شده،
+   اما محتوای قبلی بنر
+   همچنان حفظ شده است.
+*/
 
 .cover-content{
 
@@ -249,34 +323,14 @@ select{
 
     text-align:center;
 
-    padding:20px
+    padding:20px;
 }
+
+
+/* لوگو عمداً نمایش داده نمی‌شود */
 
 .cover-logo{
-
-    width:115px;
-    height:115px;
-
-    border-radius:50%;
-
-    overflow:hidden;
-
-    background:#fff;
-
-    border:4px solid var(--sky-2);
-
-    box-shadow:
-        0 12px 40px rgba(0,45,70,.35);
-
-    margin-bottom:16px
-}
-
-.cover-logo img{
-
-    width:100%;
-    height:100%;
-
-    object-fit:contain
+    display:none;
 }
 
 .cover-title{
@@ -287,8 +341,10 @@ select{
 
     font-weight:900;
 
+    line-height:1.4;
+
     text-shadow:
-        0 5px 22px rgba(0,45,70,.55)
+        0 5px 22px rgba(0,45,70,.55);
 }
 
 .cover-subtitle{
@@ -297,7 +353,7 @@ select{
 
     color:#e2f9ff;
 
-    font-size:11px
+    font-size:11px;
 }
 
 .cover-line{
@@ -315,7 +371,7 @@ select{
         transparent,
         #7ee8ff,
         transparent
-    )
+    );
 }
 
 .business-hours{
@@ -349,7 +405,6 @@ select{
 }
 
 .business-hours.closed{
-
     color:#ffd7d7;
 }
 
@@ -358,8 +413,6 @@ select{
     direction:ltr;
 
     unicode-bidi:isolate;
-
-    white-space:nowrap;
 }
 
 .business-hours .hours-separator{
@@ -376,13 +429,12 @@ select{
     direction:rtl;
 
     unicode-bidi:isolate;
-
-    white-space:nowrap;
 }
 
-/* =========================
+
+/* ==============================
    SLIDER
-========================= */
+============================== */
 
 .slider-arrow{
 
@@ -409,15 +461,17 @@ select{
 
     cursor:pointer;
 
-    backdrop-filter:blur(8px)
+    backdrop-filter:blur(8px);
+
+    -webkit-backdrop-filter:blur(8px);
 }
 
 .slider-prev{
-    right:15px
+    right:15px;
 }
 
 .slider-next{
-    left:15px
+    left:15px;
 }
 
 .slider-dots{
@@ -435,7 +489,7 @@ select{
 
     justify-content:center;
 
-    gap:6px
+    gap:6px;
 }
 
 .slider-dot{
@@ -449,7 +503,7 @@ select{
 
     background:rgba(255,255,255,.55);
 
-    cursor:pointer
+    cursor:pointer;
 }
 
 .slider-dot.active{
@@ -458,12 +512,13 @@ select{
 
     border-radius:999px;
 
-    background:#8eeaff
+    background:#8eeaff;
 }
 
-/* =========================
+
+/* ==============================
    TABS
-========================= */
+============================== */
 
 .tabs-wrap{
 
@@ -482,8 +537,10 @@ select{
 
     backdrop-filter:blur(14px);
 
+    -webkit-backdrop-filter:blur(14px);
+
     box-shadow:
-        0 6px 22px var(--shadow)
+        0 6px 22px var(--shadow);
 }
 
 .tabs{
@@ -504,11 +561,13 @@ select{
 
     scrollbar-width:none;
 
-    padding:9px 8px 0
+    padding:9px 8px 0;
+
+    -webkit-overflow-scrolling:touch;
 }
 
 .tabs::-webkit-scrollbar{
-    display:none
+    display:none;
 }
 
 .tab{
@@ -516,6 +575,7 @@ select{
     flex:0 0 auto;
 
     min-width:110px;
+
     height:46px;
 
     padding:0 14px;
@@ -540,7 +600,7 @@ select{
 
     cursor:pointer;
 
-    white-space:nowrap
+    white-space:nowrap;
 }
 
 .tab.active{
@@ -553,12 +613,13 @@ select{
         var(--sky-1)
     );
 
-    border-bottom-color:#07638d
+    border-bottom-color:#07638d;
 }
 
-/* =========================
+
+/* ==============================
    CONTAINER
-========================= */
+============================== */
 
 .container{
 
@@ -568,14 +629,14 @@ select{
 
     margin:auto;
 
-    padding:25px 18px 130px
+    padding:25px 18px 140px;
 }
 
 .welcome{
 
     text-align:center;
 
-    padding:5px 10px 25px
+    padding:5px 10px 25px;
 }
 
 .welcome h1{
@@ -584,7 +645,7 @@ select{
 
     font-size:24px;
 
-    font-weight:900
+    font-weight:900;
 }
 
 .welcome p{
@@ -593,18 +654,19 @@ select{
 
     color:var(--muted);
 
-    font-size:10px
+    font-size:10px;
 }
 
-/* =========================
+
+/* ==============================
    SECTION
-========================= */
+============================== */
 
 .menu-section{
 
     scroll-margin-top:70px;
 
-    margin-bottom:55px
+    margin-bottom:55px;
 }
 
 .section-header{
@@ -637,7 +699,7 @@ select{
     box-shadow:
         0 8px 24px var(--shadow);
 
-    text-align:center
+    text-align:center;
 }
 
 .section-title{
@@ -646,7 +708,7 @@ select{
 
     font-size:21px;
 
-    font-weight:900
+    font-weight:900;
 }
 
 .section-en{
@@ -659,12 +721,13 @@ select{
 
     font-size:9px;
 
-    direction:ltr
+    direction:ltr;
 }
 
-/* =========================
+
+/* ==============================
    FOOD CARDS
-========================= */
+============================== */
 
 .menu-grid{
 
@@ -673,7 +736,7 @@ select{
     grid-template-columns:
         repeat(2,minmax(0,1fr));
 
-    gap:16px
+    gap:16px;
 }
 
 .food-card{
@@ -700,14 +763,11 @@ select{
     box-shadow:
         0 9px 24px var(--shadow);
 
-    transition:
-        .22s;
-
+    transition:.22s;
 }
 
 .food-card:hover{
-
-    transform:translateY(-3px)
+    transform:translateY(-3px);
 }
 
 .food-image{
@@ -734,12 +794,11 @@ select{
 
     display:block;
 
-    transition:.3s
+    transition:.3s;
 }
 
 .food-card:hover .food-image img{
-
-    transform:scale(1.05)
+    transform:scale(1.05);
 }
 
 .food-info{
@@ -752,7 +811,7 @@ select{
 
     flex-direction:column;
 
-    padding:14px
+    padding:14px;
 }
 
 .food-name{
@@ -765,11 +824,12 @@ select{
 
     cursor:pointer;
 
-    transition:.18s;
+    line-height:1.7;
+
+    overflow-wrap:anywhere;
 }
 
 .food-name:hover{
-
     color:var(--sky-1);
 }
 
@@ -783,7 +843,11 @@ select{
 
     font-size:10px;
 
-    line-height:1.9
+    line-height:1.9;
+
+    overflow:hidden;
+
+    max-height:57px;
 }
 
 .food-bottom{
@@ -796,12 +860,15 @@ select{
 
     gap:8px;
 
-    margin-top:9px
+    margin-top:9px;
+
+    min-width:0;
 }
 
-/* =========================
+
+/* ==============================
    PRICE
-========================= */
+============================== */
 
 .price-box{
 
@@ -827,7 +894,9 @@ select{
     border:
         1px solid rgba(13,140,185,.12);
 
-    white-space:nowrap
+    white-space:nowrap;
+
+    flex-shrink:1;
 }
 
 .price-number{
@@ -836,7 +905,7 @@ select{
 
     font-size:14px;
 
-    font-weight:900
+    font-weight:900;
 }
 
 .price-currency{
@@ -847,7 +916,10 @@ select{
     display:flex;
 
     align-items:center;
-    justify-content:center
+
+    justify-content:center;
+
+    flex-shrink:0;
 }
 
 .price-currency img{
@@ -855,26 +927,70 @@ select{
     max-width:100%;
     max-height:100%;
 
-    object-fit:contain
+    object-fit:contain;
 }
 
 .price-currency-text{
 
     color:var(--muted);
 
-    font-size:9px
+    font-size:9px;
 }
 
-.plus{
 
-    width:32px;
-    height:32px;
+/* ==============================
+   PRODUCT QUANTITY
+============================== */
+
+.product-qty{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-end;
+
+    gap:5px;
+
+    direction:ltr;
 
     flex-shrink:0;
+}
+
+.product-qty button{
+
+    width:34px;
+    height:34px;
+
+    min-width:34px;
 
     border:0;
 
     border-radius:9px;
+
+    background:
+        rgba(37,172,217,.10);
+
+    color:var(--blue-dark);
+
+    font-size:19px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    touch-action:manipulation;
+
+    user-select:none;
+}
+
+.product-qty .qty-plus{
 
     background:
         linear-gradient(
@@ -884,33 +1000,46 @@ select{
         );
 
     color:#fff;
-
-    font-size:20px;
-
-    cursor:pointer;
-
-    transition:
-        transform .18s ease,
-        box-shadow .18s ease
 }
 
-.plus:active{
+.product-qty .qty-number{
 
-    transform:scale(.88)
+    width:28px;
+    min-width:28px;
+
+    height:34px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    color:var(--blue-dark);
+
+    font-size:12px;
+
+    font-weight:900;
+
+    line-height:1;
 }
 
-.plus.added{
-
-    transform:scale(1.22);
-
-    box-shadow:
-        0 0 0 6px
-        rgba(37,172,217,.22)
+.product-qty .qty-minus,
+.product-qty .qty-number{
+    display:none;
 }
 
-/* =========================
+.product-qty.has-item .qty-minus,
+.product-qty.has-item .qty-number{
+    display:flex;
+}
+
+
+/* ==============================
    BADGE
-========================= */
+============================== */
 
 .badge{
 
@@ -930,19 +1059,22 @@ select{
 
     color:#fff;
 
-    font-size:8px
+    font-size:8px;
+
+    white-space:nowrap;
 }
 
 .badge.special{
 
     background:#f3cd80;
 
-    color:#714e00
+    color:#714e00;
 }
 
-/* =========================
+
+/* ==============================
    HOOKAH
-========================= */
+============================== */
 
 .hookah-grid{
 
@@ -951,7 +1083,7 @@ select{
     grid-template-columns:
         repeat(2,minmax(0,1fr));
 
-    gap:14px
+    gap:14px;
 }
 
 .hookah-card{
@@ -976,7 +1108,7 @@ select{
         1px solid rgba(8,126,169,.12);
 
     box-shadow:
-        0 8px 23px var(--shadow)
+        0 8px 23px var(--shadow);
 }
 
 .hookah-name{
@@ -985,7 +1117,11 @@ select{
 
     font-size:17px;
 
-    font-weight:900
+    font-weight:900;
+
+    line-height:1.7;
+
+    cursor:pointer;
 }
 
 .hookah-description{
@@ -996,7 +1132,24 @@ select{
 
     font-size:10px;
 
-    line-height:1.8
+    line-height:1.8;
+
+    overflow:hidden;
+
+    max-height:54px;
+}
+
+.hookah-bottom{
+
+    margin-top:14px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:8px;
 }
 
 .hookah-price{
@@ -1004,8 +1157,6 @@ select{
     width:118px;
 
     min-width:118px;
-
-    max-width:118px;
 
     height:35px;
 
@@ -1019,10 +1170,6 @@ select{
 
     padding:0 8px;
 
-    margin-top:16px;
-
-    margin-right:0;
-
     border-radius:9px;
 
     background:
@@ -1031,7 +1178,7 @@ select{
     border:
         1px solid rgba(13,140,185,.12);
 
-    white-space:nowrap
+    white-space:nowrap;
 }
 
 .hookah-price .price-number{
@@ -1040,18 +1187,20 @@ select{
 
     font-size:14px;
 
-    font-weight:900
+    font-weight:900;
 }
 
 .hookah-price .price-currency{
 
     width:42px;
+
     height:25px;
 
     display:flex;
 
     align-items:center;
-    justify-content:center
+
+    justify-content:center;
 }
 
 .hookah-price .price-currency img{
@@ -1059,8 +1208,13 @@ select{
     max-width:100%;
     max-height:100%;
 
-    object-fit:contain
+    object-fit:contain;
 }
+
+
+/* ==============================
+   STATES
+============================== */
 
 .empty,
 .loading{
@@ -1080,7 +1234,7 @@ select{
 
     color:var(--muted);
 
-    font-size:10px
+    font-size:10px;
 }
 
 .error{
@@ -1098,12 +1252,13 @@ select{
     background:
         rgba(240,76,99,.08);
 
-    font-size:11px
+    font-size:11px;
 }
 
-/* =========================
+
+/* ==============================
    INSTAGRAM
-========================= */
+============================== */
 
 .instagram{
 
@@ -1123,6 +1278,8 @@ select{
 
     margin:45px auto 0;
 
+    padding:10px;
+
     color:var(--blue-dark);
 
     text-decoration:none;
@@ -1135,14 +1292,14 @@ select{
         1px solid var(--line);
 
     box-shadow:
-        0 8px 22px var(--shadow)
+        0 8px 22px var(--shadow);
 }
 
 .instagram-icon{
 
     color:#149dcc;
 
-    font-size:24px
+    font-size:24px;
 }
 
 .instagram-text{
@@ -1151,12 +1308,11 @@ select{
 
     flex-direction:column;
 
-    align-items:center
+    align-items:center;
 }
 
 .instagram-text strong{
-
-    font-size:10px
+    font-size:10px;
 }
 
 .instagram-text span{
@@ -1165,7 +1321,7 @@ select{
 
     color:var(--muted);
 
-    direction:ltr
+    direction:ltr;
 }
 
 .footer{
@@ -1176,12 +1332,13 @@ select{
 
     color:var(--muted);
 
-    font-size:9px
+    font-size:9px;
 }
 
-/* =========================
-   CART
-========================= */
+
+/* ==============================
+   CART BAR
+============================== */
 
 .cart-bar{
 
@@ -1189,7 +1346,8 @@ select{
 
     z-index:3000;
 
-    bottom:15px;
+    bottom:
+        calc(12px + env(safe-area-inset-bottom));
 
     left:50%;
 
@@ -1222,13 +1380,15 @@ select{
 
     backdrop-filter:blur(18px);
 
-    cursor:pointer
+    -webkit-backdrop-filter:blur(18px);
+
+    cursor:pointer;
 }
 
 .dark .cart-bar{
 
     background:
-        rgba(18,39,48,.97)
+        rgba(18,39,48,.97);
 }
 
 .cart-info{
@@ -1237,7 +1397,9 @@ select{
 
     align-items:center;
 
-    gap:10px
+    gap:10px;
+
+    min-width:0;
 }
 
 .cart-icon{
@@ -1252,6 +1414,7 @@ select{
     display:flex;
 
     align-items:center;
+
     justify-content:center;
 
     background:
@@ -1263,7 +1426,9 @@ select{
 
     color:#fff;
 
-    font-size:21px
+    font-size:21px;
+
+    flex-shrink:0;
 }
 
 .cart-count-badge{
@@ -1283,6 +1448,7 @@ select{
     display:flex;
 
     align-items:center;
+
     justify-content:center;
 
     border-radius:50%;
@@ -1296,7 +1462,7 @@ select{
 
     font-size:9px;
 
-    font-weight:900
+    font-weight:900;
 }
 
 .cart-text{
@@ -1305,21 +1471,23 @@ select{
 
     flex-direction:column;
 
-    gap:2px
+    gap:2px;
+
+    min-width:0;
 }
 
 .cart-text strong{
 
     color:var(--blue-dark);
 
-    font-size:11px
+    font-size:11px;
 }
 
 .cart-text span{
 
     color:var(--muted);
 
-    font-size:9px
+    font-size:9px;
 }
 
 .cart-total{
@@ -1330,12 +1498,13 @@ select{
 
     font-weight:900;
 
-    white-space:nowrap
+    white-space:nowrap;
 }
 
-/* =========================
+
+/* ==============================
    CART MODAL
-========================= */
+============================== */
 
 .modal{
 
@@ -1354,19 +1523,20 @@ select{
     background:
         rgba(0,0,0,.6);
 
-    backdrop-filter:blur(6px)
+    backdrop-filter:blur(6px);
+
+    -webkit-backdrop-filter:blur(6px);
 }
 
 .modal.show{
-
-    display:flex
+    display:flex;
 }
 
 .modal-box{
 
     width:min(100%,600px);
 
-    max-height:92vh;
+    max-height:94vh;
 
     overflow:hidden;
 
@@ -1380,19 +1550,9 @@ select{
         0 -15px 50px
         rgba(0,0,0,.35);
 
-    animation:
-        modalUp .28s ease
-}
+    display:flex;
 
-@keyframes modalUp{
-
-    from{
-        transform:translateY(100%)
-    }
-
-    to{
-        transform:translateY(0)
-    }
+    flex-direction:column;
 }
 
 .modal-head{
@@ -1403,10 +1563,14 @@ select{
 
     justify-content:space-between;
 
+    gap:10px;
+
     padding:19px 20px;
 
     border-bottom:
-        1px solid var(--line)
+        1px solid var(--line);
+
+    flex-shrink:0;
 }
 
 .modal-head h2{
@@ -1415,7 +1579,7 @@ select{
 
     font-size:18px;
 
-    font-weight:900
+    font-weight:900;
 }
 
 .modal-head small{
@@ -1426,13 +1590,15 @@ select{
 
     font-size:8px;
 
-    margin-top:3px
+    margin-top:3px;
 }
 
 .modal-close{
 
-    width:35px;
-    height:35px;
+    width:40px;
+    height:40px;
+
+    min-width:40px;
 
     border:0;
 
@@ -1445,16 +1611,18 @@ select{
 
     font-size:22px;
 
-    cursor:pointer
+    cursor:pointer;
 }
 
 .cart-items{
 
-    max-height:38vh;
+    max-height:34vh;
 
     overflow-y:auto;
 
-    padding:8px 17px
+    padding:8px 17px;
+
+    -webkit-overflow-scrolling:touch;
 }
 
 .cart-item{
@@ -1463,17 +1631,16 @@ select{
 
     align-items:center;
 
-    gap:10px;
+    gap:9px;
 
-    padding:13px 3px;
+    padding:12px 3px;
 
     border-bottom:
-        1px solid var(--line)
+        1px solid var(--line);
 }
 
 .cart-item:last-child{
-
-    border-bottom:0
+    border-bottom:0;
 }
 
 .cart-item-image{
@@ -1488,32 +1655,34 @@ select{
     background:
         var(--body-2);
 
-    flex-shrink:0
+    flex-shrink:0;
 }
 
 .cart-item-info{
 
     flex:1;
 
-    min-width:0
+    min-width:0;
 }
 
 .cart-item-name{
 
     color:var(--blue-dark);
 
-    font-size:12px;
+    font-size:11px;
 
-    font-weight:800
+    font-weight:800;
+
+    line-height:1.7;
 }
 
 .cart-item-price{
 
     color:var(--muted);
 
-    font-size:9px;
+    font-size:8px;
 
-    margin-top:4px
+    margin-top:4px;
 }
 
 .cart-controls{
@@ -1522,13 +1691,19 @@ select{
 
     align-items:center;
 
-    gap:5px
+    gap:4px;
+
+    direction:ltr;
+
+    flex-shrink:0;
 }
 
 .cart-controls button{
 
-    width:30px;
-    height:30px;
+    width:31px;
+    height:31px;
+
+    min-width:31px;
 
     border:0;
 
@@ -1541,7 +1716,12 @@ select{
 
     font-size:17px;
 
-    cursor:pointer
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
 }
 
 .cart-controls .remove{
@@ -1549,12 +1729,12 @@ select{
     background:
         rgba(240,76,99,.08);
 
-    color:#e45a6c
+    color:#e45a6c;
 }
 
 .cart-qty{
 
-    min-width:22px;
+    min-width:20px;
 
     text-align:center;
 
@@ -1562,7 +1742,7 @@ select{
 
     font-size:11px;
 
-    font-weight:900
+    font-weight:900;
 }
 
 .cart-empty{
@@ -1573,23 +1753,28 @@ select{
 
     color:var(--muted);
 
-    font-size:11px
+    font-size:11px;
+
+    line-height:2;
 }
 
-/* =========================
+
+/* ==============================
    ORDER FORM
-========================= */
+============================== */
 
 .order-form{
 
-    padding:14px 20px 20px;
+    padding:
+        14px 20px
+        calc(20px + env(safe-area-inset-bottom));
 
     border-top:
         1px solid var(--line);
 
     overflow-y:auto;
 
-    max-height:42vh
+    max-height:48vh;
 }
 
 .order-title{
@@ -1600,7 +1785,7 @@ select{
 
     color:var(--blue-dark);
 
-    margin-bottom:12px
+    margin-bottom:12px;
 }
 
 .form-grid{
@@ -1610,7 +1795,7 @@ select{
     grid-template-columns:
         1fr 1fr;
 
-    gap:10px
+    gap:10px;
 }
 
 .field{
@@ -1619,12 +1804,13 @@ select{
 
     flex-direction:column;
 
-    gap:5px
+    gap:5px;
+
+    min-width:0;
 }
 
 .field.full{
-
-    grid-column:1/-1
+    grid-column:1/-1;
 }
 
 .field label{
@@ -1633,7 +1819,7 @@ select{
 
     font-weight:800;
 
-    color:var(--muted)
+    color:var(--muted);
 }
 
 .field input,
@@ -1641,6 +1827,8 @@ select{
 .field select{
 
     width:100%;
+
+    min-height:44px;
 
     border:
         1px solid var(--line);
@@ -1658,7 +1846,7 @@ select{
 
     font-size:10px;
 
-    transition:.2s
+    transition:.2s;
 }
 
 .field input:focus,
@@ -1670,14 +1858,14 @@ select{
 
     box-shadow:
         0 0 0 3px
-        rgba(37,172,217,.09)
+        rgba(37,172,217,.09);
 }
 
 .field textarea{
 
     height:70px;
 
-    resize:none
+    resize:none;
 }
 
 .field input.invalid,
@@ -1689,12 +1877,11 @@ select{
 
     box-shadow:
         0 0 0 3px
-        rgba(228,81,103,.12)
+        rgba(228,81,103,.12);
 }
 
 .table-select-wrap{
-
-    position:relative
+    position:relative;
 }
 
 .table-select-wrap::after{
@@ -1712,7 +1899,7 @@ select{
 
     pointer-events:none;
 
-    color:var(--muted)
+    color:var(--muted);
 }
 
 .order-summary{
@@ -1727,7 +1914,7 @@ select{
         rgba(37,172,217,.06);
 
     border:
-        1px solid var(--line)
+        1px solid var(--line);
 }
 
 .summary-row{
@@ -1738,11 +1925,13 @@ select{
 
     justify-content:space-between;
 
+    gap:10px;
+
     font-size:10px;
 
     color:var(--muted);
 
-    padding:4px 0
+    padding:4px 0;
 }
 
 .summary-row.total{
@@ -1758,14 +1947,16 @@ select{
 
     font-size:12px;
 
-    font-weight:900
+    font-weight:900;
 }
 
 .summary-row.total strong{
 
     color:var(--sky-1);
 
-    font-size:17px
+    font-size:17px;
+
+    white-space:nowrap;
 }
 
 .submit-order{
@@ -1794,26 +1985,6 @@ select{
     font-weight:900;
 
     cursor:pointer;
-
-    box-shadow:
-        0 8px 20px
-        rgba(15,145,192,.2);
-
-    transition:.2s
-}
-
-.submit-order:hover{
-
-    transform:translateY(-2px)
-}
-
-.submit-order:disabled{
-
-    opacity:.65;
-
-    cursor:not-allowed;
-
-    transform:none
 }
 
 .clear-cart{
@@ -1837,18 +2008,335 @@ select{
 
     font-weight:800;
 
-    cursor:pointer
+    cursor:pointer;
 }
 
-/* =========================
+
+/* ==============================
+   CONFIRMATION
+============================== */
+
+.confirm-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:12000;
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:15px;
+
+    background:
+        rgba(0,20,30,.72);
+
+    backdrop-filter:blur(8px);
+
+    -webkit-backdrop-filter:blur(8px);
+}
+
+.confirm-overlay.show{
+    display:flex;
+}
+
+.confirm-box{
+
+    width:min(100%,520px);
+
+    max-height:92vh;
+
+    overflow:hidden;
+
+    border-radius:22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--card-top),
+            var(--card-bottom)
+        );
+
+    border:
+        1px solid var(--line);
+
+    box-shadow:
+        0 25px 80px
+        rgba(0,0,0,.4);
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+.confirm-head{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:17px 18px;
+
+    border-bottom:
+        1px solid var(--line);
+}
+
+.confirm-head h3{
+
+    color:var(--blue-dark);
+
+    font-size:17px;
+
+    font-weight:900;
+}
+
+.confirm-close{
+
+    width:38px;
+    height:38px;
+
+    border:0;
+
+    border-radius:10px;
+
+    background:
+        rgba(240,76,99,.1);
+
+    color:#e45a6c;
+
+    font-size:22px;
+
+    cursor:pointer;
+}
+
+.confirm-content{
+
+    overflow-y:auto;
+
+    padding:12px 16px;
+}
+
+.confirm-items{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+}
+
+.confirm-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:10px;
+
+    border-radius:12px;
+
+    background:
+        rgba(37,172,217,.055);
+
+    border:
+        1px solid var(--line);
+}
+
+.confirm-item-name{
+
+    flex:1;
+
+    min-width:0;
+
+    color:var(--blue-dark);
+
+    font-size:10px;
+
+    font-weight:800;
+
+    line-height:1.7;
+}
+
+.confirm-item-qty{
+
+    color:var(--sky-1);
+
+    font-size:11px;
+
+    font-weight:900;
+
+    white-space:nowrap;
+}
+
+.confirm-item-price{
+
+    color:var(--muted);
+
+    font-size:9px;
+
+    white-space:nowrap;
+}
+
+.confirm-info{
+
+    margin-top:12px;
+
+    padding:12px;
+
+    border-radius:13px;
+
+    background:
+        rgba(37,172,217,.045);
+
+    border:
+        1px solid var(--line);
+}
+
+.confirm-info-row{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+    padding:5px 0;
+
+    font-size:10px;
+}
+
+.confirm-info-row span:first-child{
+    color:var(--muted);
+}
+
+.confirm-info-row span:last-child{
+
+    color:var(--blue-dark);
+
+    font-weight:800;
+
+    text-align:left;
+
+    max-width:65%;
+
+    overflow-wrap:anywhere;
+}
+
+.confirm-total{
+
+    margin-top:10px;
+
+    padding-top:10px;
+
+    border-top:
+        1px dashed var(--line);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    color:var(--blue-dark);
+
+    font-size:12px;
+
+    font-weight:900;
+}
+
+.confirm-total strong{
+
+    color:var(--sky-1);
+
+    font-size:18px;
+}
+
+.confirm-actions{
+
+    display:grid;
+
+    grid-template-columns:1fr 1.5fr;
+
+    gap:8px;
+
+    padding:
+        12px 16px
+        calc(12px + env(safe-area-inset-bottom));
+
+    border-top:
+        1px solid var(--line);
+}
+
+.confirm-edit{
+
+    height:48px;
+
+    border:0;
+
+    border-radius:12px;
+
+    background:
+        rgba(37,172,217,.09);
+
+    color:var(--blue-dark);
+
+    font-size:10px;
+
+    font-weight:900;
+
+    cursor:pointer;
+}
+
+.confirm-submit{
+
+    height:48px;
+
+    border:0;
+
+    border-radius:12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--sky-2),
+            var(--sky-1)
+        );
+
+    color:#fff;
+
+    font-size:10px;
+
+    font-weight:900;
+
+    cursor:pointer;
+}
+
+.confirm-submit:disabled{
+    opacity:.6;
+}
+
+
+/* ==============================
    SUCCESS
-========================= */
+============================== */
 
 .success-box{
 
-    padding:35px 25px 30px;
+    padding:
+        35px 25px
+        calc(30px + env(safe-area-inset-bottom));
 
-    text-align:center
+    text-align:center;
 }
 
 .success-icon{
@@ -1870,14 +2358,14 @@ select{
 
     color:var(--success);
 
-    font-size:38px
+    font-size:38px;
 }
 
 .success-box h2{
 
     color:var(--blue-dark);
 
-    font-size:20px
+    font-size:20px;
 }
 
 .success-box p{
@@ -1888,7 +2376,7 @@ select{
 
     font-size:10px;
 
-    line-height:2
+    line-height:2;
 }
 
 .order-number{
@@ -1909,7 +2397,7 @@ select{
 
     font-size:14px;
 
-    font-weight:900
+    font-weight:900;
 }
 
 .close-success{
@@ -1933,72 +2421,13 @@ select{
 
     font-weight:800;
 
-    cursor:pointer
+    cursor:pointer;
 }
 
-/* =========================
-   TOAST
-========================= */
 
-.toast{
-
-    position:fixed;
-
-    z-index:11000;
-
-    bottom:95px;
-
-    left:50%;
-
-    transform:
-        translateX(-50%)
-        translateY(20px);
-
-    width:min(90%,420px);
-
-    padding:13px 16px;
-
-    border-radius:13px;
-
-    background:#132831;
-
-    color:#fff;
-
-    text-align:center;
-
-    font-size:10px;
-
-    box-shadow:
-        0 10px 30px
-        rgba(0,0,0,.25);
-
-    opacity:0;
-
-    pointer-events:none;
-
-    transition:.25s
-}
-
-.toast.show{
-
-    opacity:1;
-
-    transform:
-        translateX(-50%)
-        translateY(0)
-}
-
-.toast.error{
-    background:#9e3348
-}
-
-.toast.success{
-    background:#087c58
-}
-
-/* =========================
-   FOOD DETAIL MODAL
-========================= */
+/* ==============================
+   FOOD DETAIL
+============================== */
 
 .food-detail-modal{
 
@@ -2019,12 +2448,12 @@ select{
     background:
         rgba(0,28,42,.67);
 
-    backdrop-filter:
-        blur(9px);
+    backdrop-filter:blur(9px);
+
+    -webkit-backdrop-filter:blur(9px);
 }
 
 .food-detail-modal.show{
-
     display:flex;
 }
 
@@ -2032,10 +2461,7 @@ select{
 
     position:relative;
 
-    width:min(
-        100%,
-        500px
-    );
+    width:min(100%,500px);
 
     max-height:92vh;
 
@@ -2051,32 +2477,15 @@ select{
         );
 
     border:
-        1px solid
-        rgba(13,140,185,.18);
+        1px solid rgba(13,140,185,.18);
 
     box-shadow:
         0 25px 80px
         rgba(0,30,45,.35);
 
-    animation:
-        foodDetailIn .25s ease;
-}
+    display:flex;
 
-@keyframes foodDetailIn{
-
-    from{
-        opacity:0;
-        transform:
-            translateY(20px)
-            scale(.97);
-    }
-
-    to{
-        opacity:1;
-        transform:
-            translateY(0)
-            scale(1);
-    }
+    flex-direction:column;
 }
 
 .food-detail-close{
@@ -2089,8 +2498,8 @@ select{
 
     z-index:4;
 
-    width:38px;
-    height:38px;
+    width:40px;
+    height:40px;
 
     border:1px solid
         rgba(255,255,255,.35);
@@ -2104,15 +2513,7 @@ select{
 
     font-size:24px;
 
-    line-height:1;
-
     cursor:pointer;
-
-    backdrop-filter:blur(9px);
-
-    box-shadow:
-        0 5px 16px
-        rgba(0,0,0,.18);
 }
 
 .food-detail-image-wrap{
@@ -2120,6 +2521,8 @@ select{
     width:100%;
 
     height:310px;
+
+    flex-shrink:0;
 
     background:
         linear-gradient(
@@ -2143,7 +2546,9 @@ select{
 
 .food-detail-content{
 
-    padding:22px 22px 24px;
+    padding:22px;
+
+    overflow-y:auto;
 }
 
 .food-detail-title{
@@ -2167,13 +2572,9 @@ select{
 
     line-height:2.15;
 
-    min-height:24px;
-
     max-height:145px;
 
     overflow-y:auto;
-
-    padding-left:4px;
 }
 
 .food-detail-price{
@@ -2196,8 +2597,7 @@ select{
         rgba(37,172,217,.07);
 
     border:
-        1px solid
-        rgba(13,140,185,.13);
+        1px solid rgba(13,140,185,.13);
 }
 
 .food-detail-price-label{
@@ -2261,252 +2661,688 @@ select{
     font-weight:900;
 
     cursor:pointer;
+}
+
+
+/* ==============================
+   TOAST
+============================== */
+
+.toast{
+
+    position:fixed;
+
+    z-index:13000;
+
+    bottom:
+        calc(95px + env(safe-area-inset-bottom));
+
+    left:50%;
+
+    transform:
+        translateX(-50%)
+        translateY(20px);
+
+    width:min(90%,420px);
+
+    padding:13px 16px;
+
+    border-radius:13px;
+
+    background:#132831;
+
+    color:#fff;
+
+    text-align:center;
+
+    font-size:10px;
+
+    line-height:1.8;
 
     box-shadow:
-        0 8px 20px
-        rgba(15,145,192,.2);
+        0 10px 30px
+        rgba(0,0,0,.25);
 
-    transition:
-        transform .18s,
-        box-shadow .18s;
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.25s;
 }
 
-.food-detail-add:hover{
+.toast.show{
 
-    transform:translateY(-2px);
+    opacity:1;
 
-    box-shadow:
-        0 11px 24px
-        rgba(15,145,192,.28);
+    transform:
+        translateX(-50%)
+        translateY(0);
 }
 
-.food-detail-add:active{
-
-    transform:scale(.98);
+.toast.error{
+    background:#9e3348;
 }
 
-/* =========================
+.toast.success{
+    background:#087c58;
+}
+
+
+/* ==============================
    MOBILE
-========================= */
+============================== */
 
-@media(max-width:700px){
-
-    .cover{
-        height:360px
-    }
-
-    .cover-logo{
-
-        width:95px;
-
-        height:95px
-    }
-
-    .cover-title{
-
-        font-size:28px
-    }
-
-    .slider-arrow{
-
-        width:38px;
-
-        height:38px
-    }
-
-    .tabs{
-
-        justify-content:flex-start
-    }
+@media(max-width:900px){
 
     .menu-grid,
     .hookah-grid{
 
-        grid-template-columns:1fr
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:700px){
+
+    .cover{
+
+        aspect-ratio:1528 / 335;
+
+        min-height:0;
+    }
+
+    .cover-title{
+
+        font-size:22px;
+
+        line-height:1.3;
+    }
+
+    .cover-subtitle{
+
+        margin-top:4px;
+
+        font-size:8px;
+    }
+
+    .cover-line{
+
+        width:70px;
+
+        height:2px;
+
+        margin-top:7px;
+    }
+
+    .business-hours{
+
+        margin-top:6px;
+
+        font-size:8px;
+
+        gap:4px;
+
+        flex-wrap:wrap;
+
+        white-space:normal;
+    }
+
+    .slider-arrow{
+
+        width:35px;
+
+        height:35px;
+
+        font-size:18px;
+    }
+
+    .slider-prev{
+        right:7px;
+    }
+
+    .slider-next{
+        left:7px;
+    }
+
+    .slider-dots{
+
+        bottom:7px;
+
+        gap:5px;
+    }
+
+    .slider-dot{
+
+        width:5px;
+        height:5px;
+    }
+
+    .slider-dot.active{
+        width:17px;
+    }
+
+    .tabs{
+
+        justify-content:flex-start;
+
+        padding:
+            7px 8px 0;
+    }
+
+    .tab{
+
+        min-width:94px;
+
+        height:43px;
+
+        font-size:10px;
     }
 
     .container{
 
         padding:
-            20px
-            12px
-            120px
+            20px 10px
+            calc(
+                130px +
+                env(safe-area-inset-bottom)
+            );
+    }
+
+    .welcome{
+
+        padding-bottom:20px;
+    }
+
+    .welcome h1{
+        font-size:20px;
+    }
+
+    .welcome p{
+
+        font-size:9px;
+
+        line-height:1.8;
+    }
+
+    .menu-section{
+
+        scroll-margin-top:65px;
+
+        margin-bottom:42px;
     }
 
     .section-header{
 
-        min-height:72px
+        min-height:68px;
+
+        margin-bottom:14px;
+
+        border-radius:14px;
+    }
+
+    .section-title{
+        font-size:18px;
     }
 
     .food-card{
 
-        min-height:130px
+        min-height:128px;
+
+        border-radius:14px;
     }
 
     .food-image{
 
-        width:105px;
+        width:102px;
 
-        min-width:105px;
+        min-width:102px;
 
-        height:130px
+        height:128px;
     }
 
     .food-info{
 
-        padding:12px
+        padding:
+            10px 9px;
     }
 
     .food-name{
 
-        font-size:14px
+        font-size:13px;
+
+        line-height:1.6;
     }
 
-    .price-box,
-    .hookah-price{
+    .food-description{
 
-        min-width:105px;
+        font-size:8px;
+
+        line-height:1.8;
+
+        max-height:29px;
+    }
+
+    .food-bottom{
+
+        gap:5px;
+
+        margin-top:7px;
+    }
+
+    .price-box{
+
+        min-width:0;
+
+        width:auto;
+
+        height:34px;
+
+        flex:1;
+
+        gap:4px;
+
+        padding:0 5px;
+    }
+
+    .price-number{
+        font-size:11px;
+    }
+
+    .price-currency{
+
+        width:34px;
+
+        height:23px;
+    }
+
+    .product-qty{
+
+        gap:5px;
+    }
+
+    .product-qty button{
+
+        width:33px;
+
+        min-width:33px;
+
+        height:33px;
+    }
+
+    .product-qty .qty-number{
+
+        width:26px;
+
+        min-width:26px;
+
+        height:33px;
+
+        font-size:11px;
+    }
+
+    .hookah-card{
+
+        min-height:145px;
+
+        padding:
+            15px 14px;
+    }
+
+    .hookah-name{
+        font-size:15px;
+    }
+
+    .hookah-description{
+
+        font-size:9px;
+
+        line-height:1.8;
+
+        max-height:48px;
+    }
+
+    .hookah-bottom{
+        margin-top:10px;
+    }
+
+    .hookah-price{
 
         width:105px;
 
-        max-width:105px
+        min-width:105px;
+
+        height:34px;
+    }
+
+    .hookah-price .price-number{
+        font-size:11px;
+    }
+
+    .hookah-price .price-currency{
+
+        width:35px;
+
+        height:22px;
     }
 
     .theme-toggle{
 
         top:10px;
 
-        left:10px;
+        left:9px;
 
         width:39px;
 
-        height:39px
+        height:39px;
+
+        font-size:20px;
+    }
+
+    .cart-bar{
+
+        width:
+            calc(100% - 14px);
+
+        min-height:64px;
+
+        bottom:
+            calc(7px + env(safe-area-inset-bottom));
+
+        padding:
+            7px 9px 7px 11px;
+
+        border-radius:18px;
+
+        gap:7px;
+    }
+
+    .cart-icon{
+
+        width:42px;
+
+        height:42px;
+
+        font-size:19px;
+    }
+
+    .cart-total{
+        font-size:11px;
     }
 
     .modal-box{
 
-        max-height:94vh
+        width:100%;
+
+        max-height:97vh;
+
+        border-radius:
+            22px 22px 0 0;
+    }
+
+    .modal-head{
+        padding:14px 15px;
+    }
+
+    .cart-items{
+
+        max-height:30vh;
+
+        padding:
+            5px 11px;
+    }
+
+    .cart-item{
+
+        gap:7px;
+
+        padding:
+            10px 2px;
+    }
+
+    .cart-item-image{
+
+        width:47px;
+
+        height:47px;
+    }
+
+    .cart-item-name{
+        font-size:10px;
+    }
+
+    .cart-item-price{
+        font-size:8px;
+    }
+
+    .cart-controls{
+        gap:3px;
+    }
+
+    .cart-controls button{
+
+        width:29px;
+
+        min-width:29px;
+
+        height:29px;
+    }
+
+    .cart-qty{
+        min-width:18px;
+    }
+
+    .order-form{
+
+        max-height:51vh;
+
+        padding:
+            12px 14px
+            calc(
+                16px +
+                env(safe-area-inset-bottom)
+            );
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+    .confirm-overlay{
+
+        padding:8px;
+
+        align-items:flex-end;
+    }
+
+    .confirm-box{
+
+        width:100%;
+
+        max-height:96vh;
+
+        border-radius:
+            22px 22px 0 0;
+    }
+
+    .confirm-content{
+        padding:10px 12px;
+    }
+
+    .confirm-actions{
+
+        padding:
+            10px 12px
+            calc(
+                10px +
+                env(safe-area-inset-bottom)
+            );
     }
 
     .food-detail-modal{
 
-        padding:10px;
+        padding:8px;
+
+        align-items:flex-end;
     }
 
     .food-detail-box{
 
         width:100%;
 
-        max-height:94vh;
+        max-height:96vh;
 
-        border-radius:22px;
+        border-radius:
+            22px 22px 0 0;
     }
 
     .food-detail-image-wrap{
-
-        height:255px;
+        height:225px;
     }
 
     .food-detail-content{
-
-        padding:
-            18px
-            18px
-            20px;
+        padding:17px 15px;
     }
 
     .food-detail-title{
-
-        font-size:20px;
-    }
-
-}
-
-@media(max-width:450px){
-
-    .form-grid{
-
-        grid-template-columns:1fr
-    }
-
-    .field.full{
-
-        grid-column:auto
-    }
-
-    .order-form{
-
-        max-height:47vh
-    }
-
-    .cart-items{
-
-        max-height:34vh
-    }
-
-    .food-detail-image-wrap{
-
-        height:225px;
+        font-size:19px;
     }
 
     .food-detail-description{
 
-        max-height:120px;
+        font-size:10px;
+
+        max-height:110px;
     }
 
 }
 
 @media(max-width:380px){
 
-    .cover{
-
-        height:320px
-    }
-
-    .cover-logo{
-
-        width:82px;
-
-        height:82px
-    }
-
     .cover-title{
+        font-size:17px;
+    }
 
-        font-size:24px
+    .cover-subtitle{
+        font-size:6px;
+    }
+
+    .cover-line{
+        width:55px;
+    }
+
+    .business-hours{
+        font-size:6px;
+    }
+
+    .slider-arrow{
+
+        width:32px;
+        height:32px;
+
+        font-size:16px;
     }
 
     .food-image{
 
-        width:95px;
+        width:92px;
 
-        min-width:95px
+        min-width:92px;
+
+        height:116px;
     }
 
-    .price-box,
-    .hookah-price{
+    .food-card{
+        min-height:116px;
+    }
 
-        min-width:96px;
-
-        width:96px;
-
-        max-width:96px
+    .food-name{
+        font-size:12px;
     }
 
     .price-number{
-
-        font-size:12px
+        font-size:10px;
     }
 
-    .plus{
-
+    .price-currency{
         width:29px;
+    }
 
-        height:29px
+    .product-qty{
+        gap:4px;
+    }
+
+    .product-qty button{
+
+        width:31px;
+
+        min-width:31px;
+
+        height:31px;
+    }
+
+    .product-qty .qty-number{
+
+        width:23px;
+
+        min-width:23px;
+
+        height:31px;
+
+        font-size:10px;
     }
 
     .food-detail-image-wrap{
-
         height:205px;
+    }
+
+}
+
+
+/* ==============================
+   EXTRA BANNER MOBILE SAFETY
+============================== */
+
+@media(max-width:500px){
+
+    .cover-content{
+
+        padding:8px;
+    }
+
+    .cover-title{
+
+        text-shadow:
+            0 3px 12px rgba(0,45,70,.55);
+    }
+
+}
+
+
+/* ==============================
+   VERY SMALL HEIGHT SCREENS
+============================== */
+
+@media(max-height:500px) and (orientation:landscape){
+
+    .cover-title{
+        font-size:18px;
+    }
+
+    .cover-subtitle{
+        font-size:7px;
+    }
+
+    .cover-line{
+        margin-top:4px;
+    }
+
+    .business-hours{
+        margin-top:4px;
+        font-size:7px;
     }
 
 }
@@ -2517,16 +3353,23 @@ select{
 
 <body>
 
+
+<!-- ==============================
+     THEME BUTTON
+============================== -->
+
 <button
     class="theme-toggle"
     id="themeToggle"
+    aria-label="تغییر حالت نمایش"
 >
-    🌙
+    ☾
 </button>
 
-<!-- =========================
+
+<!-- ==============================
      COVER
-========================= -->
+============================== -->
 
 <header class="cover">
 
@@ -2550,7 +3393,13 @@ select{
 
     <div class="cover-overlay"></div>
 
+
     <div class="cover-content">
+
+        <!--
+           لوگو حذف شده
+           سایر بخش‌ها حفظ شده‌اند
+        -->
 
         <div class="cover-logo">
 
@@ -2561,45 +3410,35 @@ select{
 
         </div>
 
+
         <h1 class="cover-title">
-
             کافه رستوران عموحاجی
-
         </h1>
 
+
         <div class="cover-subtitle">
-
             CAFE RESTAURANT AMO HAJI
-
         </div>
 
+
         <div class="cover-line"></div>
+
 
         <div
             class="business-hours"
             id="businessHours"
-            dir="ltr"
         >
 
             <span
                 class="hours-time"
                 dir="ltr"
-                style="unicode-bidi:isolate"
             ></span>
 
-            <span
-                class="hours-separator"
-                dir="ltr"
-                style="unicode-bidi:isolate"
-            >
+            <span class="hours-separator">
                 |
             </span>
 
-            <span
-                class="hours-status"
-                dir="rtl"
-                style="unicode-bidi:isolate"
-            >
+            <span class="hours-status">
                 در خدمت مشتریان عزیز هستیم
             </span>
 
@@ -2607,19 +3446,24 @@ select{
 
     </div>
 
+
     <button
         class="slider-arrow slider-prev"
         id="prevSlide"
+        aria-label="بنر قبلی"
     >
         ›
     </button>
 
+
     <button
         class="slider-arrow slider-next"
         id="nextSlide"
+        aria-label="بنر بعدی"
     >
         ‹
     </button>
+
 
     <div
         class="slider-dots"
@@ -2628,9 +3472,10 @@ select{
 
 </header>
 
-<!-- =========================
+
+<!-- ==============================
      TABS
-========================= -->
+============================== -->
 
 <nav class="tabs-wrap">
 
@@ -2696,9 +3541,10 @@ select{
 
 </nav>
 
-<!-- =========================
+
+<!-- ==============================
      MAIN
-========================= -->
+============================== -->
 
 <main class="container">
 
@@ -2709,10 +3555,11 @@ select{
         </h1>
 
         <p>
-            انتخاب کنید، به سبد سفارش اضافه کنید و سفارش خود را ثبت کنید
+            انتخاب کنید، تعداد را مشخص کنید و سفارش خود را ثبت کنید
         </p>
 
     </section>
+
 
     <div id="menuContainer">
 
@@ -2722,10 +3569,12 @@ select{
 
     </div>
 
+
     <a
         class="instagram"
         href="https://instagram.com/nejatieh_cafe"
         target="_blank"
+        rel="noopener noreferrer"
     >
 
         <div class="instagram-icon">
@@ -2746,21 +3595,23 @@ select{
 
     </a>
 
+
     <div class="footer">
-
         کافه رستوران عموحاجی
-
     </div>
 
 </main>
 
-<!-- =========================
+
+<!-- ==============================
      CART BAR
-========================= -->
+============================== -->
 
 <div
     class="cart-bar"
     id="cartBar"
+    role="button"
+    tabindex="0"
 >
 
     <div class="cart-info">
@@ -2778,6 +3629,7 @@ select{
 
         </div>
 
+
         <div class="cart-text">
 
             <strong>
@@ -2792,6 +3644,7 @@ select{
 
     </div>
 
+
     <div
         class="cart-total"
         id="cartTotal"
@@ -2801,9 +3654,10 @@ select{
 
 </div>
 
-<!-- =========================
+
+<!-- ==============================
      CART MODAL
-========================= -->
+============================== -->
 
 <div
     class="modal"
@@ -2828,6 +3682,7 @@ select{
 
                 </div>
 
+
                 <button
                     class="modal-close"
                     id="closeModal"
@@ -2837,10 +3692,12 @@ select{
 
             </div>
 
+
             <div
                 class="cart-items"
                 id="cartItems"
             ></div>
+
 
             <div class="order-form">
 
@@ -2848,7 +3705,9 @@ select{
                     اطلاعات سفارش
                 </div>
 
+
                 <div class="form-grid">
+
 
                     <div class="field">
 
@@ -2860,9 +3719,11 @@ select{
                             id="customerName"
                             type="text"
                             placeholder="مثلاً نیما"
+                            autocomplete="name"
                         >
 
                     </div>
+
 
                     <div class="field">
 
@@ -2875,9 +3736,11 @@ select{
                             type="tel"
                             inputmode="tel"
                             placeholder="09xxxxxxxxx"
+                            autocomplete="tel"
                         >
 
                     </div>
+
 
                     <div class="field">
 
@@ -2887,93 +3750,32 @@ select{
 
                         <div class="table-select-wrap">
 
-                            <select
-                                id="tableNumber"
-                            >
+                            <select id="tableNumber">
 
                                 <option value="">
                                     انتخاب میز
                                 </option>
 
-                                <option value="1">
-                                    میز ۱
-                                </option>
-
-                                <option value="2">
-                                    میز ۲
-                                </option>
-
-                                <option value="3">
-                                    میز ۳
-                                </option>
-
-                                <option value="4">
-                                    میز ۴
-                                </option>
-
-                                <option value="5">
-                                    میز ۵
-                                </option>
-
-                                <option value="6">
-                                    میز ۶
-                                </option>
-
-                                <option value="7">
-                                    میز ۷
-                                </option>
-
-                                <option value="8">
-                                    میز ۸
-                                </option>
-
-                                <option value="9">
-                                    میز ۹
-                                </option>
-
-                                <option value="10">
-                                    میز ۱۰
-                                </option>
-
-                                <option value="11">
-                                    میز ۱۱
-                                </option>
-
-                                <option value="12">
-                                    میز ۱۲
-                                </option>
-
-                                <option value="13">
-                                    میز ۱۳
-                                </option>
-
-                                <option value="14">
-                                    میز ۱۴
-                                </option>
-
-                                <option value="15">
-                                    میز ۱۵
-                                </option>
-
-                                <option value="16">
-                                    میز ۱۶
-                                </option>
-
-                                <option value="17">
-                                    میز ۱۷
-                                </option>
-
-                                <option value="18">
-                                    میز ۱۸
-                                </option>
-
-                                <option value="19">
-                                    میز ۱۹
-                                </option>
-
-                                <option value="20">
-                                    میز ۲۰
-                                </option>
+                                <option value="1">میز ۱</option>
+                                <option value="2">میز ۲</option>
+                                <option value="3">میز ۳</option>
+                                <option value="4">میز ۴</option>
+                                <option value="5">میز ۵</option>
+                                <option value="6">میز ۶</option>
+                                <option value="7">میز ۷</option>
+                                <option value="8">میز ۸</option>
+                                <option value="9">میز ۹</option>
+                                <option value="10">میز ۱۰</option>
+                                <option value="11">میز ۱۱</option>
+                                <option value="12">میز ۱۲</option>
+                                <option value="13">میز ۱۳</option>
+                                <option value="14">میز ۱۴</option>
+                                <option value="15">میز ۱۵</option>
+                                <option value="16">میز ۱۶</option>
+                                <option value="17">میز ۱۷</option>
+                                <option value="18">میز ۱۸</option>
+                                <option value="19">میز ۱۹</option>
+                                <option value="20">میز ۲۰</option>
 
                             </select>
 
@@ -2981,15 +3783,14 @@ select{
 
                     </div>
 
+
                     <div class="field">
 
                         <label>
                             نوع سفارش
                         </label>
 
-                        <select
-                            id="orderType"
-                        >
+                        <select id="orderType">
 
                             <option value="dine_in">
                                 سرو داخل رستوران
@@ -3002,6 +3803,7 @@ select{
                         </select>
 
                     </div>
+
 
                     <div class="field full">
 
@@ -3018,6 +3820,7 @@ select{
 
                 </div>
 
+
                 <div class="order-summary">
 
                     <div class="summary-row">
@@ -3032,6 +3835,7 @@ select{
 
                     </div>
 
+
                     <div class="summary-row">
 
                         <span>
@@ -3044,15 +3848,14 @@ select{
 
                     </div>
 
+
                     <div class="summary-row total">
 
                         <span>
                             مبلغ نهایی
                         </span>
 
-                        <strong
-                            id="summaryTotal"
-                        >
+                        <strong id="summaryTotal">
                             ۰ تومان
                         </strong>
 
@@ -3060,12 +3863,14 @@ select{
 
                 </div>
 
+
                 <button
                     class="submit-order"
                     id="submitOrder"
                 >
-                    ثبت نهایی سفارش
+                    ادامه و بررسی سفارش
                 </button>
+
 
                 <button
                     class="clear-cart"
@@ -3078,7 +3883,10 @@ select{
 
         </div>
 
-        <!-- SUCCESS -->
+
+        <!-- ==============================
+             SUCCESS
+        ============================== -->
 
         <div
             id="successPage"
@@ -3103,9 +3911,7 @@ select{
 
                     شماره سفارش:
 
-                    <span
-                        id="successOrderNumber"
-                    ></span>
+                    <span id="successOrderNumber"></span>
 
                 </div>
 
@@ -3124,9 +3930,153 @@ select{
 
 </div>
 
-<!-- =========================
-     FOOD DETAIL MODAL
-========================= -->
+
+<!-- ==============================
+     CONFIRMATION
+============================== -->
+
+<div
+    class="confirm-overlay"
+    id="confirmOverlay"
+>
+
+    <div class="confirm-box">
+
+        <div class="confirm-head">
+
+            <h3>
+                بررسی نهایی سفارش
+            </h3>
+
+            <button
+                class="confirm-close"
+                id="confirmClose"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="confirm-content">
+
+            <div
+                class="confirm-items"
+                id="confirmItems"
+            ></div>
+
+
+            <div class="confirm-info">
+
+
+                <div class="confirm-info-row">
+
+                    <span>
+                        نام مشتری
+                    </span>
+
+                    <span id="confirmName">
+                        -
+                    </span>
+
+                </div>
+
+
+                <div class="confirm-info-row">
+
+                    <span>
+                        شماره تماس
+                    </span>
+
+                    <span id="confirmPhone">
+                        -
+                    </span>
+
+                </div>
+
+
+                <div class="confirm-info-row">
+
+                    <span>
+                        میز
+                    </span>
+
+                    <span id="confirmTable">
+                        -
+                    </span>
+
+                </div>
+
+
+                <div class="confirm-info-row">
+
+                    <span>
+                        نوع سفارش
+                    </span>
+
+                    <span id="confirmType">
+                        -
+                    </span>
+
+                </div>
+
+
+                <div class="confirm-info-row">
+
+                    <span>
+                        توضیحات
+                    </span>
+
+                    <span id="confirmNote">
+                        -
+                    </span>
+
+                </div>
+
+
+                <div class="confirm-total">
+
+                    <span>
+                        مبلغ نهایی
+                    </span>
+
+                    <strong id="confirmTotal">
+                        ۰ تومان
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="confirm-actions">
+
+            <button
+                class="confirm-edit"
+                id="confirmEdit"
+            >
+                برگشت و اصلاح
+            </button>
+
+            <button
+                class="confirm-submit"
+                id="confirmSubmit"
+            >
+                تأیید و ثبت سفارش
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==============================
+     FOOD DETAIL
+============================== -->
 
 <div
     class="food-detail-modal"
@@ -3142,9 +4092,8 @@ select{
             ×
         </button>
 
-        <div
-            class="food-detail-image-wrap"
-        >
+
+        <div class="food-detail-image-wrap">
 
             <img
                 class="food-detail-image"
@@ -3155,6 +4104,7 @@ select{
 
         </div>
 
+
         <div class="food-detail-content">
 
             <h2
@@ -3164,6 +4114,7 @@ select{
                 عنوان غذا
             </h2>
 
+
             <div
                 class="food-detail-description"
                 id="foodDetailDescription"
@@ -3171,11 +4122,10 @@ select{
                 توضیحات غذا
             </div>
 
+
             <div class="food-detail-price">
 
-                <span
-                    class="food-detail-price-label"
-                >
+                <span class="food-detail-price-label">
                     قیمت
                 </span>
 
@@ -3188,11 +4138,12 @@ select{
 
             </div>
 
+
             <button
                 class="food-detail-add"
                 id="foodDetailAdd"
             >
-                افزودن به سبد سفارش
+                افزودن یک عدد به سبد
             </button>
 
         </div>
@@ -3201,14 +4152,22 @@ select{
 
 </div>
 
-<!-- TOAST -->
+
+<!-- ==============================
+     TOAST
+============================== -->
 
 <div
     class="toast"
     id="toast"
 ></div>
 
+
 <script>
+
+/* ==============================
+   SUPABASE
+============================== */
 
 const SUPABASE_URL =
     "https://hblvegxugacixftvgzfw.supabase.co";
@@ -3221,6 +4180,11 @@ const supabaseClient =
         SUPABASE_URL,
         SUPABASE_KEY
     );
+
+
+/* ==============================
+   CATEGORY MAP
+============================== */
 
 const categoryMap = {
 
@@ -3266,6 +4230,11 @@ const categoryMap = {
 
 };
 
+
+/* ==============================
+   STATE
+============================== */
+
 let cart = [];
 
 let currentSlide = 0;
@@ -3278,16 +4247,17 @@ let toastTimer = null;
 
 let latestMenuItems = [];
 
-/* غذای انتخاب‌شده برای پنجره جزئیات */
 let selectedDetailProduct = null;
+
+
+/* ==============================
+   HELPERS
+============================== */
 
 const $ =
     id =>
         document.getElementById(id);
 
-/* =========================
-   HELPERS
-========================= */
 
 function escapeHTML(value){
 
@@ -3302,21 +4272,21 @@ function escapeHTML(value){
         .replace(/"/g,"&quot;")
 
         .replace(/'/g,"&#039;");
-
 }
+
 
 function escapeAttribute(value){
 
     return escapeHTML(value);
-
 }
+
 
 function persianNumber(value){
 
     return Number(value || 0)
         .toLocaleString("fa-IR");
-
 }
+
 
 function normalizeCategory(title=""){
 
@@ -3325,6 +4295,7 @@ function normalizeCategory(title=""){
             .trim()
             .toLowerCase();
 
+
     if(
         t.includes("غذای اصلی") ||
         t.includes("main food") ||
@@ -3332,11 +4303,13 @@ function normalizeCategory(title=""){
     )
         return "food";
 
+
     if(
         t.includes("فست") ||
         t.includes("fast")
     )
         return "fastfood";
+
 
     if(
         t.includes("صبحانه") ||
@@ -3344,11 +4317,13 @@ function normalizeCategory(title=""){
     )
         return "breakfast";
 
+
     if(
         t.includes("پیتزا") ||
         t.includes("pizza")
     )
         return "pizza";
+
 
     if(
         t.includes("گرم") ||
@@ -3356,11 +4331,13 @@ function normalizeCategory(title=""){
     )
         return "hot";
 
+
     if(
         t.includes("سرد") ||
         t.includes("cold")
     )
         return "cold";
+
 
     if(
         t.includes("دسر") ||
@@ -3368,27 +4345,69 @@ function normalizeCategory(title=""){
     )
         return "dessert";
 
+
     if(
         t.includes("قلیان") ||
         t.includes("hookah")
     )
         return "hookah";
 
-    return null;
 
+    return null;
 }
 
-/* =========================
+
+function lockBody(){
+
+    document.body.classList.add(
+        "modal-open"
+    );
+}
+
+
+function unlockBody(){
+
+    if(
+
+        !$("cartModal")
+            .classList
+            .contains("show")
+
+        &&
+
+        !$("foodDetailModal")
+            .classList
+            .contains("show")
+
+        &&
+
+        !$("confirmOverlay")
+            .classList
+            .contains("show")
+
+    ){
+
+        document.body.classList.remove(
+            "modal-open"
+        );
+
+    }
+}
+
+
+/* ==============================
    BUSINESS HOURS
-========================= */
+============================== */
 
 async function loadBusinessHours(){
 
     const el =
         $("businessHours");
 
+
     if(!el)
         return;
+
 
     try{
 
@@ -3411,8 +4430,10 @@ async function loadBusinessHours(){
                     }
                 );
 
+
         if(error)
             throw error;
+
 
         const weekday =
             new Intl.DateTimeFormat(
@@ -3424,6 +4445,7 @@ async function loadBusinessHours(){
             ).format(
                 new Date()
             );
+
 
         const dayMap = {
 
@@ -3437,6 +4459,7 @@ async function loadBusinessHours(){
 
         };
 
+
         const today =
             (data || []).find(
                 item =>
@@ -3446,20 +4469,24 @@ async function loadBusinessHours(){
                     dayMap[weekday]
             );
 
+
         const timeEl =
             el.querySelector(
                 ".hours-time"
             );
+
 
         const separatorEl =
             el.querySelector(
                 ".hours-separator"
             );
 
+
         const statusEl =
             el.querySelector(
                 ".hours-status"
             );
+
 
         if(!today){
 
@@ -3471,12 +4498,9 @@ async function loadBusinessHours(){
             statusEl.textContent =
                 "ساعت کاری ثبت نشده است";
 
-            el.classList.remove(
-                "closed"
-            );
-
             return;
         }
+
 
         if(today.is_closed){
 
@@ -3495,56 +4519,72 @@ async function loadBusinessHours(){
             return;
         }
 
+
         const open =
             String(
                 today.open_time || ""
             ).slice(0,5);
+
 
         const close =
             String(
                 today.close_time || ""
             ).slice(0,5);
 
+
+        const openParts =
+            open.split(":");
+
+
+        const closeParts =
+            close.split(":");
+
+
         const openFa =
-            `${persianNumber(open.split(":")[0])}:${persianNumber(open.split(":")[1])}`;
+            openParts.length >= 2
+
+                ? `${persianNumber(openParts[0])}:${persianNumber(openParts[1])}`
+
+                : "";
+
 
         const closeFa =
-            `${persianNumber(close.split(":")[0])}:${persianNumber(close.split(":")[1])}`;
+            closeParts.length >= 2
+
+                ? `${persianNumber(closeParts[0])}:${persianNumber(closeParts[1])}`
+
+                : "";
+
 
         timeEl.innerHTML = `
 
-            <span
-                dir="ltr"
-                style="unicode-bidi:isolate"
-            >
+            <span dir="ltr">
                 ${closeFa}
             </span>
 
-            <span
-                dir="rtl"
-                style="unicode-bidi:isolate"
-            >
+            <span dir="rtl">
                 &nbsp; تا&nbsp;
             </span>
 
-            <span
-                dir="ltr"
-                style="unicode-bidi:isolate"
-            >
+            <span dir="ltr">
                 ${openFa}
             </span>
 
         `;
 
+
         separatorEl.style.display =
             "inline";
+
 
         statusEl.textContent =
             "در خدمت مشتریان عزیز هستیم";
 
+
         el.classList.remove(
             "closed"
         );
+
 
     }catch(error){
 
@@ -3553,31 +4593,37 @@ async function loadBusinessHours(){
             error
         );
 
+
         el.querySelector(
             ".hours-time"
         ).textContent = "";
+
 
         el.querySelector(
             ".hours-separator"
         ).style.display =
             "none";
 
+
         el.querySelector(
             ".hours-status"
         ).textContent =
             "ساعت کاری ثبت نشده است";
+
     }
 
 }
 
-/* =========================
+
+/* ==============================
    LOAD MENU
-========================= */
+============================== */
 
 async function loadMenu(){
 
     const container =
         $("menuContainer");
+
 
     try{
 
@@ -3611,8 +4657,10 @@ async function loadMenu(){
                     }
                 );
 
+
         if(error)
             throw error;
+
 
         const available =
             (data || [])
@@ -3621,43 +4669,60 @@ async function loadMenu(){
                         item.is_available !== false
                 );
 
+
         latestMenuItems =
             available;
+
 
         renderMenu(
             available
         );
 
+
+        updateAllProductQtyUI();
+
+        updateActiveTab();
+
+
     }catch(error){
 
-        console.error(error);
+        console.error(
+            "Menu:",
+            error
+        );
 
-        container.innerHTML =
 
-            `
+        container.innerHTML = `
+
             <div class="error">
 
                 خطا در دریافت منو.
                 لطفاً دوباره تلاش کنید.
 
             </div>
-            `;
+
+        `;
+
     }
 
 }
 
-/* =========================
+
+/* ==============================
    RENDER MENU
-========================= */
+============================== */
 
 function renderMenu(items){
 
     const container =
         $("menuContainer");
 
+
     container.innerHTML = "";
 
+
     const grouped = {};
+
 
     Object.keys(
         categoryMap
@@ -3668,16 +4733,19 @@ function renderMenu(items){
         }
     );
 
+
     items.forEach(
         item=>{
 
             const categoryTitle =
                 item.categories?.title || "";
 
+
             const key =
                 normalizeCategory(
                     categoryTitle
                 );
+
 
             if(key){
 
@@ -3690,6 +4758,7 @@ function renderMenu(items){
         }
     );
 
+
     Object.keys(
         categoryMap
     )
@@ -3701,16 +4770,20 @@ function renderMenu(items){
             )
                 return;
 
+
             const section =
                 document.createElement(
                     "section"
                 );
 
+
             section.className =
                 "menu-section";
 
+
             section.id =
                 key;
+
 
             section.innerHTML = `
 
@@ -3718,25 +4791,26 @@ function renderMenu(items){
 
                     <div>
 
-                        <div
-                            class="section-title"
-                        >
+                        <div class="section-title">
+
                             ${escapeHTML(
                                 categoryMap[key].title
                             )}
+
                         </div>
 
-                        <span
-                            class="section-en"
-                        >
+                        <span class="section-en">
+
                             ${escapeHTML(
                                 categoryMap[key].en
                             )}
+
                         </span>
 
                     </div>
 
                 </div>
+
 
                 <div
                     class="${
@@ -3748,10 +4822,12 @@ function renderMenu(items){
 
             `;
 
+
             const grid =
                 section.querySelector(
                     ".menu-grid,.hookah-grid"
                 );
+
 
             grouped[key].forEach(
                 item=>{
@@ -3775,6 +4851,7 @@ function renderMenu(items){
                 }
             );
 
+
             container.appendChild(
                 section
             );
@@ -3784,47 +4861,199 @@ function renderMenu(items){
 
 }
 
-/* =========================
-   PRODUCT JSON
-========================= */
 
-function makeProductJSON(item){
+/* ==============================
+   PRODUCT HELPERS
+============================== */
 
-    const product = {
+function getProduct(id){
 
-        id:item.id,
-
-        name:item.name,
-
-        price:
-            Number(item.price) || 0,
-
-        image:
-            item.image_url ||
-            "no-image.jpg",
-
-        description:
-            item.description || ""
-
-    };
-
-    return JSON.stringify(
-        product
-    )
-    .replace(
-        /\\/g,
-        "\\\\"
-    )
-    .replace(
-        /'/g,
-        "&#039;"
+    return latestMenuItems.find(
+        item =>
+            String(item.id) ===
+            String(id)
     );
+}
+
+
+function getCartItem(id){
+
+    return cart.find(
+        item =>
+            String(item.id) ===
+            String(id)
+    );
+}
+
+
+function getProductQty(id){
+
+    const item =
+        getCartItem(id);
+
+
+    return item
+        ? Number(item.qty) || 0
+        : 0;
+}
+
+
+/* ==============================
+   UPDATE PRODUCT QUANTITY UI
+============================== */
+
+function updateAllProductQtyUI(){
+
+    document
+        .querySelectorAll(
+            ".product-qty"
+        )
+        .forEach(
+            controls=>{
+
+                const id =
+                    controls.dataset.productId;
+
+
+                const qty =
+                    getProductQty(id);
+
+
+                const numberEl =
+                    controls.querySelector(
+                        ".qty-number"
+                    );
+
+
+                if(numberEl){
+
+                    numberEl.textContent =
+                        persianNumber(
+                            qty
+                        );
+
+                }
+
+
+                controls.classList.toggle(
+                    "has-item",
+                    qty > 0
+                );
+
+            }
+        );
 
 }
 
-/* =========================
+
+/* ==============================
+   CHANGE PRODUCT QTY
+============================== */
+
+function changeProductQty(
+    id,
+    amount,
+    showMessage = true
+){
+
+    const source =
+        getProduct(id);
+
+
+    if(!source)
+        return;
+
+
+    let item =
+        getCartItem(id);
+
+
+    if(amount > 0){
+
+        if(!item){
+
+            item = {
+
+                id:
+                    source.id,
+
+                name:
+                    source.name,
+
+                price:
+                    Number(
+                        source.price
+                    ) || 0,
+
+                image:
+                    source.image_url ||
+                    "no-image.jpg",
+
+                description:
+                    source.description ||
+                    "",
+
+                qty:0
+
+            };
+
+
+            cart.push(
+                item
+            );
+
+        }
+
+
+        item.qty += amount;
+
+
+    }else{
+
+        if(!item)
+            return;
+
+
+        item.qty += amount;
+
+
+        if(item.qty <= 0){
+
+            cart =
+                cart.filter(
+                    x =>
+                        String(x.id) !==
+                        String(id)
+                );
+
+        }
+
+    }
+
+
+    updateAllProductQtyUI();
+
+    updateCart();
+
+
+    if(
+        showMessage &&
+        amount > 0
+    ){
+
+        showToast(
+            "به سبد سفارش اضافه شد",
+            "success"
+        );
+
+    }
+
+}
+
+
+/* ==============================
    FOOD CARD
-========================= */
+============================== */
 
 function createFoodCard(item){
 
@@ -3832,9 +5061,9 @@ function createFoodCard(item){
         item.image_url ||
         "no-image.jpg";
 
+
     const badge =
         item.badge
-
             ? `
 
                 <div
@@ -3842,13 +5071,10 @@ function createFoodCard(item){
                         String(
                             item.badge
                         ).includes("ویژه") ||
-
                         String(
                             item.badge
                         ).includes("special")
-
                             ? "special"
-
                             : ""
                     }"
                 >
@@ -3860,55 +5086,54 @@ function createFoodCard(item){
                 </div>
 
             `
-
             : "";
 
-    const productJSON =
-        makeProductJSON(
-            item
-        );
 
     return `
 
-        <article class="food-card">
+        <article
+            class="food-card"
+            data-item-id="${escapeAttribute(
+                item.id
+            )}"
+        >
 
             ${badge}
 
+
             <div
                 class="food-image"
-                onclick='openFoodDetail(
-                    ${productJSON}
-                )'
+                data-action="detail"
+                data-id="${escapeAttribute(
+                    item.id
+                )}"
             >
 
                 <img
-
                     src="${escapeAttribute(
                         image
                     )}"
-
                     alt="${escapeAttribute(
                         item.name
                     )}"
-
+                    loading="lazy"
                     onerror="
                         this.src='no-image.jpg'
                     "
-
                 >
 
             </div>
 
+
             <div class="food-info">
 
+
                 <div
-
                     class="food-name"
-
-                    onclick='openFoodDetail(
-                        ${productJSON}
-                    )'
-
+                    data-action="detail"
+                    data-id="${escapeAttribute(
+                        item.id
+                    )}"
                 >
 
                     ${escapeHTML(
@@ -3916,6 +5141,7 @@ function createFoodCard(item){
                     )}
 
                 </div>
+
 
                 <div class="food-description">
 
@@ -3925,7 +5151,9 @@ function createFoodCard(item){
 
                 </div>
 
+
                 <div class="food-bottom">
+
 
                     <div class="price-box">
 
@@ -3937,39 +5165,59 @@ function createFoodCard(item){
 
                         </span>
 
+
                         <span class="price-currency">
 
                             <img
-
                                 src="toman.png"
-
                                 alt="تومان"
-
+                                loading="lazy"
                                 onerror="
                                     this.style.display='none';
                                     this.parentElement.innerHTML='<span class=&quot;price-currency-text&quot;>تومان</span>'
                                 "
-
                             >
 
                         </span>
 
                     </div>
 
-                    <button
 
-                        class="plus"
-
-                        onclick='addToCart(
-                            ${productJSON},
-                            this
-                        )'
-
+                    <div
+                        class="product-qty"
+                        data-product-id="${escapeAttribute(
+                            item.id
+                        )}"
                     >
 
-                        +
 
-                    </button>
+                        <button
+                            type="button"
+                            class="qty-minus"
+                            data-qty-change="-1"
+                            aria-label="کم کردن تعداد"
+                        >
+                            −
+                        </button>
+
+
+                        <span class="qty-number">
+                            ۰
+                        </span>
+
+
+                        <button
+                            type="button"
+                            class="qty-plus"
+                            data-qty-change="1"
+                            aria-label="افزودن به سبد"
+                        >
+                            +
+                        </button>
+
+
+                    </div>
+
 
                 </div>
 
@@ -3981,15 +5229,15 @@ function createFoodCard(item){
 
 }
 
-/* =========================
+
+/* ==============================
    HOOKAH CARD
-========================= */
+============================== */
 
 function createHookahCard(item){
 
     const badge =
         item.badge
-
             ? `
 
                 <div
@@ -4009,26 +5257,27 @@ function createHookahCard(item){
                 </div>
 
             `
-
             : "";
 
-    const productJSON =
-        makeProductJSON(
-            item
-        );
 
     return `
 
-        <article class="hookah-card">
+        <article
+            class="hookah-card"
+            data-item-id="${escapeAttribute(
+                item.id
+            )}"
+        >
 
             ${badge}
 
+
             <div
                 class="hookah-name"
-                style="cursor:pointer"
-                onclick='openFoodDetail(
-                    ${productJSON}
-                )'
+                data-action="detail"
+                data-id="${escapeAttribute(
+                    item.id
+                )}"
             >
 
                 ${escapeHTML(
@@ -4036,6 +5285,7 @@ function createHookahCard(item){
                 )}
 
             </div>
+
 
             <div class="hookah-description">
 
@@ -4045,55 +5295,75 @@ function createHookahCard(item){
 
             </div>
 
-            <div class="hookah-price">
 
-                <span class="price-number">
+            <div class="hookah-bottom">
 
-                    ${persianNumber(
-                        item.price
-                    )}
 
-                </span>
+                <div class="hookah-price">
 
-                <span class="price-currency">
+                    <span class="price-number">
 
-                    <img
+                        ${persianNumber(
+                            item.price
+                        )}
 
-                        src="toman.png"
+                    </span>
 
-                        alt="تومان"
 
-                        onerror="
-                            this.style.display='none';
-                            this.parentElement.innerHTML='<span class=&quot;price-currency-text&quot;>تومان</span>'
-                        "
+                    <span class="price-currency">
 
+                        <img
+                            src="toman.png"
+                            alt="تومان"
+                            loading="lazy"
+                            onerror="
+                                this.style.display='none';
+                                this.parentElement.innerHTML='<span class=&quot;price-currency-text&quot;>تومان</span>'
+                            "
+                        >
+
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="product-qty"
+                    data-product-id="${escapeAttribute(
+                        item.id
+                    )}"
+                >
+
+
+                    <button
+                        type="button"
+                        class="qty-minus"
+                        data-qty-change="-1"
+                        aria-label="کم کردن تعداد"
                     >
+                        −
+                    </button>
 
-                </span>
+
+                    <span class="qty-number">
+                        ۰
+                    </span>
+
+
+                    <button
+                        type="button"
+                        class="qty-plus"
+                        data-qty-change="1"
+                        aria-label="افزودن به سبد"
+                    >
+                        +
+                    </button>
+
+
+                </div>
+
 
             </div>
-
-            <button
-
-                class="plus"
-
-                style="
-                    position:absolute;
-                    left:18px;
-                    bottom:15px
-                "
-
-                onclick='addToCart(
-                    ${productJSON},
-                    this
-                )'
-
-            >
-
-                +
-
-            </button>
 
         </article>
 
@@ -4101,9 +5371,110 @@ function createHookahCard(item){
 
 }
 
-/* =========================
+
+/* ==============================
+   MENU EVENT DELEGATION
+============================== */
+
+$("menuContainer")
+    .addEventListener(
+        "click",
+        event=>{
+
+
+            const qtyButton =
+                event.target.closest(
+                    "[data-qty-change]"
+                );
+
+
+            if(qtyButton){
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+
+                const controls =
+                    qtyButton.closest(
+                        ".product-qty"
+                    );
+
+
+                if(!controls)
+                    return;
+
+
+                const id =
+                    controls.dataset.productId;
+
+
+                const amount =
+                    Number(
+                        qtyButton.dataset.qtyChange
+                    );
+
+
+                changeProductQty(
+                    id,
+                    amount
+                );
+
+
+                return;
+            }
+
+
+            const detailTarget =
+                event.target.closest(
+                    '[data-action="detail"]'
+                );
+
+
+            if(!detailTarget)
+                return;
+
+
+            const product =
+                getProduct(
+                    detailTarget.dataset.id
+                );
+
+
+            if(!product)
+                return;
+
+
+            openFoodDetail({
+
+                id:
+                    product.id,
+
+                name:
+                    product.name,
+
+                price:
+                    Number(
+                        product.price
+                    ) || 0,
+
+                image:
+                    product.image_url ||
+                    "no-image.jpg",
+
+                description:
+                    product.description ||
+                    ""
+
+            });
+
+        }
+    );
+
+
+/* ==============================
    FOOD DETAIL
-========================= */
+============================== */
 
 function openFoodDetail(
     product
@@ -4112,66 +5483,65 @@ function openFoodDetail(
     selectedDetailProduct =
         product;
 
-    const modal =
-        $("foodDetailModal");
 
-    const image =
-        $("foodDetailImage");
-
-    const title =
-        $("foodDetailTitle");
-
-    const description =
-        $("foodDetailDescription");
-
-    const price =
-        $("foodDetailPrice");
-
-    image.src =
+    $("foodDetailImage").src =
         product.image ||
         "no-image.jpg";
 
-    image.alt =
-        product.name || "";
 
-    image.onerror =
+    $("foodDetailImage").alt =
+        product.name ||
+        "";
+
+
+    $("foodDetailImage").onerror =
         ()=>{
-            image.src =
+            $("foodDetailImage").src =
                 "no-image.jpg";
         };
 
-    title.textContent =
-        product.name || "";
 
-    description.textContent =
+    $("foodDetailTitle")
+        .textContent =
+        product.name ||
+        "";
+
+
+    $("foodDetailDescription")
+        .textContent =
         product.description ||
         "توضیحاتی برای این محصول ثبت نشده است.";
 
-    price.innerHTML = `
 
-        <span>
-            ${persianNumber(
-                product.price
-            )}
-        </span>
+    $("foodDetailPrice")
+        .innerHTML = `
 
-        <img
-            src="toman.png"
-            alt="تومان"
-            onerror="
-                this.style.display='none'
-            "
-        >
+            <span>
+                ${persianNumber(
+                    product.price
+                )}
+            </span>
 
-    `;
+            <img
+                src="toman.png"
+                alt="تومان"
+                onerror="
+                    this.style.display='none'
+                "
+            >
 
-    modal.classList.add(
-        "show"
-    );
+        `;
 
-    document.body.style.overflow =
-        "hidden";
+
+    $("foodDetailModal")
+        .classList
+        .add("show");
+
+
+    lockBody();
+
 }
+
 
 function closeFoodDetail(){
 
@@ -4179,12 +5549,15 @@ function closeFoodDetail(){
         .classList
         .remove("show");
 
-    document.body.style.overflow =
-        "";
 
     selectedDetailProduct =
         null;
+
+
+    unlockBody();
+
 }
+
 
 $("foodDetailClose")
     .addEventListener(
@@ -4192,13 +5565,14 @@ $("foodDetailClose")
         closeFoodDetail
     );
 
+
 $("foodDetailModal")
     .addEventListener(
         "click",
-        e=>{
+        event=>{
 
             if(
-                e.target ===
+                event.target ===
                 $("foodDetailModal")
             ){
 
@@ -4208,6 +5582,7 @@ $("foodDetailModal")
 
         }
     );
+
 
 $("foodDetailAdd")
     .addEventListener(
@@ -4219,155 +5594,36 @@ $("foodDetailAdd")
             )
                 return;
 
-            addToCart(
-                selectedDetailProduct
+
+            changeProductQty(
+                selectedDetailProduct.id,
+                1
             );
+
 
             closeFoodDetail();
 
         }
     );
 
-/* =========================
+
+/* ==============================
    CART
-========================= */
-
-function addToCart(
-    product,
-    button = null
-){
-
-    const existing =
-        cart.find(
-            item =>
-                String(
-                    item.id
-                ) ===
-                String(
-                    product.id
-                )
-        );
-
-    if(existing){
-
-        existing.qty++;
-
-    }else{
-
-        cart.push({
-
-            ...product,
-
-            qty:1
-
-        });
-
-    }
-
-    if(button){
-
-        button.classList.add(
-            "added"
-        );
-
-        setTimeout(
-            ()=>{
-
-                button.classList.remove(
-                    "added"
-                );
-
-            },
-            250
-        );
-
-    }
-
-    updateCart();
-
-    showToast(
-        "به سبد سفارش اضافه شد",
-        "success"
-    );
-
-}
-
-function increaseItem(id){
-
-    const item =
-        cart.find(
-            x =>
-                String(x.id) ===
-                String(id)
-        );
-
-    if(item){
-
-        item.qty++;
-
-    }
-
-    updateCart();
-
-    renderCart();
-
-}
-
-function decreaseItem(id){
-
-    const item =
-        cart.find(
-            x =>
-                String(x.id) ===
-                String(id)
-        );
-
-    if(!item)
-        return;
-
-    item.qty--;
-
-    if(item.qty <= 0){
-
-        cart =
-            cart.filter(
-                x =>
-                    String(x.id) !==
-                    String(id)
-            );
-
-    }
-
-    updateCart();
-
-    renderCart();
-
-}
-
-function removeItem(id){
-
-    cart =
-        cart.filter(
-            x =>
-                String(x.id) !==
-                String(id)
-        );
-
-    updateCart();
-
-    renderCart();
-
-}
+============================== */
 
 function getCartCount(){
 
     return cart.reduce(
         (sum,item)=>
-            sum + item.qty,
+            sum +
+            (
+                Number(item.qty) || 0
+            ),
         0
     );
 
 }
+
 
 function getCartTotal(){
 
@@ -4378,17 +5634,13 @@ function getCartTotal(){
             sum +
 
             (
-                Number(
-                    item.price
-                ) || 0
+                Number(item.price) || 0
             )
 
             *
 
             (
-                Number(
-                    item.qty
-                ) || 0
+                Number(item.qty) || 0
             ),
 
         0
@@ -4397,33 +5649,41 @@ function getCartTotal(){
 
 }
 
+
 function updateCart(){
 
     const count =
         getCartCount();
 
+
     const total =
         getCartTotal();
+
 
     $("cartCount")
         .textContent =
         `${persianNumber(count)} آیتم`;
 
+
     $("cartBadge")
         .textContent =
         persianNumber(count);
+
 
     $("cartTotal")
         .textContent =
         `${persianNumber(total)} تومان`;
 
+
     $("summaryCount")
         .textContent =
         persianNumber(count);
 
+
     $("summarySubtotal")
         .textContent =
         `${persianNumber(total)} تومان`;
+
 
     $("summaryTotal")
         .textContent =
@@ -4431,10 +5691,16 @@ function updateCart(){
 
 }
 
+
+/* ==============================
+   RENDER CART
+============================== */
+
 function renderCart(){
 
     const box =
         $("cartItems");
+
 
     if(!cart.length){
 
@@ -4452,76 +5718,79 @@ function renderCart(){
 
         `;
 
+
         updateCart();
 
         return;
     }
+
 
     box.innerHTML =
 
         cart.map(
             item=>`
 
-                <div class="cart-item">
+                <div
+                    class="cart-item"
+                    data-cart-id="${escapeAttribute(
+                        item.id
+                    )}"
+                >
 
                     <img
-
                         class="cart-item-image"
-
                         src="${escapeAttribute(
                             item.image ||
                             "no-image.jpg"
                         )}"
-
+                        alt="${escapeAttribute(
+                            item.name
+                        )}"
+                        loading="lazy"
                         onerror="
                             this.src='no-image.jpg'
                         "
-
                     >
+
 
                     <div class="cart-item-info">
 
-                        <div
-                            class="cart-item-name"
-                        >
+                        <div class="cart-item-name">
+
                             ${escapeHTML(
                                 item.name
                             )}
+
                         </div>
 
-                        <div
-                            class="cart-item-price"
-                        >
+
+                        <div class="cart-item-price">
 
                             ${persianNumber(
                                 item.price
                             )}
 
-                            تومان ×
-
-                            ${persianNumber(
-                                item.qty
-                            )}
+                            تومان
 
                         </div>
 
                     </div>
 
-                    <div class="cart-controls">
+
+                    <div
+                        class="cart-controls"
+                        data-cart-controls-id="${escapeAttribute(
+                            item.id
+                        )}"
+                    >
 
                         <button
-
-                            onclick="
-                                decreaseItem(
-                                    '${escapeAttribute(
-                                        item.id
-                                    )}'
-                                )
-                            "
-
+                            type="button"
+                            data-cart-action="decrease"
                         >
                             −
                         </button>
+
 
                         <span class="cart-qty">
 
@@ -4531,32 +5800,19 @@ function renderCart(){
 
                         </span>
 
+
                         <button
-
-                            onclick="
-                                increaseItem(
-                                    '${escapeAttribute(
-                                        item.id
-                                    )}'
-                                )
-                            "
-
+                            type="button"
+                            data-cart-action="increase"
                         >
                             +
                         </button>
 
+
                         <button
-
+                            type="button"
                             class="remove"
-
-                            onclick="
-                                removeItem(
-                                    '${escapeAttribute(
-                                        item.id
-                                    )}'
-                                )
-                            "
-
+                            data-cart-action="remove"
                         >
                             ×
                         </button>
@@ -4568,32 +5824,122 @@ function renderCart(){
             `
         ).join("");
 
+
     updateCart();
 
 }
 
+
+/* ==============================
+   CART EVENTS
+============================== */
+
+$("cartItems")
+    .addEventListener(
+        "click",
+        event=>{
+
+            const button =
+                event.target.closest(
+                    "[data-cart-action]"
+                );
+
+
+            if(!button)
+                return;
+
+
+            const controls =
+                button.closest(
+                    "[data-cart-controls-id]"
+                );
+
+
+            if(!controls)
+                return;
+
+
+            const id =
+                controls.dataset.cartControlsId;
+
+
+            const action =
+                button.dataset.cartAction;
+
+
+            if(
+                action === "increase"
+            ){
+
+                changeProductQty(
+                    id,
+                    1,
+                    false
+                );
+
+
+            }else if(
+                action === "decrease"
+            ){
+
+                changeProductQty(
+                    id,
+                    -1,
+                    false
+                );
+
+
+            }else if(
+                action === "remove"
+            ){
+
+                cart =
+                    cart.filter(
+                        item =>
+                            String(item.id) !==
+                            String(id)
+                    );
+
+            }
+
+
+            updateAllProductQtyUI();
+
+            renderCart();
+
+        }
+    );
+
+
+/* ==============================
+   OPEN / CLOSE CART
+============================== */
+
 function openCart(){
 
     renderCart();
+
 
     $("cartPage")
         .style
         .display =
         "block";
 
+
     $("successPage")
         .style
         .display =
         "none";
 
+
     $("cartModal")
         .classList
         .add("show");
 
-    document.body.style.overflow =
-        "hidden";
 
+    lockBody();
 }
+
 
 function closeCart(){
 
@@ -4601,57 +5947,10 @@ function closeCart(){
         .classList
         .remove("show");
 
-    document.body.style.overflow =
-        "";
 
+    unlockBody();
 }
 
-/* =========================
-   FORM RESET
-========================= */
-
-function resetOrderForm(){
-
-    $("customerName")
-        .value = "";
-
-    $("customerPhone")
-        .value = "";
-
-    $("tableNumber")
-        .value = "";
-
-    $("orderNote")
-        .value = "";
-
-    $("orderType")
-        .value =
-        "dine_in";
-
-    $("tableNumber")
-        .closest(".field")
-        .style.opacity =
-        "1";
-
-    [
-
-        "customerName",
-        "customerPhone",
-        "tableNumber"
-
-    ].forEach(
-        id=>{
-
-            $(id)
-                .classList
-                .remove(
-                    "invalid"
-                );
-
-        }
-    );
-
-}
 
 $("cartBar")
     .addEventListener(
@@ -4659,19 +5958,41 @@ $("cartBar")
         openCart
     );
 
+
+$("cartBar")
+    .addEventListener(
+        "keydown",
+        event=>{
+
+            if(
+                event.key === "Enter" ||
+                event.key === " "
+            ){
+
+                event.preventDefault();
+
+                openCart();
+
+            }
+
+        }
+    );
+
+
 $("closeModal")
     .addEventListener(
         "click",
         closeCart
     );
 
+
 $("cartModal")
     .addEventListener(
         "click",
-        e=>{
+        event=>{
 
             if(
-                e.target ===
+                event.target ===
                 $("cartModal")
             ){
 
@@ -4682,6 +6003,59 @@ $("cartModal")
         }
     );
 
+
+/* ==============================
+   RESET FORM
+============================== */
+
+function resetOrderForm(){
+
+    $("customerName")
+        .value = "";
+
+
+    $("customerPhone")
+        .value = "";
+
+
+    $("tableNumber")
+        .value = "";
+
+
+    $("orderNote")
+        .value = "";
+
+
+    $("orderType")
+        .value =
+        "dine_in";
+
+
+    $("tableNumber")
+        .closest(".field")
+        .style.opacity =
+        "1";
+
+
+    [
+        "customerName",
+        "customerPhone",
+        "tableNumber"
+
+    ].forEach(
+        id=>{
+
+            $(id)
+                .classList
+                .remove(
+                    "invalid"
+                );
+
+        }
+    );
+}
+
+
 $("clearCart")
     .addEventListener(
         "click",
@@ -4689,6 +6063,7 @@ $("clearCart")
 
             if(!cart.length)
                 return;
+
 
             if(
                 confirm(
@@ -4698,7 +6073,9 @@ $("clearCart")
 
                 cart = [];
 
-                updateCart();
+
+                updateAllProductQtyUI();
+
 
                 renderCart();
 
@@ -4707,6 +6084,7 @@ $("clearCart")
         }
     );
 
+
 $("closeSuccess")
     .addEventListener(
         "click",
@@ -4714,49 +6092,37 @@ $("closeSuccess")
 
             cart = [];
 
+
+            updateAllProductQtyUI();
+
+
             updateCart();
 
+
             resetOrderForm();
+
 
             closeCart();
 
         }
     );
 
-document.addEventListener(
-    "keydown",
-    e=>{
 
-        if(
-            e.key ===
-            "Escape"
-        ){
-
-            closeCart();
-
-            closeFoodDetail();
-
-        }
-
-    }
-);
-
-/* =========================
+/* ==============================
    VALIDATION
-========================= */
+============================== */
 
 function markInvalid(id){
 
     $(id)
         .classList
         .add("invalid");
-
 }
+
 
 function clearInvalid(){
 
     [
-
         "customerName",
         "customerPhone",
         "tableNumber"
@@ -4775,9 +6141,11 @@ function clearInvalid(){
 
 }
 
+
 function validateOrder(){
 
     clearInvalid();
+
 
     if(!cart.length){
 
@@ -4786,26 +6154,32 @@ function validateOrder(){
             "error"
         );
 
+
         return false;
     }
+
 
     const name =
         $("customerName")
             .value
             .trim();
 
+
     const phone =
         $("customerPhone")
             .value
             .trim();
 
+
     const table =
         $("tableNumber")
             .value;
 
+
     const orderType =
         $("orderType")
             .value;
+
 
     if(!name){
 
@@ -4814,15 +6188,19 @@ function validateOrder(){
             "error"
         );
 
+
         markInvalid(
             "customerName"
         );
 
+
         $("customerName")
             .focus();
 
+
         return false;
     }
+
 
     if(!phone){
 
@@ -4831,15 +6209,19 @@ function validateOrder(){
             "error"
         );
 
+
         markInvalid(
             "customerPhone"
         );
 
+
         $("customerPhone")
             .focus();
 
+
         return false;
     }
+
 
     const normalizedPhone =
         phone.replace(
@@ -4847,8 +6229,10 @@ function validateOrder(){
             ""
         );
 
+
     const irMobilePattern =
         /^(?:\+?98|0)?9\d{9}$/;
+
 
     if(
         !irMobilePattern.test(
@@ -4861,19 +6245,22 @@ function validateOrder(){
             "error"
         );
 
+
         markInvalid(
             "customerPhone"
         );
 
+
         $("customerPhone")
             .focus();
+
 
         return false;
     }
 
+
     if(
-        orderType ===
-            "dine_in" &&
+        orderType === "dine_in" &&
         !table
     ){
 
@@ -4882,15 +6269,19 @@ function validateOrder(){
             "error"
         );
 
+
         markInvalid(
             "tableNumber"
         );
 
+
         $("tableNumber")
             .focus();
 
+
         return false;
     }
+
 
     if(
         latestMenuItems.length
@@ -4900,23 +6291,21 @@ function validateOrder(){
             new Set(
 
                 latestMenuItems.map(
-                    m =>
-                        String(
-                            m.id
-                        )
+                    item =>
+                        String(item.id)
                 )
 
             );
+
 
         const unavailable =
             cart.filter(
                 item =>
                     !availableIds.has(
-                        String(
-                            item.id
-                        )
+                        String(item.id)
                     )
             );
+
 
         if(
             unavailable.length
@@ -4925,10 +6314,11 @@ function validateOrder(){
             const names =
                 unavailable
                     .map(
-                        i =>
-                            i.name
+                        item =>
+                            item.name
                     )
                     .join("، ");
+
 
             showToast(
 
@@ -4937,105 +6327,309 @@ function validateOrder(){
                 "error"
             );
 
+
             cart =
                 cart.filter(
-
                     item =>
                         availableIds.has(
-                            String(
-                                item.id
-                            )
+                            String(item.id)
                         )
-
                 );
 
-            updateCart();
+
+            updateAllProductQtyUI();
 
             renderCart();
 
-            return false;
 
+            return false;
         }
 
     }
 
+
     return true;
-
 }
 
-/* =========================
-   ORDER
-========================= */
 
-function generateOrderNumber(){
+/* ==============================
+   CONFIRMATION
+============================== */
 
-    const number =
-        Math.floor(
-            10000 +
-            Math.random() *
-            90000
-        );
-
-    return String(
-        number
-    );
-
-}
-
-async function submitOrder(){
+function prepareConfirmation(){
 
     if(
         !validateOrder()
     )
         return;
 
-    const button =
-        $("submitOrder");
 
-    button.disabled = true;
+    $("confirmItems")
+        .innerHTML =
+
+        cart.map(
+            item=>{
+
+                const itemTotal =
+                    (
+                        Number(item.price) || 0
+                    )
+
+                    *
+
+                    (
+                        Number(item.qty) || 0
+                    );
+
+
+                return `
+
+                    <div class="confirm-item">
+
+                        <div class="confirm-item-name">
+
+                            ${escapeHTML(
+                                item.name
+                            )}
+
+                        </div>
+
+
+                        <div class="confirm-item-qty">
+
+                            × ${persianNumber(
+                                item.qty
+                            )}
+
+                        </div>
+
+
+                        <div class="confirm-item-price">
+
+                            ${persianNumber(
+                                itemTotal
+                            )}
+
+                            تومان
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+        ).join("");
+
+
+    $("confirmName")
+        .textContent =
+        $("customerName")
+            .value
+            .trim();
+
+
+    $("confirmPhone")
+        .textContent =
+        $("customerPhone")
+            .value
+            .trim();
+
+
+    const type =
+        $("orderType")
+            .value;
+
+
+    $("confirmTable")
+        .textContent =
+
+        type === "takeaway"
+
+            ? "ندارد"
+
+            : `میز ${$("tableNumber").value}`;
+
+
+    $("confirmType")
+        .textContent =
+
+        type === "takeaway"
+
+            ? "بیرون‌بر"
+
+            : "سرو داخل رستوران";
+
+
+    $("confirmNote")
+        .textContent =
+
+        $("orderNote")
+            .value
+            .trim()
+
+            ||
+
+        "ندارد";
+
+
+    $("confirmTotal")
+        .textContent =
+        `${persianNumber(
+            getCartTotal()
+        )} تومان`;
+
+
+    $("confirmOverlay")
+        .classList
+        .add("show");
+
+
+    lockBody();
+
+}
+
+
+function closeConfirmation(){
+
+    $("confirmOverlay")
+        .classList
+        .remove("show");
+
+
+    unlockBody();
+
+}
+
+
+$("submitOrder")
+    .addEventListener(
+        "click",
+        prepareConfirmation
+    );
+
+
+$("confirmClose")
+    .addEventListener(
+        "click",
+        closeConfirmation
+    );
+
+
+$("confirmEdit")
+    .addEventListener(
+        "click",
+        closeConfirmation
+    );
+
+
+$("confirmOverlay")
+    .addEventListener(
+        "click",
+        event=>{
+
+            if(
+                event.target ===
+                $("confirmOverlay")
+            ){
+
+                closeConfirmation();
+
+            }
+
+        }
+    );
+
+
+/* ==============================
+   SUBMIT ORDER
+============================== */
+
+function generateOrderNumber(){
+
+    return String(
+        Math.floor(
+            10000 +
+            Math.random() *
+            90000
+        )
+    );
+
+}
+
+
+async function submitOrder(){
+
+    if(
+        !validateOrder()
+    ){
+
+        closeConfirmation();
+
+        return;
+    }
+
+
+    const button =
+        $("confirmSubmit");
+
+
+    button.disabled =
+        true;
+
 
     button.textContent =
         "در حال ثبت سفارش...";
+
 
     try{
 
         const orderNumber =
             generateOrderNumber();
 
+
         const customerName =
             $("customerName")
                 .value
                 .trim();
+
 
         const customerPhone =
             $("customerPhone")
                 .value
                 .trim();
 
+
         const tableNumber =
             $("tableNumber")
                 .value ||
             null;
 
+
         const orderType =
             $("orderType")
                 .value;
+
 
         const note =
             $("orderNote")
                 .value
                 .trim();
 
+
         const total =
             getCartTotal();
+
 
         const items =
             cart.map(
                 item=>({
 
-                    id:item.id,
+                    id:
+                        item.id,
 
-                    name:item.name,
+                    name:
+                        item.name,
 
                     price:
                         Number(
@@ -5065,6 +6659,7 @@ async function submitOrder(){
 
                 })
             );
+
 
         const orderData = {
 
@@ -5104,10 +6699,6 @@ async function submitOrder(){
 
         };
 
-        console.log(
-            "ORDER DATA:",
-            orderData
-        );
 
         const {
             error
@@ -5120,40 +6711,48 @@ async function submitOrder(){
                     orderData
                 ]);
 
-        if(error){
 
-            console.error(
-                "SUPABASE ORDER ERROR:",
-                error
-            );
-
+        if(error)
             throw error;
-        }
 
-        $("successOrderNumber")
-            .textContent =
-            orderNumber;
+
+        closeConfirmation();
+
 
         $("cartPage")
             .style
             .display =
             "none";
 
+
+        $("successOrderNumber")
+            .textContent =
+            orderNumber;
+
+
         $("successPage")
             .style
             .display =
             "block";
 
+
         cart = [];
+
+
+        updateAllProductQtyUI();
+
 
         updateCart();
 
+
         resetOrderForm();
+
 
         showToast(
             "سفارش با موفقیت ثبت شد",
             "success"
         );
+
 
     }catch(error){
 
@@ -5162,8 +6761,10 @@ async function submitOrder(){
             error
         );
 
+
         let message =
             "ثبت سفارش انجام نشد.";
+
 
         if(
             error &&
@@ -5176,58 +6777,36 @@ async function submitOrder(){
 
         }
 
-        if(error?.details){
-
-            console.error(
-                "Details:",
-                error.details
-            );
-
-        }
-
-        if(error?.hint){
-
-            console.error(
-                "Hint:",
-                error.hint
-            );
-
-        }
-
-        if(error?.code){
-
-            console.error(
-                "Code:",
-                error.code
-            );
-
-        }
 
         alert(
             message
         );
+
 
     }finally{
 
         button.disabled =
             false;
 
+
         button.textContent =
-            "ثبت نهایی سفارش";
+            "تأیید و ثبت سفارش";
 
     }
 
 }
 
-$("submitOrder")
+
+$("confirmSubmit")
     .addEventListener(
         "click",
         submitOrder
     );
 
-/* =========================
+
+/* ==============================
    TOAST
-========================= */
+============================== */
 
 function showToast(
     message,
@@ -5237,15 +6816,19 @@ function showToast(
     const toast =
         $("toast");
 
+
     toast.textContent =
         message;
+
 
     toast.className =
         `toast ${type} show`;
 
+
     clearTimeout(
         toastTimer
     );
+
 
     toastTimer =
 
@@ -5257,14 +6840,15 @@ function showToast(
                 );
 
             },
-            3000
+            2800
         );
 
 }
 
-/* =========================
+
+/* ==============================
    SLIDER
-========================= */
+============================== */
 
 function setupSlider(){
 
@@ -5276,47 +6860,50 @@ function setupSlider(){
 
     ];
 
-    const dots =
-        $("sliderDots");
 
-    dots.innerHTML =
+    $("sliderDots")
+        .innerHTML =
 
         slides.map(
             (_,i)=>`
 
                 <button
-
                     class="slider-dot ${
                         i === 0
                             ? "active"
                             : ""
                     }"
-
-                    onclick="
-                        goToSlide(${i})
-                    "
-
+                    data-slide="${i}"
+                    aria-label="تصویر ${i + 1}"
                 ></button>
 
             `
         ).join("");
 
+
     startSlider();
 
 }
 
-function goToSlide(
-    index
-){
+
+function goToSlide(index){
 
     if(!slides.length)
         return;
 
-    slides[currentSlide]
-        .classList
-        .remove(
-            "active"
-        );
+
+    if(
+        slides[currentSlide]
+    ){
+
+        slides[currentSlide]
+            .classList
+            .remove(
+                "active"
+            );
+
+    }
+
 
     currentSlide =
         (
@@ -5325,11 +6912,13 @@ function goToSlide(
         ) %
         slides.length;
 
+
     slides[currentSlide]
         .classList
         .add(
             "active"
         );
+
 
     document
         .querySelectorAll(
@@ -5339,20 +6928,18 @@ function goToSlide(
             (dot,i)=>{
 
                 dot.classList.toggle(
-
                     "active",
-
-                    i ===
-                    currentSlide
-
+                    i === currentSlide
                 );
 
             }
         );
 
+
     startSlider();
 
 }
+
 
 function nextSlide(){
 
@@ -5362,6 +6949,7 @@ function nextSlide(){
 
 }
 
+
 function prevSlide(){
 
     goToSlide(
@@ -5370,23 +6958,47 @@ function prevSlide(){
 
 }
 
+
 function startSlider(){
 
     clearInterval(
         slideTimer
     );
 
+
     slideTimer =
-
         setInterval(
-
-            ()=>nextSlide(),
-
+            nextSlide,
             5000
-
         );
 
 }
+
+
+$("sliderDots")
+    .addEventListener(
+        "click",
+        event=>{
+
+            const dot =
+                event.target.closest(
+                    "[data-slide]"
+                );
+
+
+            if(!dot)
+                return;
+
+
+            goToSlide(
+                Number(
+                    dot.dataset.slide
+                )
+            );
+
+        }
+    );
+
 
 $("nextSlide")
     .addEventListener(
@@ -5394,15 +7006,17 @@ $("nextSlide")
         nextSlide
     );
 
+
 $("prevSlide")
     .addEventListener(
         "click",
         prevSlide
     );
 
-/* =========================
+
+/* ==============================
    TABS
-========================= */
+============================== */
 
 document
     .querySelectorAll(
@@ -5412,9 +7026,7 @@ document
         tab=>{
 
             tab.addEventListener(
-
                 "click",
-
                 ()=>{
 
                     const target =
@@ -5422,20 +7034,23 @@ document
                             tab.dataset.target
                         );
 
+
                     if(!target)
                         return;
+
 
                     const tabsWrap =
                         document.querySelector(
                             ".tabs-wrap"
                         );
 
+
                     const offset =
                         (
-                            tabsWrap
-                                ?.offsetHeight
-                            || 0
+                            tabsWrap?.offsetHeight ||
+                            0
                         ) + 10;
+
 
                     const y =
                         target
@@ -5446,6 +7061,7 @@ document
 
                         offset;
 
+
                     window.scrollTo({
 
                         top:y,
@@ -5455,11 +7071,11 @@ document
                     });
 
                 }
-
             );
 
         }
     );
+
 
 function updateActiveTab(){
 
@@ -5470,6 +7086,7 @@ function updateActiveTab(){
             )
         ];
 
+
     const tabs =
         [
             ...document.querySelectorAll(
@@ -5477,19 +7094,17 @@ function updateActiveTab(){
             )
         ];
 
+
     let active = "";
 
-    sections.forEach(
 
+    sections.forEach(
         section=>{
 
-            const top =
+            if(
                 section
                     .getBoundingClientRect()
-                    .top;
-
-            if(
-                top <= 120
+                    .top <= 120
             ){
 
                 active =
@@ -5498,11 +7113,10 @@ function updateActiveTab(){
             }
 
         }
-
     );
 
-    tabs.forEach(
 
+    tabs.forEach(
         tab=>{
 
             tab.classList.toggle(
@@ -5515,10 +7129,10 @@ function updateActiveTab(){
             );
 
         }
-
     );
 
 }
+
 
 window.addEventListener(
 
@@ -5532,9 +7146,10 @@ window.addEventListener(
 
 );
 
-/* =========================
+
+/* ==============================
    THEME
-========================= */
+============================== */
 
 function applyTheme(
     theme
@@ -5543,6 +7158,7 @@ function applyTheme(
     const dark =
         theme === "dark";
 
+
     document.documentElement
         .classList
         .toggle(
@@ -5550,12 +7166,23 @@ function applyTheme(
             dark
         );
 
+
     $("themeToggle")
         .textContent =
 
         dark
-            ? "☀️"
-            : "🌙";
+            ? "☀"
+            : "☾";
+
+
+    localStorage.setItem(
+
+        "nejati-theme",
+
+        theme
+
+    );
+
 
     document
         .querySelector(
@@ -5571,15 +7198,8 @@ function applyTheme(
 
         );
 
-    localStorage.setItem(
-
-        "nejati-theme",
-
-        theme
-
-    );
-
 }
+
 
 function initTheme(){
 
@@ -5587,6 +7207,7 @@ function initTheme(){
         localStorage.getItem(
             "nejati-theme"
         );
+
 
     if(saved){
 
@@ -5598,12 +7219,14 @@ function initTheme(){
 
     }
 
+
     const prefersDark =
         window.matchMedia(
 
             "(prefers-color-scheme: dark)"
 
         ).matches;
+
 
     applyTheme(
 
@@ -5614,6 +7237,7 @@ function initTheme(){
     );
 
 }
+
 
 $("themeToggle")
     .addEventListener(
@@ -5629,6 +7253,7 @@ $("themeToggle")
                         "dark"
                     );
 
+
             applyTheme(
 
                 isDark
@@ -5641,9 +7266,10 @@ $("themeToggle")
 
     );
 
-/* =========================
+
+/* ==============================
    ORDER TYPE
-========================= */
+============================== */
 
 $("orderType")
     .addEventListener(
@@ -5658,6 +7284,7 @@ $("orderType")
                         ".field"
                     );
 
+
             if(
 
                 this.value ===
@@ -5668,8 +7295,10 @@ $("orderType")
                 tableField.style.opacity =
                     ".45";
 
+
                 $("tableNumber")
                     .value = "";
+
 
             }else{
 
@@ -5682,9 +7311,38 @@ $("orderType")
 
     );
 
-/* =========================
+
+/* ==============================
+   ESC
+============================== */
+
+document.addEventListener(
+
+    "keydown",
+
+    event=>{
+
+        if(
+            event.key !==
+            "Escape"
+        )
+            return;
+
+
+        closeConfirmation();
+
+        closeCart();
+
+        closeFoodDetail();
+
+    }
+
+);
+
+
+/* ==============================
    INIT
-========================= */
+============================== */
 
 setupSlider();
 
@@ -5699,5 +7357,5 @@ loadBusinessHours();
 </script>
 
 </body>
-</html>
 
+</html>
