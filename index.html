@@ -255,11 +255,6 @@ html.dark{
     width:100%;
     height:100%;
 
-    /*
-       عکس بدون کشیدگی
-       و با حفظ نسبت اصلی
-    */
-
     object-fit:cover;
 
     object-position:center;
@@ -2742,41 +2737,76 @@ html.dark{
 
 }
 
+
 @media(max-width:700px){
+
+    /*
+       اصلاح اصلی کاور موبایل:
+       قبلاً نسبت 1528/335 باعث می‌شد
+       ارتفاع کاور روی گوشی خیلی کم شود.
+       حالا کاور روی موبایل بلندتر است.
+    */
 
     .cover{
 
-        aspect-ratio:1528 / 335;
+        aspect-ratio:2.15 / 1;
 
         min-height:0;
+
     }
+
+
+    .cover-slide{
+
+        object-position:center center;
+
+    }
+
+
+    .cover-content{
+
+        padding:
+            12px 46px 24px;
+
+    }
+
 
     .cover-title{
 
-        font-size:22px;
+        font-size:23px;
 
-        line-height:1.3;
+        line-height:1.35;
+
+        white-space:normal;
+
     }
+
 
     .cover-subtitle{
 
-        margin-top:4px;
+        margin-top:5px;
 
         font-size:8px;
+
+        letter-spacing:.2px;
+
     }
+
 
     .cover-line{
 
-        width:70px;
+        width:72px;
 
         height:2px;
 
-        margin-top:7px;
+        margin-top:8px;
+
     }
+
 
     .business-hours{
 
-        margin-top:6px;
+        margin-top:7px;
 
         font-size:8px;
 
@@ -2784,8 +2814,14 @@ html.dark{
 
         flex-wrap:wrap;
 
+        justify-content:center;
+
+        line-height:1.8;
+
         white-space:normal;
+
     }
+
 
     .slider-arrow{
 
@@ -2794,32 +2830,40 @@ html.dark{
         height:35px;
 
         font-size:18px;
+
     }
 
+
     .slider-prev{
-        right:7px;
+        right:8px;
     }
 
     .slider-next{
-        left:7px;
+        left:8px;
     }
+
 
     .slider-dots{
 
-        bottom:7px;
+        bottom:8px;
 
         gap:5px;
+
     }
+
 
     .slider-dot{
 
         width:5px;
         height:5px;
+
     }
+
 
     .slider-dot.active{
         width:17px;
     }
+
 
     .tabs{
 
@@ -2827,7 +2871,9 @@ html.dark{
 
         padding:
             7px 8px 0;
+
     }
+
 
     .tab{
 
@@ -2836,7 +2882,9 @@ html.dark{
         height:43px;
 
         font-size:10px;
+
     }
+
 
     .container{
 
@@ -2846,30 +2894,39 @@ html.dark{
                 130px +
                 env(safe-area-inset-bottom)
             );
+
     }
+
 
     .welcome{
 
         padding-bottom:20px;
+
     }
+
 
     .welcome h1{
         font-size:20px;
     }
+
 
     .welcome p{
 
         font-size:9px;
 
         line-height:1.8;
+
     }
+
 
     .menu-section{
 
         scroll-margin-top:65px;
 
         margin-bottom:42px;
+
     }
+
 
     .section-header{
 
@@ -2878,18 +2935,23 @@ html.dark{
         margin-bottom:14px;
 
         border-radius:14px;
+
     }
+
 
     .section-title{
         font-size:18px;
     }
+
 
     .food-card{
 
         min-height:128px;
 
         border-radius:14px;
+
     }
+
 
     .food-image{
 
@@ -2898,20 +2960,26 @@ html.dark{
         min-width:102px;
 
         height:128px;
+
     }
+
 
     .food-info{
 
         padding:
             10px 9px;
+
     }
+
 
     .food-name{
 
         font-size:13px;
 
         line-height:1.6;
+
     }
+
 
     .food-description{
 
@@ -2920,14 +2988,18 @@ html.dark{
         line-height:1.8;
 
         max-height:29px;
+
     }
+
 
     .food-bottom{
 
         gap:5px;
 
         margin-top:7px;
+
     }
+
 
     .price-box{
 
@@ -2942,23 +3014,30 @@ html.dark{
         gap:4px;
 
         padding:0 5px;
+
     }
+
 
     .price-number{
         font-size:11px;
     }
+
 
     .price-currency{
 
         width:34px;
 
         height:23px;
+
     }
+
 
     .product-qty{
 
         gap:5px;
+
     }
+
 
     .product-qty button{
 
@@ -2967,7 +3046,9 @@ html.dark{
         min-width:33px;
 
         height:33px;
+
     }
+
 
     .product-qty .qty-number{
 
@@ -2978,7 +3059,9 @@ html.dark{
         height:33px;
 
         font-size:11px;
+
     }
+
 
     .hookah-card{
 
@@ -2986,11 +3069,14 @@ html.dark{
 
         padding:
             15px 14px;
+
     }
+
 
     .hookah-name{
         font-size:15px;
     }
+
 
     .hookah-description{
 
@@ -2999,11 +3085,14 @@ html.dark{
         line-height:1.8;
 
         max-height:48px;
+
     }
+
 
     .hookah-bottom{
         margin-top:10px;
     }
+
 
     .hookah-price{
 
@@ -3012,18 +3101,23 @@ html.dark{
         min-width:105px;
 
         height:34px;
+
     }
+
 
     .hookah-price .price-number{
         font-size:11px;
     }
+
 
     .hookah-price .price-currency{
 
         width:35px;
 
         height:22px;
+
     }
+
 
     .theme-toggle{
 
@@ -3036,7 +3130,9 @@ html.dark{
         height:39px;
 
         font-size:20px;
+
     }
+
 
     .cart-bar{
 
@@ -3054,7 +3150,9 @@ html.dark{
         border-radius:18px;
 
         gap:7px;
+
     }
+
 
     .cart-icon{
 
@@ -3063,11 +3161,14 @@ html.dark{
         height:42px;
 
         font-size:19px;
+
     }
+
 
     .cart-total{
         font-size:11px;
     }
+
 
     .modal-box{
 
@@ -3077,11 +3178,14 @@ html.dark{
 
         border-radius:
             22px 22px 0 0;
+
     }
+
 
     .modal-head{
         padding:14px 15px;
     }
+
 
     .cart-items{
 
@@ -3089,7 +3193,9 @@ html.dark{
 
         padding:
             5px 11px;
+
     }
+
 
     .cart-item{
 
@@ -3097,26 +3203,33 @@ html.dark{
 
         padding:
             10px 2px;
+
     }
+
 
     .cart-item-image{
 
         width:47px;
 
         height:47px;
+
     }
+
 
     .cart-item-name{
         font-size:10px;
     }
 
+
     .cart-item-price{
         font-size:8px;
     }
 
+
     .cart-controls{
         gap:3px;
     }
+
 
     .cart-controls button{
 
@@ -3125,11 +3238,14 @@ html.dark{
         min-width:29px;
 
         height:29px;
+
     }
+
 
     .cart-qty{
         min-width:18px;
     }
+
 
     .order-form{
 
@@ -3141,22 +3257,28 @@ html.dark{
                 16px +
                 env(safe-area-inset-bottom)
             );
+
     }
+
 
     .form-grid{
         grid-template-columns:1fr;
     }
 
+
     .field.full{
         grid-column:auto;
     }
+
 
     .confirm-overlay{
 
         padding:8px;
 
         align-items:flex-end;
+
     }
+
 
     .confirm-box{
 
@@ -3166,11 +3288,14 @@ html.dark{
 
         border-radius:
             22px 22px 0 0;
+
     }
+
 
     .confirm-content{
         padding:10px 12px;
     }
+
 
     .confirm-actions{
 
@@ -3180,14 +3305,18 @@ html.dark{
                 10px +
                 env(safe-area-inset-bottom)
             );
+
     }
+
 
     .food-detail-modal{
 
         padding:8px;
 
         align-items:flex-end;
+
     }
+
 
     .food-detail-box{
 
@@ -3197,46 +3326,78 @@ html.dark{
 
         border-radius:
             22px 22px 0 0;
+
     }
+
 
     .food-detail-image-wrap{
         height:225px;
     }
 
+
     .food-detail-content{
         padding:17px 15px;
     }
 
+
     .food-detail-title{
         font-size:19px;
     }
+
 
     .food-detail-description{
 
         font-size:10px;
 
         max-height:110px;
+
     }
 
 }
 
+
 @media(max-width:380px){
 
-    .cover-title{
-        font-size:17px;
+    /*
+       گوشی‌های خیلی کوچک
+    */
+
+    .cover{
+
+        aspect-ratio:1.95 / 1;
+
     }
+
+
+    .cover-content{
+
+        padding:
+            10px 42px 22px;
+
+    }
+
+
+    .cover-title{
+        font-size:19px;
+    }
+
 
     .cover-subtitle{
-        font-size:6px;
+        font-size:7px;
     }
+
 
     .cover-line{
-        width:55px;
+        width:58px;
+        margin-top:6px;
     }
 
+
     .business-hours{
-        font-size:6px;
+        font-size:7px;
+        margin-top:5px;
     }
+
 
     .slider-arrow{
 
@@ -3244,7 +3405,9 @@ html.dark{
         height:32px;
 
         font-size:16px;
+
     }
+
 
     .food-image{
 
@@ -3253,27 +3416,34 @@ html.dark{
         min-width:92px;
 
         height:116px;
+
     }
+
 
     .food-card{
         min-height:116px;
     }
 
+
     .food-name{
         font-size:12px;
     }
+
 
     .price-number{
         font-size:10px;
     }
 
+
     .price-currency{
         width:29px;
     }
 
+
     .product-qty{
         gap:4px;
     }
+
 
     .product-qty button{
 
@@ -3282,7 +3452,9 @@ html.dark{
         min-width:31px;
 
         height:31px;
+
     }
+
 
     .product-qty .qty-number{
 
@@ -3293,7 +3465,9 @@ html.dark{
         height:31px;
 
         font-size:10px;
+
     }
+
 
     .food-detail-image-wrap{
         height:205px;
@@ -3310,13 +3484,29 @@ html.dark{
 
     .cover-content{
 
-        padding:8px;
+        padding:
+            10px 44px 25px;
+
     }
+
 
     .cover-title{
 
         text-shadow:
             0 3px 12px rgba(0,45,70,.55);
+
+    }
+
+
+    .cover-overlay{
+
+        background:linear-gradient(
+            to bottom,
+            rgba(0,65,96,.03),
+            rgba(2,56,83,.13) 45%,
+            rgba(2,35,55,.52)
+        );
+
     }
 
 }
@@ -3328,17 +3518,32 @@ html.dark{
 
 @media(max-height:500px) and (orientation:landscape){
 
+    .cover{
+
+        aspect-ratio:1528 / 335;
+
+    }
+
+
+    .cover-content{
+        padding:10px 40px;
+    }
+
+
     .cover-title{
         font-size:18px;
     }
+
 
     .cover-subtitle{
         font-size:7px;
     }
 
+
     .cover-line{
         margin-top:4px;
     }
+
 
     .business-hours{
         margin-top:4px;
@@ -3377,29 +3582,29 @@ html.dark{
         class="cover-slide active"
         src="cover-1.jpg"
         alt=""
+        fetchpriority="high"
+        loading="eager"
+        decoding="async"
     >
 
     <img
         class="cover-slide"
         src="cover-2.jpg"
         alt=""
+        decoding="async"
     >
 
     <img
         class="cover-slide"
         src="cover-3.jpg"
         alt=""
+        decoding="async"
     >
 
     <div class="cover-overlay"></div>
 
 
     <div class="cover-content">
-
-        <!--
-           لوگو حذف شده
-           سایر بخش‌ها حفظ شده‌اند
-        -->
 
         <div class="cover-logo">
 
@@ -4272,12 +4477,14 @@ function escapeHTML(value){
         .replace(/"/g,"&quot;")
 
         .replace(/'/g,"&#039;");
+
 }
 
 
 function escapeAttribute(value){
 
     return escapeHTML(value);
+
 }
 
 
@@ -4285,6 +4492,7 @@ function persianNumber(value){
 
     return Number(value || 0)
         .toLocaleString("fa-IR");
+
 }
 
 
@@ -4354,6 +4562,7 @@ function normalizeCategory(title=""){
 
 
     return null;
+
 }
 
 
@@ -4362,6 +4571,7 @@ function lockBody(){
     document.body.classList.add(
         "modal-open"
     );
+
 }
 
 
@@ -4392,6 +4602,7 @@ function unlockBody(){
         );
 
     }
+
 }
 
 
@@ -4729,7 +4940,9 @@ function renderMenu(items){
     )
     .forEach(
         key=>{
+
             grouped[key] = [];
+
         }
     );
 
@@ -4873,6 +5086,7 @@ function getProduct(id){
             String(item.id) ===
             String(id)
     );
+
 }
 
 
@@ -4883,6 +5097,7 @@ function getCartItem(id){
             String(item.id) ===
             String(id)
     );
+
 }
 
 
@@ -4895,6 +5110,7 @@ function getProductQty(id){
     return item
         ? Number(item.qty) || 0
         : 0;
+
 }
 
 
@@ -5117,6 +5333,7 @@ function createFoodCard(item){
                         item.name
                     )}"
                     loading="lazy"
+                    decoding="async"
                     onerror="
                         this.src='no-image.jpg'
                     "
@@ -5172,6 +5389,7 @@ function createFoodCard(item){
                                 src="toman.png"
                                 alt="تومان"
                                 loading="lazy"
+                                decoding="async"
                                 onerror="
                                     this.style.display='none';
                                     this.parentElement.innerHTML='<span class=&quot;price-currency-text&quot;>تومان</span>'
@@ -5316,6 +5534,7 @@ function createHookahCard(item){
                             src="toman.png"
                             alt="تومان"
                             loading="lazy"
+                            decoding="async"
                             onerror="
                                 this.style.display='none';
                                 this.parentElement.innerHTML='<span class=&quot;price-currency-text&quot;>تومان</span>'
@@ -5747,6 +5966,7 @@ function renderCart(){
                             item.name
                         )}"
                         loading="lazy"
+                        decoding="async"
                         onerror="
                             this.src='no-image.jpg'
                         "
@@ -6053,6 +6273,7 @@ function resetOrderForm(){
 
         }
     );
+
 }
 
 
@@ -6117,6 +6338,7 @@ function markInvalid(id){
     $(id)
         .classList
         .add("invalid");
+
 }
 
 
@@ -6349,6 +6571,7 @@ function validateOrder(){
 
 
     return true;
+
 }
 
 
@@ -7298,7 +7521,6 @@ $("orderType")
 
                 $("tableNumber")
                     .value = "";
-
 
             }else{
 
