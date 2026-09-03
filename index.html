@@ -224,16 +224,6 @@ html.dark{
 
     width:100%;
 
-    /*
-       ابعاد واقعی بنرها:
-       1528 × 333
-       1527 × 332
-       1528 × 337
-
-       نسبت تقریبی:
-       1528 / 335
-    */
-
     aspect-ratio:1528 / 335;
 
     overflow:hidden;
@@ -293,13 +283,6 @@ html.dark{
     pointer-events:none;
 }
 
-
-/*
-   لوگو حذف شده،
-   اما محتوای قبلی بنر
-   همچنان حفظ شده است.
-*/
-
 .cover-content{
 
     position:absolute;
@@ -320,9 +303,6 @@ html.dark{
 
     padding:20px;
 }
-
-
-/* لوگو عمداً نمایش داده نمی‌شود */
 
 .cover-logo{
     display:none;
@@ -2740,12 +2720,7 @@ html.dark{
 
 @media(max-width:700px){
 
-    /*
-       اصلاح اصلی کاور موبایل:
-       قبلاً نسبت 1528/335 باعث می‌شد
-       ارتفاع کاور روی گوشی خیلی کم شود.
-       حالا کاور روی موبایل بلندتر است.
-    */
+    /* اصلاح کاور موبایل */
 
     .cover{
 
@@ -2777,8 +2752,6 @@ html.dark{
 
         line-height:1.35;
 
-        white-space:normal;
-
     }
 
 
@@ -2787,8 +2760,6 @@ html.dark{
         margin-top:5px;
 
         font-size:8px;
-
-        letter-spacing:.2px;
 
     }
 
@@ -3309,11 +3280,18 @@ html.dark{
     }
 
 
+    /* ==========================
+       FIX FOOD DETAIL MOBILE
+       وسط صفحه
+    ========================== */
+
     .food-detail-modal{
 
         padding:8px;
 
-        align-items:flex-end;
+        align-items:center;
+
+        justify-content:center;
 
     }
 
@@ -3322,26 +3300,33 @@ html.dark{
 
         width:100%;
 
-        max-height:96vh;
+        max-width:500px;
 
-        border-radius:
-            22px 22px 0 0;
+        max-height:92vh;
+
+        border-radius:22px;
 
     }
 
 
     .food-detail-image-wrap{
+
         height:225px;
+
     }
 
 
     .food-detail-content{
+
         padding:17px 15px;
+
     }
 
 
     .food-detail-title{
+
         font-size:19px;
+
     }
 
 
@@ -3357,10 +3342,6 @@ html.dark{
 
 
 @media(max-width:380px){
-
-    /*
-       گوشی‌های خیلی کوچک
-    */
 
     .cover{
 
@@ -3389,19 +3370,24 @@ html.dark{
 
     .cover-line{
         width:58px;
+
         margin-top:6px;
     }
 
 
     .business-hours{
+
         font-size:7px;
+
         margin-top:5px;
+
     }
 
 
     .slider-arrow{
 
         width:32px;
+
         height:32px;
 
         font-size:16px;
@@ -3470,7 +3456,9 @@ html.dark{
 
 
     .food-detail-image-wrap{
+
         height:205px;
+
     }
 
 }
@@ -3547,7 +3535,9 @@ html.dark{
 
     .business-hours{
         margin-top:4px;
+
         font-size:7px;
+
     }
 
 }
@@ -6158,6 +6148,7 @@ function openCart(){
 
 
     lockBody();
+
 }
 
 
@@ -6169,6 +6160,7 @@ function closeCart(){
 
 
     unlockBody();
+
 }
 
 
@@ -7521,6 +7513,7 @@ $("orderType")
 
                 $("tableNumber")
                     .value = "";
+
 
             }else{
 
