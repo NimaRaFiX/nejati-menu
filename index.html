@@ -150,8 +150,8 @@
         border: 1px solid rgba(255, 255, 255, 0.25);
         border-radius: 50%;
 
-        background: rgba(255, 255, 255, 0.88);
-        color: #07557a;
+        background: #c9a27e;
+        color: #4a2b1a;
 
         display: flex;
         align-items: center;
@@ -174,19 +174,19 @@
       }
 
       html.dark .theme-toggle {
-        background: rgba(8, 23, 30, 0.88);
-        color: #e5f8ff;
+        background: #6f4b36;
+        color: #fff4e8;
         border-color: rgba(114, 213, 242, 0.28);
       }
 
       html.dark .theme-toggle:hover {
-        background: rgba(12, 34, 43, 0.98);
+        background: #805942;
       }
 
       .theme-toggle:hover {
         transform: scale(1.08);
-        background: rgba(255, 255, 255, 1);
-        box-shadow: 0 7px 22px rgba(0, 0, 0, 0.25);
+        background: #d5b28f;
+        box-shadow: 0 7px 22px rgba(74, 43, 26, 0.25);
       }
 
       .theme-toggle:active {
@@ -254,7 +254,7 @@
         margin-top: 5px;
         padding: 0;
         color: #ffffff;
-        font-size: 15px;
+        font-size: 8px;
         font-weight: 700;
         line-height: 1.5;
         background: transparent;
@@ -556,6 +556,13 @@
 
       .tab:not(.active):hover .tab-image {
         transform: scale(1.06);
+      }
+
+      @media (hover: none) and (pointer: coarse) {
+        .tab:not(.active):hover .tab-image,
+        .tab.active:hover .tab-image {
+          transform: none;
+        }
       }
 
       .tab.active .tab-image {
@@ -2423,8 +2430,33 @@
 
         .tab {
           min-width: 94px;
-          height: 43px;
+          width: 94px;
+          height: 82px;
+          min-height: 82px;
+          padding: 5px 8px 7px;
           font-size: 10px;
+          gap: 4px;
+          box-sizing: border-box;
+          overflow: hidden;
+          flex-shrink: 0;
+        }
+
+        .tab-image {
+          width: 38px;
+          height: 38px;
+          min-width: 38px;
+          min-height: 38px;
+          max-width: 38px;
+          max-height: 38px;
+          flex: 0 0 38px;
+          transform: none !important;
+        }
+
+        .tab-title {
+          max-width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          line-height: 1.35;
         }
 
         .container {
@@ -2889,7 +2921,7 @@
           <span class="hours-status"> در خدمت مشتریان عزیز هستیم </span>
         </div>
 
-        <div class="branch-badge">( شعبه یک )</div>
+        <div class="branch-badge">شعبه یک</div>
       </div>
 
       <button
