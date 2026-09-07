@@ -286,9 +286,7 @@
         padding: 20px;
       }
 
-      .cover-logo {
-        display: none;
-      }
+
 
       .cover-title {
         color: #fff;
@@ -2945,10 +2943,7 @@
 
       <div class="cover-overlay"></div>
 
-      <div class="cover-content">
-        <div class="cover-logo">
-          <img src="logo.jpg" alt="لوگو" />
-        </div>
+
 
         <h1 class="cover-title">کافه رستوران عموحاجی</h1>
 
@@ -3135,7 +3130,7 @@
                 />
               </div>
 
-              <div class="field">
+              <div class="field table-order-field">
                 <label> شماره میز * </label>
 
                 <div class="table-select-wrap">
@@ -3170,7 +3165,7 @@
                 <label> نوع سفارش </label>
 
                 <select id="orderType">
-                  <option value="dine_in">سرو داخل رستوران</option>
+                  <option value="dine_in">سرو داخل کافه</option>
 
                   <option value="takeaway">بیرون‌بر</option>
                 </select>
@@ -3207,7 +3202,7 @@
             </div>
 
             <button class="submit-order" id="submitOrder">
-              ادامه و بررسی سفارش
+              ثبت سفارش
             </button>
 
             <button class="clear-cart" id="clearCart">خالی کردن سبد</button>
@@ -3423,6 +3418,10 @@
       let toastTimer = null;
 
       let latestMenuItems = [];
+      let menuRealtimeChannel = null;
+      let menuReloadTimer = null;
+      let menuLoadInProgress = false;
+      let menuLoadQueued = false;
 
       let selectedDetailProduct = null;
 
@@ -3613,52 +3612,143 @@
       ============================== */
 
       async function loadMenu() {
+        if (menuLoadInProgress) {
+          menuLoadQueued = true;
+          return;
+        }
+
+        menuLoadInProgress = true;
         const container = $("menuContainer");
 
         try {
           const { data, error } = await supabaseClient
             .from("menu_items")
-            .select(
-              `
-                  id,
-                  category_id,
-                  name,
-                  description,
-                  price,
-                  badge,
-                  image_url,
-                  is_available,
-                  sort_order,
-                  categories(id,title)
-                `,
-            )
-            .order("sort_order", {
-              ascending: true,
-            });
+            .select(`id,category_id,name,description,price,badge,image_url,is_available,sort_order,categories(id,title)`)
+            .order("sort_order", { ascending: true });
 
           if (error) throw error;
 
-          const available = (data || []).filter(
-            (item) => item.is_available !== false,
-          );
-
+          const available = (data || []).filter((item) => item.is_available !== false);
           latestMenuItems = available;
 
+          syncCategoryTabs(available);
           renderMenu(available);
-
           updateAllProductQtyUI();
-
           updateActiveTab();
         } catch (error) {
           console.error("Menu:", error);
 
-          container.innerHTML = `
-            <div class="error">
-              خطا در دریافت منو.
-              لطفاً دوباره تلاش کنید.
-            </div>
-          `;
+          if (!latestMenuItems.length) {
+            container.innerHTML = `
+              <div class="error">
+                خطا در دریافت منو.
+                لطفاً دوباره تلاش کنید.
+              </div>
+            `;
+          }
+        } finally {
+          menuLoadInProgress = false;
+          if (menuLoadQueued) {
+            menuLoadQueued = false;
+            loadMenu();
+          }
         }
+      }
+
+      /* ==============================
+         SYNC CATEGORY TABS
+         فقط دسته‌هایی که حداقل یک محصول موجود دارند نمایش داده می‌شوند.
+      ============================== */
+
+      function syncCategoryTabs(items) {
+        const availableCategories = new Set();
+
+        (items || []).forEach((item) => {
+          const title = item.categories?.title || "";
+          const key = normalizeCategory(title);
+
+          if (key) {
+            availableCategories.add(key);
+          }
+        });
+
+        document.querySelectorAll(".tab[data-target]").forEach((tab) => {
+          const key = tab.dataset.target;
+          const visible = availableCategories.has(key);
+
+          tab.style.display = visible ? "inline-flex" : "none";
+          tab.setAttribute("aria-hidden", visible ? "false" : "true");
+        });
+
+        const visibleTabs = [
+          ...document.querySelectorAll('.tab[data-target]:not([style*="display: none"])'),
+        ];
+
+        const activeTab = document.querySelector('.tab.active:not([style*="display: none"])');
+
+        if (!activeTab && visibleTabs.length) {
+          visibleTabs.forEach((tab) => tab.classList.remove("active"));
+          visibleTabs[0].classList.add("active");
+        }
+      }
+
+      function scheduleMenuReload() {
+        clearTimeout(menuReloadTimer);
+        menuReloadTimer = setTimeout(() => {
+          loadMenu();
+        }, 120);
+      }
+
+      function setupMenuRealtime() {
+        if (!supabaseClient) return;
+
+        if (menuRealtimeChannel) {
+          try {
+            supabaseClient.removeChannel(menuRealtimeChannel);
+          } catch (error) {
+            console.warn("Realtime cleanup:", error);
+          }
+          menuRealtimeChannel = null;
+        }
+
+        menuRealtimeChannel = supabaseClient
+          .channel("public-menu-realtime", {
+            config: {
+              broadcast: { self: false },
+              presence: { key: "menu" },
+            },
+          })
+          .on(
+            "postgres_changes",
+            {
+              event: "*",
+              schema: "public",
+              table: "menu_items",
+            },
+            scheduleMenuReload,
+          )
+          .on(
+            "postgres_changes",
+            {
+              event: "*",
+              schema: "public",
+              table: "categories",
+            },
+            scheduleMenuReload,
+          )
+          .subscribe((status) => {
+            console.log("Menu realtime:", status);
+
+            if (status === "SUBSCRIBED") {
+              scheduleMenuReload();
+            } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+              setTimeout(() => {
+                if (menuRealtimeChannel) {
+                  setupMenuRealtime();
+                }
+              }, 3000);
+            }
+          });
       }
 
       /* ==============================
@@ -4375,8 +4465,11 @@
 
         $("orderType").value = "dine_in";
 
-        $("tableNumber").closest(".field").style.opacity =
-          "1";
+        $("tableNumber").closest(".field").style.display =
+          "block";
+
+        $("submitOrder").textContent =
+          "ثبت سفارش";
 
         [
           "customerName",
@@ -4603,7 +4696,7 @@
         $("confirmType").textContent =
           type === "takeaway"
             ? "بیرون‌بر"
-            : "سرو داخل رستوران";
+            : "سرو داخل کافه";
 
         $("confirmNote").textContent =
           $("orderNote").value.trim() ||
@@ -4629,9 +4722,13 @@
         unlockBody();
       }
 
+      function handleSubmitButton() {
+        submitOrder($("submitOrder"));
+      }
+
       $("submitOrder").addEventListener(
         "click",
-        prepareConfirmation,
+        handleSubmitButton,
       );
 
       $("confirmClose").addEventListener(
@@ -4668,14 +4765,14 @@
         );
       }
 
-      async function submitOrder() {
+      async function submitOrder(triggerButton = null) {
         if (!validateOrder()) {
           closeConfirmation();
 
           return;
         }
 
-        const button = $("confirmSubmit");
+        const button = triggerButton || $("confirmSubmit");
 
         button.disabled = true;
 
@@ -4792,8 +4889,7 @@
         } finally {
           button.disabled = false;
 
-          button.textContent =
-            "تأیید و ثبت سفارش";
+          button.textContent = "ثبت سفارش";
         }
       }
 
@@ -5001,14 +5097,18 @@
         });
       }
 
+      let activeTabFrame = 0;
+
       window.addEventListener(
         "scroll",
-
-        updateActiveTab,
-
-        {
-          passive: true,
+        () => {
+          if (activeTabFrame) return;
+          activeTabFrame = requestAnimationFrame(() => {
+            activeTabFrame = 0;
+            updateActiveTab();
+          });
         },
+        { passive: true },
       );
 
       /* ==============================
@@ -5100,19 +5200,14 @@
               ".field",
             );
 
-          if (
-            this.value ===
-            "takeaway"
-          ) {
-            tableField.style.opacity =
-              ".45";
-
-            $("tableNumber").value =
-              "";
+          if (this.value === "takeaway") {
+            tableField.style.display = "none";
+            $("tableNumber").value = "";
           } else {
-            tableField.style.opacity =
-              "1";
+            tableField.style.display = "block";
           }
+
+          $("submitOrder").textContent = "ثبت سفارش";
         },
       );
 
@@ -5149,6 +5244,7 @@
       updateCart();
 
       loadMenu();
+      setupMenuRealtime();
 
       loadBusinessHours();
     </script>
