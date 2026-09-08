@@ -10597,6 +10597,15 @@ function stopAutoRefresh(){
    SOUND
 ========================= */
 
+function unlockNotificationAudio(){
+    try{
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if(!AC) return;
+        if(!audioContext) audioContext = new AC();
+        if(audioContext.state === 'suspended') audioContext.resume().catch(()=>{});
+    }catch(e){}
+}
+
 function playNewOrderSoundLoud(){
     try{
         const AC = window.AudioContext || window.webkitAudioContext;
@@ -10657,7 +10666,9 @@ function playNewOrderSoundLoud(){
         };
 
         if(ctx.state === 'suspended'){
-            ctx.resume().then(startSound).catch(()=>{});
+            ctx.resume().then(()=>{
+                if(ctx.state === 'running') startSound();
+            }).catch(()=>{});
         }else{
             startSound();
         }
@@ -10669,6 +10680,12 @@ function playNewOrderSoundLoud(){
 /* =========================
    EVENTS
 ========================= */
+
+// مرورگرها پخش صدای خودکار را تا اولین تعامل کاربر مسدود می‌کنند.
+// با اولین کلیک/لمس/فشردن کلید، صدای پنل را آزاد می‌کنیم تا
+// سفارش جدید حتی وقتی از طریق Realtime یا polling می‌رسد، هشدار بدهد.
+window.addEventListener('pointerdown', unlockNotificationAudio, {once:false, passive:true});
+window.addEventListener('keydown', unlockNotificationAudio, {once:false, passive:true});
 
 $("loginBtn")
     .addEventListener(
