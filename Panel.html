@@ -3240,6 +3240,25 @@ input[type="time"]:focus{
 }
 
 </style>
+<style>
+/* هشدار سفارش جدید: همیشه بالای صفحه و کاملاً قابل تشخیص */
+.new-order-notification{
+    z-index:999999 !important;
+    left:18px !important;
+    right:auto !important;
+    width:min(390px,calc(100vw - 36px)) !important;
+    box-shadow:0 18px 50px rgba(0,0,0,.38) !important;
+    border:3px solid #d79b35 !important;
+}
+.new-order-notification.show{
+    animation:newOrderAlertPulse 1.2s ease-in-out 3;
+}
+@keyframes newOrderAlertPulse{
+    0%,100%{transform:translateX(0) scale(1);}
+    50%{transform:translateX(0) scale(1.025);}
+}
+</style>
+
 
 </head>
 
@@ -4919,6 +4938,15 @@ let currentNewOrderNotificationId =
 let newOrderNotificationTimer =
     null;
 
+let newOrderTitleTimer =
+    null;
+
+let originalDocumentTitle =
+    document.title;
+
+let audioUnlocked =
+    false;
+
 
 /* =========================
    THERMAL SETTINGS
@@ -5553,6 +5581,7 @@ function showNewOrderNotification(
         );
     }
 
+    // اعلان را مدت بیشتری نگه می‌داریم تا مدیر فرصت دیدنش را داشته باشد.
     newOrderNotificationTimer =
         setTimeout(
             ()=>{
@@ -5560,10 +5589,87 @@ function showNewOrderNotification(
                 hideNewOrderNotification();
 
             },
-            7000
+            15000
         );
+
+    // اگر مدیر در تب دیگری از مرورگر باشد، عنوان تب هم چشمک می‌زند.
+    startNewOrderTitleAlert();
+
+    // در صورت اجازه مرورگر، اعلان سیستم‌عامل هم نمایش داده می‌شود.
+    try{
+        if(
+            document.visibilityState !== "visible" &&
+            "Notification" in window &&
+            Notification.permission === "granted"
+        ){
+            new Notification("سفارش جدید کافه رستوران عمو حاجی",{
+                body:
+                    (order.order_number ? `سفارش ${order.order_number}` : "سفارش جدید") +
+                    " دریافت شد. لطفاً پنل مدیریت را بررسی کنید.",
+                tag:"amo-haji-new-order"
+            });
+        }
+    }catch(e){}
 }
 
+
+function startNewOrderTitleAlert(){
+
+    if(newOrderTitleTimer){
+        clearInterval(newOrderTitleTimer);
+    }
+
+    let showAlertTitle = true;
+
+    newOrderTitleTimer =
+        setInterval(()=>{
+            document.title = showAlertTitle
+                ? "🔔 سفارش جدید!"
+                : originalDocumentTitle;
+
+            showAlertTitle = !showAlertTitle;
+        },700);
+
+    setTimeout(()=>{
+        if(newOrderTitleTimer){
+            clearInterval(newOrderTitleTimer);
+            newOrderTitleTimer = null;
+        }
+        document.title = originalDocumentTitle;
+    },15000);
+}
+
+function unlockNotificationAudio(){
+    try{
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if(!AC) return;
+
+        if(!audioContext){
+            audioContext = new AC();
+        }
+
+        if(audioContext.state === "suspended"){
+            audioContext.resume().then(()=>{
+                audioUnlocked = audioContext.state === "running";
+            }).catch(()=>{});
+        }else{
+            audioUnlocked = true;
+        }
+    }catch(e){
+        console.warn("Audio unlock failed",e);
+    }
+}
+
+function requestDesktopNotificationPermission(){
+    try{
+        if(
+            "Notification" in window &&
+            Notification.permission === "default"
+        ){
+            Notification.requestPermission().catch(()=>{});
+        }
+    }catch(e){}
+}
 
 function hideNewOrderNotification(){
 
@@ -6495,14 +6601,10 @@ async function loadOrders(
                 showNewOrderNotification(
                     latestPending
                 );
-            }
 
-
-            if(
-                thermalSettings.sound
-            ){
-
-                playNewOrderSoundLoud();
+                if(thermalSettings.sound){
+                    playNewOrderSoundLoud();
+                }
             }
 
 
@@ -10572,7 +10674,7 @@ function startAutoRefresh(){
                 });
 
             },
-            15000
+            3000
         );
 }
 
@@ -10619,53 +10721,59 @@ function playNewOrderSoundLoud(){
                 return;
             }
 
+            audioUnlocked = true;
+
             const now = ctx.currentTime;
 
             const compressor =
                 ctx.createDynamicsCompressor();
 
-            compressor.threshold.setValueAtTime(-20, now);
-            compressor.knee.setValueAtTime(8, now);
-            compressor.ratio.setValueAtTime(10, now);
-            compressor.attack.setValueAtTime(0.003, now);
-            compressor.release.setValueAtTime(0.2, now);
+            compressor.threshold.setValueAtTime(-18, now);
+            compressor.knee.setValueAtTime(6, now);
+            compressor.ratio.setValueAtTime(12, now);
+            compressor.attack.setValueAtTime(0.002, now);
+            compressor.release.setValueAtTime(0.18, now);
             compressor.connect(ctx.destination);
 
             const master = ctx.createGain();
-            master.gain.setValueAtTime(1.25, now);
+            master.gain.setValueAtTime(1.4, now);
             master.connect(compressor);
 
-            [0, 0.42, 0.84].forEach((offset)=>{
+            // دقیقاً سه بوق بلند و واضح
+            [0, 0.50, 1.00].forEach((offset)=>{
 
                 const t = now + offset;
+
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
 
                 osc.type = "sine";
-                osc.frequency.setValueAtTime(880, t);
-                osc.frequency.exponentialRampToValueAtTime(1120, t + 0.08);
+                osc.frequency.setValueAtTime(920, t);
+                osc.frequency.exponentialRampToValueAtTime(1180, t + 0.08);
 
                 gain.gain.setValueAtTime(0.0001, t);
-                gain.gain.exponentialRampToValueAtTime(0.95, t + 0.018);
-                gain.gain.setValueAtTime(0.95, t + 0.14);
-                gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.30);
+                gain.gain.exponentialRampToValueAtTime(1.0, t + 0.018);
+                gain.gain.setValueAtTime(1.0, t + 0.20);
+                gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.36);
 
                 osc.connect(gain);
                 gain.connect(master);
                 osc.start(t);
-                osc.stop(t + 0.32);
+                osc.stop(t + 0.39);
             });
         };
 
         if(ctx.state === "suspended"){
-            ctx.resume().then(()=>startBeeps()).catch(()=>{});
+            ctx.resume()
+                .then(()=>startBeeps())
+                .catch(err=>console.warn("Audio resume failed",err));
         }else{
             startBeeps();
         }
 
     }catch(error){
 
-        console.warn("Notification sound unavailable.", error);
+        console.warn("Notification sound unavailable.",error);
     }
 }
 
@@ -10677,8 +10785,25 @@ function playNewOrderSoundLoud(){
 $("loginBtn")
     .addEventListener(
         "click",
-        login
+        ()=>{
+            // با کلیک مدیر، صدای مرورگر برای هشدارهای بعدی آزاد می‌شود.
+            unlockNotificationAudio();
+            requestDesktopNotificationPermission();
+            login();
+        }
     );
+
+
+// هر کلیک/کلید مدیر می‌تواند صدای مرورگر را دوباره فعال نگه دارد.
+window.addEventListener("pointerdown",unlockNotificationAudio,{passive:true});
+window.addEventListener("keydown",unlockNotificationAudio,{passive:true});
+
+document.addEventListener("visibilitychange",()=>{
+    if(document.visibilityState === "visible"){
+        // وقتی مدیر برمی‌گردد، هشدار تصویری باقی‌مانده را می‌بیند.
+        document.title = originalDocumentTitle;
+    }
+});
 
 
 $("loginPassword")
