@@ -287,6 +287,7 @@
       }
 
 
+
       .cover-title {
         color: #fff;
         font-size: 37px;
@@ -960,7 +961,10 @@
         white-space: nowrap;
       }
 
-      .badge.special {
+      .discount-badge{display:inline-flex;align-items:center;justify-content:center;padding:4px 7px;border-radius:8px;background:#e65353;color:#fff;font-size:9px;font-weight:900;white-space:nowrap;margin-inline-start:5px}
+.original-price{color:var(--muted);text-decoration:line-through;font-size:10px;margin-inline-start:5px}
+
+.badge.special {
         background: #f3cd80;
         color: #714e00;
       }
@@ -1184,6 +1188,14 @@
       /* ==============================
          CART BAR
       ============================== */
+
+
+/* ==============================
+   STOCK BADGE
+============================== */
+.stock-badge{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:25px;padding:4px 8px;border-radius:9px;border:1px solid rgba(39,194,129,.22);background:rgba(39,194,129,.07);color:#63dfab;font-size:10px;font-weight:800;white-space:nowrap;line-height:1.2}
+.stock-badge.low{border-color:rgba(243,155,61,.28);background:rgba(243,155,61,.08);color:#ffc16f}
+.stock-badge-wrap{min-width:0;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 
       .cart-bar {
         position: fixed;
@@ -2910,15 +2922,28 @@
         }
       }
     
-      .branch-name {
-        margin-top: 9px;
-        color: #fff;
-        font-size: 12px;
-        font-weight: 800;
-        text-shadow: 0 3px 14px rgba(0,45,70,.55);
-      }
+/* DISCOUNT PRICE */
+.price-box .price-number,
+.hookah-price .price-number{
+    font-weight:950;
+}
+.price-box .original-price,
+.hookah-price .original-price{
+    color:var(--muted);
+    text-decoration:line-through;
+    text-decoration-thickness:1px;
+    opacity:.52;
+    font-size:10px;
+    font-weight:700;
+    margin-inline-start:7px;
+}
+.price-box .discount-badge,
+.hookah-price .discount-badge{
+    margin-inline-start:5px;
+    box-shadow:0 4px 12px rgba(230,83,83,.12);
+}
 
-    </style>
+</style>
   </head>
 
   <body>
@@ -2952,7 +2977,9 @@
       <div class="cover-overlay"></div>
 
       <div class="cover-content">
+        <div class="cover-logo">
 
+        </div>
 
         <h1 class="cover-title">کافه رستوران عموحاجی</h1>
 
@@ -3429,6 +3456,7 @@
       let latestMenuItems = [];
       let menuRealtimeChannel = null;
       let menuReloadTimer = null;
+      let menuRealtimeFallbackTimer = null;
       let menuLoadInProgress = false;
       let menuLoadQueued = false;
 
@@ -3632,12 +3660,38 @@
         try {
           const { data, error } = await supabaseClient
             .from("menu_items")
-            .select(`id,category_id,name,description,price,badge,image_url,is_available,sort_order,categories(id,title)`)
+            .select(`id,category_id,name,description,price,badge,discount_percent,image_url,is_available,stock,sort_order`)
             .order("sort_order", { ascending: true });
 
           if (error) throw error;
 
-          const available = (data || []).filter((item) => item.is_available !== false);
+          let categoryData = [];
+          const categoryResult = await supabaseClient
+            .from("categories")
+            .select("id,title")
+            .order("sort_order", { ascending: true });
+
+          if (categoryResult.error) {
+            console.warn("Categories:", categoryResult.error);
+          } else {
+            categoryData = categoryResult.data || [];
+          }
+
+          const available = (data || [])
+            .map((item) => ({
+              ...item,
+              categories:
+                categoryData.find(
+                  (category) =>
+                    String(category.id) === String(item.category_id)
+                ) || null,
+            }))
+            .filter((item) =>
+              item.is_available !== false &&
+              (item.stock === null ||
+                item.stock === undefined ||
+                Number(item.stock) > 0)
+            );
           latestMenuItems = available;
 
           syncCategoryTabs(available);
@@ -3708,8 +3762,22 @@
         }, 120);
       }
 
+      function startMenuRealtimeFallback() {
+        clearInterval(menuRealtimeFallbackTimer);
+
+        // Fallback برای زمانی که Supabase Realtime روی جدول‌ها فعال نشده باشد.
+        // در این حالت منو حداکثر چند ثانیه بعد از تغییر پنل به‌روزرسانی می‌شود.
+        menuRealtimeFallbackTimer = setInterval(() => {
+          if (document.visibilityState === "visible") {
+            scheduleMenuReload();
+          }
+        }, 4000);
+      }
+
       function setupMenuRealtime() {
         if (!supabaseClient) return;
+
+        startMenuRealtimeFallback();
 
         if (menuRealtimeChannel) {
           try {
@@ -3873,6 +3941,18 @@
          CHANGE PRODUCT QTY
       ============================== */
 
+      function getDiscountedPrice(item) {
+        const price = Number(item?.price) || 0;
+        const discount = Math.min(100, Math.max(0, Number(item?.discount_percent) || 0));
+        return Math.round(price * (1 - discount / 100));
+      }
+
+      function discountHTML(item) {
+        const d = Math.min(100, Math.max(0, Number(item?.discount_percent) || 0));
+        if (!d) return "";
+        return `<span class="discount-badge">${persianNumber(d)}٪ تخفیف</span>`;
+      }
+
       function changeProductQty(id, amount, showMessage = true) {
         const source = getProduct(id);
 
@@ -3881,13 +3961,32 @@
         let item = getCartItem(id);
 
         if (amount > 0) {
+          const stock =
+            source.stock === null || source.stock === undefined
+              ? null
+              : Math.max(0, Number(source.stock) || 0);
+
+          const currentQty = item ? Number(item.qty) || 0 : 0;
+
+          if (stock !== null && currentQty + amount > stock) {
+            if (showMessage) {
+              showToast(
+                `از «${source.name}» فقط ${persianNumber(stock)} عدد موجود است.`,
+                "error",
+              );
+            }
+            return;
+          }
+
           if (!item) {
             item = {
               id: source.id,
 
               name: source.name,
 
-              price: Number(source.price) || 0,
+              price: getDiscountedPrice(source),
+              originalPrice: Number(source.price) || 0,
+              discount_percent: Number(source.discount_percent) || 0,
 
               image: source.image_url || "no-image.jpg",
 
@@ -3980,10 +4079,25 @@
               </div>
 
               <div class="food-bottom">
+                <div class="stock-badge-wrap">
+                  <div class="stock-badge ${
+                    item.stock !== null && item.stock !== undefined && Number(item.stock) <= 5
+                      ? "low"
+                      : ""
+                  }">
+                    ${
+                      item.stock === null || item.stock === undefined
+                        ? "موجود"
+                        : `موجودی: ${persianNumber(item.stock)}`
+                    }
+                  </div>
+                </div>
+
                 <div class="price-box">
                   <span class="price-number">
-                    ${persianNumber(item.price)}
+                    ${persianNumber(getDiscountedPrice(item))}
                   </span>
+                  ${item.discount_percent > 0 ? `<span class="original-price">${persianNumber(item.price)}</span>${discountHTML(item)}` : ""}
 
                   <span class="price-currency">
                     <img
@@ -4070,8 +4184,9 @@
             <div class="hookah-bottom">
               <div class="hookah-price">
                 <span class="price-number">
-                  ${persianNumber(item.price)}
+                  ${persianNumber(getDiscountedPrice(item))}
                 </span>
+                ${item.discount_percent > 0 ? `<span class="original-price">${persianNumber(item.price)}</span>${discountHTML(item)}` : ""}
 
                 <span class="price-currency">
                   <img
@@ -4654,6 +4769,28 @@
           }
         }
 
+        for (const item of cart) {
+          const latest = getProduct(item.id);
+          if (!latest) continue;
+
+          if (latest.stock !== null && latest.stock !== undefined) {
+            const stock = Math.max(0, Number(latest.stock) || 0);
+            if (Number(item.qty) > stock) {
+              showToast(
+                `موجودی «${latest.name}» کافی نیست. موجودی فعلی: ${persianNumber(stock)}`,
+                "error",
+              );
+              item.qty = stock;
+              if (stock <= 0) {
+                cart = cart.filter((x) => String(x.id) !== String(item.id));
+              }
+              updateAllProductQtyUI();
+              updateCart();
+              return false;
+            }
+          }
+        }
+
         return true;
       }
 
@@ -4848,9 +4985,10 @@
           };
 
           const { error } =
-            await supabaseClient
-              .from("orders")
-              .insert([orderData]);
+            await supabaseClient.rpc(
+              "create_order_with_stock",
+              { p_order: orderData },
+            );
 
           if (error) throw error;
 
