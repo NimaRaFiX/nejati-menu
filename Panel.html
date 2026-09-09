@@ -1271,6 +1271,47 @@ textarea{
 
 
 /* =========================
+
+/* =========================
+   STOCK / INVENTORY
+========================= */
+
+.product-stock-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    margin-top:7px;
+    padding:5px 8px;
+    border:1px solid rgba(77,156,255,.22);
+    background:rgba(77,156,255,.07);
+    color:#8fc2ff;
+    border-radius:9px;
+    font-size:10px;
+    font-weight:800;
+    white-space:nowrap;
+}
+
+/* QUICK STOCK CONTROLS */
+.stock-quick{display:flex;align-items:center;gap:5px;margin-top:7px;flex-wrap:wrap}
+.stock-quick button{width:28px;height:28px;padding:0;border-radius:8px;font-weight:900}
+.stock-quick .stock-value{min-width:52px;text-align:center;font-size:10px;font-weight:900}
+.discount-badge-admin{display:inline-flex;align-items:center;margin-top:7px;padding:4px 7px;border-radius:8px;background:rgba(39,194,129,.10);color:#63dfab;font-size:9px;font-weight:900}
+
+
+.product-stock-badge.zero{
+    border-color:rgba(230,83,83,.28);
+    background:rgba(230,83,83,.08);
+    color:#ff8585;
+}
+
+.product-stock-badge.unlimited{
+    border-color:rgba(39,194,129,.22);
+    background:rgba(39,194,129,.06);
+    color:#63dfab;
+}
+
+
+/* =========================
    ORDERS
 ========================= */
 
@@ -3239,6 +3280,24 @@ input[type="time"]:focus{
     }
 }
 
+
+.finance-period-card{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:14px;padding:15px 18px;border:1px solid var(--border);border-radius:16px;background:linear-gradient(135deg,var(--panel),rgba(215,168,79,.045))}.finance-period-label{display:block;color:var(--muted);font-size:9px;font-weight:800;margin-bottom:4px}.finance-period-card strong{font-size:15px}.finance-period-note{color:var(--muted);font-size:10px}.finance-grid-pro{margin-bottom:12px}.finance-card small{display:block;color:var(--muted);font-size:9px;margin-top:5px}.finance-primary{border-color:rgba(215,168,79,.35)}.finance-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}.finance-kpi{padding:14px;border:1px solid var(--border);border-radius:14px;background:var(--panel2)}.finance-kpi span{display:block;color:var(--muted);font-size:9px;margin-bottom:7px}.finance-kpi strong{font-size:17px}.finance-head-note{display:block;color:var(--muted);font-size:9px;margin-top:4px}.finance-products-table{width:100%;border-collapse:collapse}.finance-products-table th,.finance-products-table td{padding:11px 9px;border-bottom:1px solid var(--border);text-align:right;font-size:10px}.finance-products-table th{color:var(--muted);font-weight:800}.finance-products-table td strong{font-size:11px}.finance-rank{width:34px;color:var(--gold);font-weight:950}.finance-product-name{font-weight:900}.finance-product-sub{display:block;color:var(--muted);font-size:8px;margin-top:3px}.finance-amount{font-weight:950}.finance-empty{padding:20px;text-align:center;color:var(--muted);font-size:11px}@media(max-width:900px){.finance-kpi-grid{grid-template-columns:repeat(2,1fr)}.finance-period-card{align-items:flex-start;flex-direction:column}}@media(max-width:560px){.finance-kpi-grid{grid-template-columns:1fr}.finance-products-table th:nth-child(4),.finance-products-table td:nth-child(4){display:none}.finance-period-card{padding:13px}.finance-products-table th,.finance-products-table td{padding:9px 5px;font-size:9px}}
+.finance-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.finance-card{position:relative;overflow:hidden;background:linear-gradient(145deg,var(--panel),rgba(255,255,255,.025));border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:0 10px 28px rgba(0,0,0,.10)}
+.finance-card::after{content:"";position:absolute;inset:auto -25px -35px auto;width:100px;height:100px;border-radius:50%;background:rgba(215,168,79,.06);pointer-events:none}
+.finance-card span{display:block;color:var(--muted);font-size:10px;margin-bottom:9px;font-weight:800}
+.finance-card strong{display:block;font-size:20px;line-height:1.5}
+.finance-sub{display:block;margin-top:6px;color:var(--muted);font-size:9px}
+.finance-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.finance-summary-item{padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.018)}
+.finance-summary-item span{display:block;color:var(--muted);font-size:9px;margin-bottom:5px}
+.finance-summary-item strong{font-size:14px}
+.admin-price-box{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.admin-old-price{color:var(--muted);text-decoration:line-through;opacity:.55;font-size:10px;font-weight:700}
+.admin-new-price{font-size:15px;font-weight:950;color:var(--gold)}
+@media(max-width:900px){.finance-grid{grid-template-columns:repeat(2,1fr)}.finance-summary-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.finance-grid{grid-template-columns:1fr}.finance-summary-grid{grid-template-columns:1fr}.stock-quick{gap:4px}}
+
 </style>
 <style>
 /* هشدار سفارش جدید: همیشه بالای صفحه و کاملاً قابل تشخیص */
@@ -3426,6 +3485,13 @@ input[type="time"]:focus{
                     0
                 </span>
 
+            </button>
+
+            <button
+                class="tab"
+                data-tab="finance"
+            >
+                گزارش مالی 📊
             </button>
 
             <button
@@ -3771,6 +3837,41 @@ input[type="time"]:focus{
                         <div class="field">
 
                             <label>
+                                تخفیف درصدی
+                            </label>
+
+                            <input
+                                type="number"
+                                id="productDiscount"
+                                min="0"
+                                max="100"
+                                step="1"
+                                placeholder="مثلاً 20"
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                موجودی (تعداد)
+                            </label>
+
+                            <input
+                                type="number"
+                                id="productStock"
+                                min="0"
+                                step="1"
+                                placeholder="مثلاً 20"
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
                                 برچسب
                             </label>
 
@@ -3929,8 +4030,61 @@ input[type="time"]:focus{
 
 
         <!-- =========================
-             HOURS
+             FINANCE
         ========================= -->
+
+        <section class="section" id="financeSection">
+    <div class="section-head">
+        <div class="section-title">
+            <h1>گزارش مالی 📊</h1>
+            <p>گزارش حرفه‌ای فروش، سفارش‌ها و عملکرد محصولات در ۳۰ روز اخیر</p>
+        </div>
+        <div class="actions">
+            <button class="btn btn-blue" id="refreshFinanceBtn">↻ بروزرسانی گزارش</button>
+        </div>
+    </div>
+
+    <div class="finance-period-card">
+        <div>
+            <span class="finance-period-label">دوره گزارش</span>
+            <strong>۳۰ روز اخیر</strong>
+        </div>
+        <div class="finance-period-note">مبنای فروش: فقط سفارش‌های موفق</div>
+    </div>
+
+    <div class="finance-grid finance-grid-pro">
+        <div class="finance-card finance-primary"><span>فروش ۳۰ روز اخیر</span><strong id="financeMonth">۰ تومان</strong><small>جمع سفارش‌های موفق</small></div>
+        <div class="finance-card"><span>تعداد سفارش موفق</span><strong id="financeOrders">۰</strong><small>در ۳۰ روز اخیر</small></div>
+        <div class="finance-card"><span>میانگین مبلغ سفارش</span><strong id="financeAverage">۰ تومان</strong><small>فروش ÷ سفارش موفق</small></div>
+        <div class="finance-card"><span>فروش امروز</span><strong id="financeToday">۰ تومان</strong><small>سفارش‌های موفق امروز</small></div>
+    </div>
+
+    <div class="finance-kpi-grid">
+        <div class="finance-kpi"><span>کل سفارش‌های ثبت‌شده</span><strong id="financeAllOrders">۰</strong></div>
+        <div class="finance-kpi"><span>لغو / ناموفق</span><strong id="financeFailedOrders">۰</strong></div>
+        <div class="finance-kpi"><span>نرخ موفقیت سفارش</span><strong id="financeSuccessRate">۰٪</strong></div>
+        <div class="finance-kpi"><span>تعداد محصولات فروخته‌شده</span><strong id="financeUnits">۰</strong></div>
+    </div>
+
+    <div class="card finance-products-card">
+        <div class="card-head">
+            <div>
+                <h3>پرفروش‌ترین محصولات</h3>
+                <small class="finance-head-note">تعداد فروش و مبلغ فروش هر محصول در ۳۰ روز اخیر</small>
+            </div>
+        </div>
+        <div class="card-body" id="financeProducts">در حال دریافت گزارش...</div>
+    </div>
+
+    <div class="card">
+        <div class="card-head"><h3>خلاصه حسابداری</h3></div>
+        <div class="card-body" id="financeSummary">در حال دریافت گزارش...</div>
+    </div>
+</section>
+
+<!-- =========================
+     HOURS
+========================= -->
 
         <section
             class="section"
@@ -3984,7 +4138,7 @@ input[type="time"]:focus{
                         <label
                             for="globalOpenTime"
                         >
-                            از ساعت
+                            از ساعت <span style="color:var(--muted);font-size:10px">(مثلاً 09:00 = ۹ صبح)</span>
                         </label>
 
                         <input
@@ -4003,11 +4157,11 @@ input[type="time"]:focus{
                         <label
                             for="globalCloseTime"
                         >
-                            تا ساعت
+                            تا ساعت <span style="color:var(--muted);font-size:10px">(مثلاً 24:00 = ۱۲ شب)</span>
                         </label>
 
                         <input
-                            type="time"
+                            type="text"
                             id="globalCloseTime"
                             value="23:00"
                         >
@@ -5905,6 +6059,83 @@ async function logout(){
    BUSINESS HOURS
 ========================= */
 
+async function loadFinanceReport(){
+    try{
+        const { data, error } = await supabaseClient
+            .from("orders")
+            .select("id,created_at,total_amount,status,items")
+            .order("created_at", { ascending:false });
+        if(error) throw error;
+
+        const allOrders = data || [];
+        const successfulStatuses = new Set(["completed","accepted","delivered"]);
+        const now = new Date();
+        const from = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        const recentOrders = allOrders.filter(o => new Date(o.created_at) >= from);
+        const successful = recentOrders.filter(o => successfulStatuses.has(String(o.status || "").toLowerCase()));
+        const failed = recentOrders.filter(o => !successfulStatuses.has(String(o.status || "").toLowerCase()) && String(o.status || "").toLowerCase() !== "pending");
+        const pending = recentOrders.filter(o => String(o.status || "").toLowerCase() === "pending");
+        const amount = list => list.reduce((sum,o)=>sum+(Number(o.total_amount)||0),0);
+        const recentSales = amount(successful);
+        const orderCount = successful.length;
+        const average = orderCount ? Math.round(recentSales/orderCount) : 0;
+        const units = {};
+        let totalUnits = 0;
+
+        successful.forEach(order=>{
+            let items = Array.isArray(order.items) ? order.items : [];
+            items.forEach(item=>{
+                const qty = Math.max(0, Number(item.quantity ?? item.qty ?? 1) || 0);
+                const price = Number(item.price) || 0;
+                const lineTotal = Number(item.total ?? (price * qty)) || 0;
+                const key = String(item.id ?? item.product_id ?? item.name ?? "unknown");
+                if(!units[key]) units[key] = {name:item.name || "محصول بدون نام", qty:0, sales:0};
+                units[key].qty += qty;
+                units[key].sales += lineTotal;
+                totalUnits += qty;
+            });
+        });
+
+        const productRows = Object.values(units).sort((a,b)=>b.sales-a.sales || b.qty-a.qty);
+        const successRate = recentOrders.length ? Math.round((orderCount/recentOrders.length)*100) : 0;
+
+        const tehranDate = d => new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Tehran",year:"numeric",month:"2-digit",day:"2-digit"}).format(d);
+        const todayOrders = successful.filter(o=>tehranDate(new Date(o.created_at))===tehranDate(now));
+
+        $("financeToday") && ($("financeToday").textContent = `${amount(todayOrders).toLocaleString("fa-IR")} تومان`);
+        $("financeMonth") && ($("financeMonth").textContent = `${recentSales.toLocaleString("fa-IR")} تومان`);
+        $("financeOrders") && ($("financeOrders").textContent = orderCount.toLocaleString("fa-IR"));
+        $("financeAverage") && ($("financeAverage").textContent = `${average.toLocaleString("fa-IR")} تومان`);
+        $("financeAllOrders") && ($("financeAllOrders").textContent = recentOrders.length.toLocaleString("fa-IR"));
+        $("financeFailedOrders") && ($("financeFailedOrders").textContent = failed.length.toLocaleString("fa-IR"));
+        $("financeSuccessRate") && ($("financeSuccessRate").textContent = `${successRate.toLocaleString("fa-IR")}٪`);
+        $("financeUnits") && ($("financeUnits").textContent = totalUnits.toLocaleString("fa-IR"));
+
+        if($("financeProducts")){
+            $("financeProducts").innerHTML = productRows.length ? `
+                <div style="overflow:auto">
+                <table class="finance-products-table">
+                    <thead><tr><th>#</th><th>محصول</th><th>تعداد فروش</th><th>مبلغ فروش</th></tr></thead>
+                    <tbody>${productRows.map((p,i)=>`<tr><td class="finance-rank">${(i+1).toLocaleString("fa-IR")}</td><td><span class="finance-product-name">${escapeHTML(p.name)}</span><span class="finance-product-sub">سهم از فروش: ${recentSales ? Math.round(p.sales/recentSales*100).toLocaleString("fa-IR") : "۰"}٪</span></td><td><strong>${p.qty.toLocaleString("fa-IR")}</strong> عدد</td><td class="finance-amount">${p.sales.toLocaleString("fa-IR")} تومان</td></tr>`).join("")}</tbody>
+                </table></div>` : `<div class="finance-empty">در ۳۰ روز اخیر هنوز سفارش موفقی ثبت نشده است.</div>`;
+        }
+
+        if($("financeSummary")){
+            $("financeSummary").innerHTML = `<div class="finance-summary-grid">
+                <div class="finance-summary-item"><span>فروش خالص ثبت‌شده</span><strong>${recentSales.toLocaleString("fa-IR")} تومان</strong></div>
+                <div class="finance-summary-item"><span>سفارش موفق</span><strong>${orderCount.toLocaleString("fa-IR")} سفارش</strong></div>
+                <div class="finance-summary-item"><span>میانگین ارزش سفارش</span><strong>${average.toLocaleString("fa-IR")} تومان</strong></div>
+                <div class="finance-summary-item"><span>سفارش در انتظار</span><strong>${pending.length.toLocaleString("fa-IR")} سفارش</strong></div>
+                <div class="finance-summary-item"><span>لغو / ناموفق</span><strong>${failed.length.toLocaleString("fa-IR")} سفارش</strong></div>
+                <div class="finance-summary-item"><span>تعداد کل اقلام فروخته‌شده</span><strong>${totalUnits.toLocaleString("fa-IR")} عدد</strong></div>
+            </div>`;
+        }
+    }catch(error){
+        console.error("FINANCE REPORT ERROR:",error);
+        if($("financeSummary")) $("financeSummary").innerHTML=`<div style="color:#ff8585;line-height:2">دریافت گزارش مالی ناموفق بود.<br>${escapeHTML(error.message||"خطای نامشخص")}</div>`;
+    }
+}
+
 async function loadBusinessHours(){
 
     const openEl =
@@ -6315,15 +6546,17 @@ async function loadAll(){
 
     try{
 
-        await Promise.all([
+        await loadCategories();
 
-            loadCategories(),
+        await Promise.allSettled([
 
             loadProducts(),
 
             loadOrders(),
 
-            loadBusinessHours()
+            loadBusinessHours(),
+
+            loadFinanceReport()
 
         ]);
 
@@ -6331,17 +6564,26 @@ async function loadAll(){
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            "LOAD ALL ERROR:",
+            error
+        );
 
         toast(
-            "خطا در دریافت اطلاعات پنل",
+            "خطا در دریافت اطلاعات پنل: " +
+            (
+                error.message ||
+                "خطای نامشخص"
+            ),
             "error"
         );
+
+    }finally{
+
+        hideLoader();
+
     }
-
-    hideLoader();
 }
-
 
 async function loadCategories(){
 
@@ -6434,58 +6676,106 @@ function renderCategorySelects(){
 
 async function loadProducts(){
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from(
-                "menu_items"
-            )
-            .select(`
-                id,
-                category_id,
-                name,
-                description,
-                price,
-                badge,
-                image_url,
-                is_available,
-                sort_order,
-                categories(id,title)
-            `)
-            .order(
-                "sort_order",
-                {
-                    ascending:true
-                }
+    try{
+
+        const result =
+            await supabaseClient
+                .from("menu_items")
+                .select(`
+                    id,
+                    category_id,
+                    name,
+                    description,
+                    price,
+                    badge,
+                    image_url,
+                    is_available,
+                    stock,
+                    discount_percent,
+                    sort_order
+                `)
+                .order(
+                    "sort_order",
+                    {
+                        ascending:true
+                    }
+                );
+
+        if(result.error){
+
+            console.error(
+                "MENU ITEMS ERROR:",
+                result.error
             );
 
-    if(error){
+            toast(
+                "دریافت محصولات ناموفق بود: " +
+                (
+                    result.error.message ||
+                    "خطای نامشخص"
+                ),
+                "error"
+            );
 
-        console.error(error);
+            products = [];
+            renderProducts();
+
+            if($("statProducts")){
+                $("statProducts").textContent = "۰";
+            }
+
+            return false;
+        }
+
+        products =
+            (result.data || []).map(product => ({
+
+                ...product,
+
+                category:
+                    categories.find(
+                        category =>
+                            String(category.id) ===
+                            String(product.category_id)
+                    ) || null
+
+            }));
+
+        renderProducts();
+
+        if($("statProducts")){
+            $("statProducts").textContent =
+                products.length.toLocaleString("fa-IR");
+        }
+
+        return true;
+
+    }catch(error){
+
+        console.error(
+            "LOAD PRODUCTS EXCEPTION:",
+            error
+        );
 
         toast(
-            "دریافت محصولات ناموفق بود.",
+            "دریافت محصولات ناموفق بود: " +
+            (
+                error.message ||
+                "خطای نامشخص"
+            ),
             "error"
         );
 
-        return;
+        products = [];
+        renderProducts();
+
+        if($("statProducts")){
+            $("statProducts").textContent = "۰";
+        }
+
+        return false;
     }
-
-    products =
-        data || [];
-
-    renderProducts();
-
-    $("statProducts")
-        .textContent =
-            products.length
-                .toLocaleString(
-                    "fa-IR"
-                );
 }
-
 
 async function loadOrders(
     options={}
@@ -6837,6 +7127,15 @@ function renderProducts(){
                                 </div>
 
 
+                                ${product.discount_percent > 0 ? `<div class="discount-badge-admin">${product.discount_percent}٪ تخفیف</div>` : ""}
+
+                                <div class="stock-quick">
+                                    <button class="btn btn-danger" title="کاهش موجودی" onclick="quickAdjustStock(${product.id},-1)">−</button>
+                                    <span class="stock-value">${product.stock === null || product.stock === undefined ? "∞" : Number(product.stock).toLocaleString("fa-IR")}</span>
+                                    <button class="btn btn-success" title="افزایش موجودی" onclick="quickAdjustStock(${product.id},1)">+</button>
+                                    ${product.stock === null || product.stock === undefined ? "" : `<button class="btn btn-blue" title="افزایش 10 عدد" onclick="quickAdjustStock(${product.id},10)">+10</button>`}
+                                </div>
+
                                 <div
                                     class="product-desc"
                                 >
@@ -6857,13 +7156,29 @@ function renderProducts(){
 
                                     <div>
 
-                                        <div
-                                            class="product-price"
-                                        >
+                                        <div class="product-price admin-price-box">
 
-                                            ${formatPrice(
-                                                product.price
-                                            )}
+                                            ${
+                                                Number(product.discount_percent || 0) > 0
+                                                ? `
+                                                    <span class="admin-old-price">
+                                                        ${formatPrice(product.price)}
+                                                    </span>
+                                                    <span class="admin-new-price">
+                                                        ${formatPrice(
+                                                            Math.round(
+                                                                Number(product.price || 0) *
+                                                                (1 - Number(product.discount_percent || 0) / 100)
+                                                            )
+                                                        )}
+                                                    </span>
+                                                `
+                                                : `
+                                                    <span class="admin-new-price">
+                                                        ${formatPrice(product.price)}
+                                                    </span>
+                                                `
+                                            }
 
                                         </div>
 
@@ -7022,6 +7337,72 @@ function renderProducts(){
 }
 
 
+async function quickAdjustStock(id, amount){
+
+    const product = products.find(
+        p => String(p.id) === String(id)
+    );
+
+    if(!product){
+        return;
+    }
+
+    const currentRaw = product.stock;
+
+    // اگر موجودی تعریف نشده باشد، با + از ۱ شروع می‌شود.
+    // +10 هم از ۱۰ شروع می‌کند.
+    let next;
+
+    if(currentRaw === null || currentRaw === undefined || currentRaw === ""){
+        if(Number(amount) > 0){
+            next = Number(amount);
+        }else{
+            next = null;
+        }
+    }else{
+        const current = Math.max(0, Number(currentRaw) || 0);
+        // وقتی موجودی صفر است و دوباره «−» زده شود، محصول به حالت نامحدود برمی‌گردد.
+        if(current === 0 && Number(amount) < 0){
+            next = null;
+        }else{
+            next = Math.max(0, current + Number(amount || 0));
+        }
+    }
+
+    const { error } =
+        await supabaseClient
+            .from("menu_items")
+            .update({
+                stock: next,
+                is_available: next === null ? true : next > 0
+            })
+            .eq("id", id);
+
+    if(error){
+
+        console.error("QUICK STOCK ERROR:", error);
+
+        toast(
+            "تغییر موجودی ناموفق بود: " +
+            (error.message || "خطای نامشخص"),
+            "error"
+        );
+
+        return;
+    }
+
+    product.stock = next;
+    product.is_available = next === null ? true : next > 0;
+
+    renderProducts();
+
+    toast(
+        next === null ? `«${product.name}» به موجودی نامحدود برگشت.` : `موجودی «${product.name}» شد ${next.toLocaleString("fa-IR")}`,
+        "success"
+    );
+}
+
+
 /* =========================
    AVAILABILITY
 ========================= */
@@ -7130,6 +7511,10 @@ function resetProductForm(){
         .value =
             "";
 
+    $("productStock")
+        .value =
+            "0";
+
     $("productBadge")
         .value =
             "";
@@ -7199,11 +7584,23 @@ function editProduct(id){
             ||
             "";
 
+    $("productStock")
+        .value =
+            product.stock === null || product.stock === undefined
+                ? ""
+                : product.stock;
+
     $("productBadge")
         .value =
             product.badge
             ||
             "";
+
+    $("productDiscount")
+        .value =
+            product.discount_percent === null || product.discount_percent === undefined
+                ? "0"
+                : product.discount_percent;
 
     $("productSort")
         .value =
@@ -7368,6 +7765,18 @@ async function saveProduct(){
             .value
             .trim();
 
+    const discount = Math.min(100, Math.max(0, Math.floor(Number($("productDiscount").value || 0))));
+
+    const stockRaw =
+        $("productStock")
+            .value
+            .trim();
+
+    const stock =
+        stockRaw === ""
+            ? null
+            : Math.max(0, Math.floor(Number(stockRaw) || 0));
+
     const sortOrder =
         Number(
             $("productSort")
@@ -7438,8 +7847,15 @@ async function saveProduct(){
 
             badge,
 
+            stock,
+
+            discount_percent:
+                discount,
+
             is_available:
-                isAvailable,
+                stock !== null && stock <= 0
+                    ? false
+                    : isAvailable,
 
             sort_order:
                 sortOrder
@@ -10861,6 +11277,8 @@ $("refreshBtn")
         }
     );
 
+
+$("refreshFinanceBtn")?.addEventListener("click", loadFinanceReport);
 
 $("saveProductBtn")
     .addEventListener(
