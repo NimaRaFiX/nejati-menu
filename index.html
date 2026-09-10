@@ -1081,6 +1081,69 @@
         object-fit: contain;
       }
 
+
+/* ==============================
+   HOOKAH IMAGE - ENABLED
+============================== */
+.hookah-card{
+  display:flex;
+  align-items:stretch;
+  gap:14px;
+}
+
+.hookah-image{
+  width:125px;
+  min-width:125px;
+  height:145px;
+  border-radius:14px;
+  overflow:hidden;
+  cursor:pointer;
+  background:var(--card-bottom);
+  flex-shrink:0;
+}
+
+.hookah-image img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  transition:.3s;
+}
+
+.hookah-card:hover .hookah-image img{
+  transform:scale(1.05);
+}
+
+.hookah-content{
+  flex:1;
+  min-width:0;
+  min-height:145px;
+  display:flex;
+  flex-direction:column;
+}
+
+.hookah-bottom{
+  margin-top:auto !important;
+}
+
+@media (max-width:700px){
+  .hookah-card{
+    gap:10px;
+    min-height:116px;
+  }
+
+  .hookah-image{
+    width:92px;
+    min-width:92px;
+    height:116px;
+  }
+
+  .hookah-content{
+    min-width:0;
+    min-height:116px;
+  }
+}
+
       /* ==============================
          STATES
       ============================== */
@@ -2943,6 +3006,126 @@
     box-shadow:0 4px 12px rgba(230,83,83,.12);
 }
 
+
+/* ==============================
+   HOOKAH = SAME DESIGN AS PRODUCTS
+============================== */
+.hookah-card{
+  position:relative;
+  min-height:145px;
+  display:flex;
+  overflow:hidden;
+  padding:0;
+  border-radius:16px;
+  background:linear-gradient(135deg,var(--card-top),var(--card-bottom));
+  border:1px solid rgba(9,126,168,.1);
+  box-shadow:0 9px 24px var(--shadow);
+  transition:.22s;
+}
+
+.hookah-card:hover{
+  transform:translateY(-3px);
+}
+
+.hookah-card .food-image{
+  width:125px;
+  min-width:125px;
+  height:145px;
+  overflow:hidden;
+  background:#d8f4fc;
+  cursor:pointer;
+}
+
+.hookah-card .food-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transition:.3s;
+}
+
+.hookah-card:hover .food-image img{
+  transform:scale(1.05);
+}
+
+.hookah-card .food-info{
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  padding:14px;
+}
+
+.hookah-card .food-name{
+  color:var(--blue-dark);
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+  line-height:1.7;
+  overflow-wrap:anywhere;
+}
+
+.hookah-card .food-description{
+  flex:1;
+  margin-top:5px;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.9;
+  overflow:hidden;
+  max-height:57px;
+}
+
+.hookah-card .food-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-top:9px;
+  min-width:0;
+}
+
+.hookah-card .price-box{
+  min-width:118px;
+  height:35px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:0 8px;
+  border-radius:9px;
+  background:rgba(37,172,217,.08);
+  border:1px solid rgba(13,140,185,.12);
+  white-space:nowrap;
+  flex-shrink:1;
+}
+
+@media (max-width:700px){
+  .hookah-card{
+    min-height:116px;
+    border-radius:14px;
+  }
+
+  .hookah-card .food-image{
+    width:92px;
+    min-width:92px;
+    height:116px;
+  }
+
+  .hookah-card .food-info{
+    padding:11px;
+  }
+
+  .hookah-card .food-name{
+    font-size:12px;
+  }
+
+  .hookah-card .food-description{
+    font-size:9px;
+    line-height:1.8;
+    max-height:48px;
+  }
+}
+
 </style>
   </head>
 
@@ -4150,11 +4333,16 @@
       ============================== */
 
       function createHookahCard(item) {
+        const image = item.image_url || "no-image.jpg";
+
         const badge = item.badge
           ? `
             <div
               class="badge ${
-                String(item.badge).includes("ویژه") ? "special" : ""
+                String(item.badge).includes("ویژه") ||
+                String(item.badge).includes("special")
+                  ? "special"
+                  : ""
               }"
             >
               ${escapeHTML(item.badge)}
@@ -4164,69 +4352,100 @@
 
         return `
           <article
-            class="hookah-card"
+            class="food-card hookah-card"
             data-item-id="${escapeAttribute(item.id)}"
           >
             ${badge}
 
             <div
-              class="hookah-name"
+              class="food-image"
               data-action="detail"
               data-id="${escapeAttribute(item.id)}"
             >
-              ${escapeHTML(item.name)}
+              <img
+                src="${escapeAttribute(image)}"
+                alt="${escapeAttribute(item.name)}"
+                loading="lazy"
+                decoding="async"
+                onerror="this.src='no-image.jpg'"
+              >
             </div>
 
-            <div class="hookah-description">
-              ${escapeHTML(item.description || "")}
-            </div>
-
-            <div class="hookah-bottom">
-              <div class="hookah-price">
-                <span class="price-number">
-                  ${persianNumber(getDiscountedPrice(item))}
-                </span>
-                ${item.discount_percent > 0 ? `<span class="original-price">${persianNumber(item.price)}</span>${discountHTML(item)}` : ""}
-
-                <span class="price-currency">
-                  <img
-                    src="toman.png"
-                    alt="تومان"
-                    loading="lazy"
-                    decoding="async"
-                    onerror="
-                      this.style.display='none';
-                      this.parentElement.innerHTML='<span class=&quot;price-currency-text&quot;>تومان</span>'
-                    "
-                  >
-                </span>
+            <div class="food-info">
+              <div
+                class="food-name"
+                data-action="detail"
+                data-id="${escapeAttribute(item.id)}"
+              >
+                ${escapeHTML(item.name)}
               </div>
 
-              <div
-                class="product-qty"
-                data-product-id="${escapeAttribute(item.id)}"
-              >
-                <button
-                  type="button"
-                  class="qty-minus"
-                  data-qty-change="-1"
-                  aria-label="کم کردن تعداد"
-                >
-                  −
-                </button>
+              <div class="food-description">
+                ${escapeHTML(item.description || "")}
+              </div>
 
-                <span class="qty-number">
-                  ۰
-                </span>
+              <div class="food-bottom">
+                <div class="stock-badge-wrap">
+                  <div class="stock-badge ${
+                    item.stock !== null &&
+                    item.stock !== undefined &&
+                    Number(item.stock) <= 5
+                      ? "low"
+                      : ""
+                  }">
+                    ${
+                      item.stock === null || item.stock === undefined
+                        ? "موجود"
+                        : `موجودی: ${persianNumber(item.stock)}`
+                    }
+                  </div>
+                </div>
 
-                <button
-                  type="button"
-                  class="qty-plus"
-                  data-qty-change="1"
-                  aria-label="افزودن به سبد"
+                <div class="price-box">
+                  <span class="price-number">
+                    ${persianNumber(getDiscountedPrice(item))}
+                  </span>
+
+                  ${
+                    item.discount_percent > 0
+                      ? `<span class="original-price">${persianNumber(item.price)}</span>${discountHTML(item)}`
+                      : ""
+                  }
+
+                  <span class="price-currency">
+                    <img
+                      src="toman.png"
+                      alt="تومان"
+                      loading="lazy"
+                      decoding="async"
+                      onerror="
+                        this.style.display='none';
+                        this.parentElement.innerHTML='<span class=&quot;price-currency-text&quot;>تومان</span>'
+                      "
+                    >
+                  </span>
+                </div>
+
+                <div
+                  class="product-qty"
+                  data-product-id="${escapeAttribute(item.id)}"
                 >
-                  +
-                </button>
+                  <button
+                    type="button"
+                    class="qty-minus"
+                    data-qty-change="-1"
+                    aria-label="کم کردن تعداد"
+                  >−</button>
+
+                  <span class="qty-number">۰</span>
+
+                  <button
+                    type="button"
+                    class="qty-plus"
+                    data-qty-change="1"
+                    aria-label="افزودن به سبد"
+                  >+</button>
+                </div>
               </div>
             </div>
           </article>
