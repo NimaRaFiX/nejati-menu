@@ -3562,77 +3562,96 @@
         color: #71808b !important;
         opacity: 1 !important;
       }
+      /* پیام‌های اطلاع‌رسانی در حالت روز */
+      html:not(.dark) .toast {
+        color: #17212b !important;
+        background: #ffffff !important;
+        border-color: #c8d2db !important;
+        box-shadow: 0 15px 40px rgba(30, 55, 75, 0.18) !important;
+        text-shadow: none !important;
+        -webkit-text-fill-color: #17212b !important;
+      }
+      html:not(.dark) .toast.success {
+        border-color: rgba(21, 155, 104, 0.35) !important;
+      }
+      html:not(.dark) .toast.error {
+        border-color: rgba(216, 75, 75, 0.35) !important;
+      }
+      html:not(.dark) .toast.warning {
+        border-color: rgba(223, 132, 44, 0.35) !important;
+      }
     </style>
 
-    <style id="order-details-visibility-fix">
-      /* ===== FIX: readable order details in light theme ===== */
-      html:not(.dark) #orderModal .modal-box {
-        background: #ffffff !important;
-        color: #18232d !important;
-        border-color: #cfd7df !important;
-      }
+<style id="order-details-visibility-fix">
+/* ===== FIX: readable order details in light theme ===== */
+html:not(.dark) #orderModal .modal-box {
+  background: #ffffff !important;
+  color: #18232d !important;
+  border-color: #cfd7df !important;
+}
 
-      html:not(.dark) #orderModal .modal-head,
-      html:not(.dark) #orderModal .modal-body,
-      html:not(.dark) #orderModal .modal-footer {
-        background: #ffffff !important;
-        color: #18232d !important;
-      }
+html:not(.dark) #orderModal .modal-head,
+html:not(.dark) #orderModal .modal-body,
+html:not(.dark) #orderModal .modal-footer {
+  background: #ffffff !important;
+  color: #18232d !important;
+}
 
-      html:not(.dark) #orderModal .info-box,
-      html:not(.dark) #orderModal .order-items,
-      html:not(.dark) #orderModal .order-item {
-        background: #f7f9fb !important;
-        color: #18232d !important;
-        border-color: #cfd7df !important;
-      }
+html:not(.dark) #orderModal .info-box,
+html:not(.dark) #orderModal .order-items,
+html:not(.dark) #orderModal .order-item {
+  background: #f7f9fb !important;
+  color: #18232d !important;
+  border-color: #cfd7df !important;
+}
 
-      html:not(.dark) #orderModal .info-label,
-      html:not(.dark) #orderModal .item-qty,
-      html:not(.dark) #orderModal .total-box span {
-        color: #53616d !important;
-        -webkit-text-fill-color: #53616d !important;
-      }
+html:not(.dark) #orderModal .info-label,
+html:not(.dark) #orderModal .item-qty,
+html:not(.dark) #orderModal .total-box span {
+  color: #53616d !important;
+  -webkit-text-fill-color: #53616d !important;
+}
 
-      html:not(.dark) #orderModal .info-value,
-      html:not(.dark) #orderModal .item-name,
-      html:not(.dark) #orderModal .item-price,
-      html:not(.dark) #orderModal .total-box strong {
-        color: #18232d !important;
-        -webkit-text-fill-color: #18232d !important;
-        text-shadow: none !important;
-      }
+html:not(.dark) #orderModal .info-value,
+html:not(.dark) #orderModal .item-name,
+html:not(.dark) #orderModal .item-price,
+html:not(.dark) #orderModal .total-box strong {
+  color: #18232d !important;
+  -webkit-text-fill-color: #18232d !important;
+  text-shadow: none !important;
+}
 
-      html:not(.dark) #orderModal .total-box {
-        background: #fff8e9 !important;
-        border-color: #e4c47c !important;
-        color: #18232d !important;
-      }
+html:not(.dark) #orderModal .total-box {
+  background: #fff8e9 !important;
+  border-color: #e4c47c !important;
+  color: #18232d !important;
+}
 
-      html:not(.dark) #orderModal .total-box strong {
-        color: #b98220 !important;
-        -webkit-text-fill-color: #b98220 !important;
-      }
+html:not(.dark) #orderModal .total-box strong {
+  color: #b98220 !important;
+  -webkit-text-fill-color: #b98220 !important;
+}
 
-      html:not(.dark) #orderModal .status {
-        text-shadow: none !important;
-      }
+html:not(.dark) #orderModal .status {
+  text-shadow: none !important;
+}
 
-      /* ===== FIX: keep order details readable in dark theme too ===== */
-      html.dark #orderModal .modal-box,
-      html.dark #orderModal .modal-head,
-      html.dark #orderModal .modal-body,
-      html.dark #orderModal .modal-footer {
-        color: #f4f5f6 !important;
-      }
+/* ===== FIX: keep order details readable in dark theme too ===== */
+html.dark #orderModal .modal-box,
+html.dark #orderModal .modal-head,
+html.dark #orderModal .modal-body,
+html.dark #orderModal .modal-footer {
+  color: #f4f5f6 !important;
+}
 
-      html.dark #orderModal .info-value,
-      html.dark #orderModal .item-name,
-      html.dark #orderModal .item-price {
-        color: #f4f5f6 !important;
-        -webkit-text-fill-color: #f4f5f6 !important;
-      }
-    </style>
+html.dark #orderModal .info-value,
+html.dark #orderModal .item-name,
+html.dark #orderModal .item-price {
+  color: #f4f5f6 !important;
+  -webkit-text-fill-color: #f4f5f6 !important;
+}
+</style>
+
   </head>
 
   <body>
@@ -3672,19 +3691,6 @@
 
     <div class="app hidden" id="app">
       <header class="topbar">
-        <button
-          class="menu-toggle"
-          id="menuToggle"
-          type="button"
-          aria-label="منوی پنل"
-          aria-expanded="false"
-          title="منوی پنل"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-
         <div class="brand">
           <div class="brand-logo">ن</div>
 
