@@ -939,6 +939,49 @@
       }
 
       /* ==============================
+         UNAVAILABLE PRODUCT
+      ============================== */
+      .food-card.unavailable {
+        opacity: .78;
+      }
+
+      .food-card.unavailable .food-image img {
+        filter: grayscale(.65);
+      }
+
+      .unavailable-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        background: rgba(20, 25, 30, .22);
+      }
+
+      .unavailable-overlay span {
+        padding: 9px 18px;
+        border-radius: 999px;
+        background: rgba(205, 45, 55, .94);
+        color: #fff;
+        font-size: 15px;
+        font-weight: 900;
+        box-shadow: 0 8px 24px rgba(0,0,0,.22);
+      }
+
+      .food-card.unavailable .product-qty button {
+        opacity: .35;
+        cursor: not-allowed;
+      }
+
+      .food-card.unavailable .stock-badge {
+        background: rgba(229, 65, 78, .12);
+        border-color: rgba(229, 65, 78, .25);
+        color: #d83f4f;
+      }
+
+      /* ==============================
          BADGE
       ============================== */
 
@@ -3868,13 +3911,7 @@
                   (category) =>
                     String(category.id) === String(item.category_id)
                 ) || null,
-            }))
-            .filter((item) =>
-              item.is_available !== false &&
-              (item.stock === null ||
-                item.stock === undefined ||
-                Number(item.stock) > 0)
-            );
+            }));
           latestMenuItems = available;
 
           syncCategoryTabs(available);
@@ -4141,6 +4178,19 @@
 
         if (!source) return;
 
+        const unavailable =
+          source.is_available === false ||
+          (source.stock !== null &&
+            source.stock !== undefined &&
+            Number(source.stock) <= 0);
+
+        if (unavailable && amount > 0) {
+          if (showMessage) {
+            showToast(`«${source.name}» ناموجود است.`, "error");
+          }
+          return;
+        }
+
         let item = getCartItem(id);
 
         if (amount > 0) {
@@ -4227,10 +4277,15 @@
 
         return `
           <article
-            class="food-card"
+            class="food-card ${item.is_available === false || (item.stock !== null && item.stock !== undefined && Number(item.stock) <= 0) ? "unavailable" : ""}"
             data-item-id="${escapeAttribute(item.id)}"
           >
             ${badge}
+            ${
+              item.is_available === false || (item.stock !== null && item.stock !== undefined && Number(item.stock) <= 0)
+                ? `<div class="unavailable-overlay"><span>ناموجود</span></div>`
+                : ""
+            }
 
             <div
               class="food-image"
@@ -4269,9 +4324,12 @@
                       : ""
                   }">
                     ${
-                      item.stock === null || item.stock === undefined
-                        ? "موجود"
-                        : `موجودی: ${persianNumber(item.stock)}`
+                      item.is_available === false ||
+                      (item.stock !== null && item.stock !== undefined && Number(item.stock) <= 0)
+                        ? "ناموجود"
+                        : item.stock === null || item.stock === undefined
+                          ? "موجود"
+                          : `موجودی: ${persianNumber(item.stock)}`
                     }
                   </div>
                 </div>
@@ -4305,6 +4363,7 @@
                     class="qty-minus"
                     data-qty-change="-1"
                     aria-label="کم کردن تعداد"
+                    ${item.is_available === false || (item.stock !== null && item.stock !== undefined && Number(item.stock) <= 0) ? "disabled" : ""}
                   >
                     −
                   </button>
@@ -4318,6 +4377,7 @@
                     class="qty-plus"
                     data-qty-change="1"
                     aria-label="افزودن به سبد"
+                    ${item.is_available === false || (item.stock !== null && item.stock !== undefined && Number(item.stock) <= 0) ? "disabled" : ""}
                   >
                     +
                   </button>
@@ -4352,10 +4412,15 @@
 
         return `
           <article
-            class="food-card hookah-card"
+            class="food-card hookah-card ${item.is_available === false || (item.stock !== null && item.stock !== undefined && Number(item.stock) <= 0) ? "unavailable" : ""}"
             data-item-id="${escapeAttribute(item.id)}"
           >
             ${badge}
+            ${
+              item.is_available === false || (item.stock !== null && item.stock !== undefined && Number(item.stock) <= 0)
+                ? `<div class="unavailable-overlay"><span>ناموجود</span></div>`
+                : ""
+            }
 
             <div
               class="food-image"
@@ -4394,9 +4459,12 @@
                       : ""
                   }">
                     ${
-                      item.stock === null || item.stock === undefined
-                        ? "موجود"
-                        : `موجودی: ${persianNumber(item.stock)}`
+                      item.is_available === false ||
+                      (item.stock !== null && item.stock !== undefined && Number(item.stock) <= 0)
+                        ? "ناموجود"
+                        : item.stock === null || item.stock === undefined
+                          ? "موجود"
+                          : `موجودی: ${persianNumber(item.stock)}`
                     }
                   </div>
                 </div>
@@ -4435,6 +4503,7 @@
                     class="qty-minus"
                     data-qty-change="-1"
                     aria-label="کم کردن تعداد"
+                    ${item.is_available === false || (item.stock !== null && item.stock !== undefined && Number(item.stock) <= 0) ? "disabled" : ""}
                   >−</button>
 
                   <span class="qty-number">۰</span>
@@ -4444,6 +4513,7 @@
                     class="qty-plus"
                     data-qty-change="1"
                     aria-label="افزودن به سبد"
+                    ${item.is_available === false || (item.stock !== null && item.stock !== undefined && Number(item.stock) <= 0) ? "disabled" : ""}
                   >+</button>
                 </div>
               </div>
@@ -4991,6 +5061,17 @@
         for (const item of cart) {
           const latest = getProduct(item.id);
           if (!latest) continue;
+
+          if (latest.is_available === false) {
+            showToast(
+              `«${latest.name}» ناموجود است. لطفاً آن را از سبد حذف کنید.`,
+              "error",
+            );
+            cart = cart.filter((x) => String(x.id) !== String(item.id));
+            updateAllProductQtyUI();
+            updateCart();
+            return false;
+          }
 
           if (latest.stock !== null && latest.stock !== undefined) {
             const stock = Math.max(0, Number(latest.stock) || 0);
