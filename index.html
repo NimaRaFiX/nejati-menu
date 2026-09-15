@@ -3206,7 +3206,7 @@
       .modern-screen .text-lg{
         font-family:'Mahboubeh Mehravar','mahboubehmehravar','Mahboubeh_mehravar',system-ui,sans-serif !important;
         font-weight:800 !important;
-        color:var(--blue-dark) !important;
+        color:var(#ffffff ) !important;
         font-size:18px !important;
       }
       .modern-screen .modern-head h2,
@@ -3240,7 +3240,7 @@
       .modern-cart-controls{display:flex;align-items:center;direction:ltr;background:#fff;border:1px solid rgba(13,143,196,.15);border-radius:11px;padding:3px;box-shadow:0 2px 6px rgba(4,79,111,.07);flex:0 0 auto;}
       .modern-cart-controls button{width:29px;height:29px;border:0;background:transparent;color:var(--blue-dark);font-size:17px;font-weight:800;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
       .modern-cart-qty{min-width:25px;text-align:center;color:var(--sky-1);font-size:12px;font-weight:800;}
-      .modern-cart-empty{padding:35px 15px;text-align:center;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:7px;font-size:10px;}
+      .modern-cart-empty{padding:35px 15px;text-align:center;color:var(#000);display:flex;flex-direction:column;align-items:center;gap:7px;font-size:10px;}
       .modern-cart-empty strong{font-size:13px;color:var(--blue-dark);font-weight:800;}
       .modern-cart-empty span{display:none;}
       .modern-cart-footer{padding:10px 22px calc(17px + env(safe-area-inset-bottom));border-top:1px solid rgba(13,143,196,.10);flex:0 0 auto;background:rgba(255,255,255,.92);}
@@ -3290,6 +3290,192 @@
         .modern-item-name{font-size:11px;}
       }
 
+
+
+
+      /* ==============================
+         FINAL CART / CHECKOUT FIXES
+      ============================== */
+      .modern-head{
+        position:relative !important;
+        display:flex !important;
+        align-items:center !important;
+        justify-content:center !important;
+        width:100% !important;
+      }
+      .modern-head > div{
+        width:100% !important;
+        flex:1 1 100% !important;
+        text-align:center !important;
+        display:flex !important;
+        align-items:center !important;
+        justify-content:center !important;
+      }
+      .modern-head h2{
+        width:100% !important;
+        text-align:center !important;
+        margin:0 !important;
+        color:var(--blue-dark) !important;
+      }
+      .modern-close{
+        position:absolute !important;
+        left:18px !important;
+        top:50% !important;
+        transform:translateY(-50%) !important;
+        z-index:2 !important;
+      }
+
+      .modern-cart-empty{
+        width:100% !important;
+        padding:24px 10px 28px !important;
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:center !important;
+        justify-content:center !important;
+        text-align:center !important;
+        gap:9px !important;
+      }
+      .modern-cart-empty-icon{
+        width:42px !important;
+        height:42px !important;
+        border-radius:50% !important;
+        background:#fff !important;
+        border:1px solid hwb(0 100% 0%) !important;
+        box-shadow:0 3px 10px rgba(0, 4, 5, 0.1) !important;
+        flex:0 0 42px !important;
+      }
+      .modern-cart-empty-text{
+        width:100% !important;
+        display:flex !important;
+        align-items:center !important;
+        justify-content:center !important;
+        gap:14px !important;
+        white-space:nowrap !important;
+        text-align:center !important;
+      }
+      .modern-cart-empty-text strong,
+      .modern-cart-empty-text span{
+        display:inline !important;
+        margin:0 !important;
+        font-size:11px !important;
+        line-height:1.6 !important;
+        text-align:center !important;
+        color:var(--muted) !important;
+        font-family:'Mahboubeh Mehravar','mahboubehmehravar','Mahboubeh_mehravar',system-ui,sans-serif !important;
+        font-weight:800 !important;
+      }
+      .modern-cart-empty-text strong{
+        color:var(--blue-dark) !important;
+      }
+
+      /* فقط خود عددها با فونت عادی سایت */
+      .modern-screen .normal-number{
+        font-family:"Vazirmatn",sans-serif !important;
+        font-weight:800 !important;
+        font-variant-numeric:normal !important;
+      }
+      .modern-screen .modern-fields input,
+      .modern-screen .modern-fields textarea,
+      .modern-screen .modern-fields select,
+      #customerPhone{
+        font-family:"Vazirmatn",sans-serif !important;
+      }
+
+      .modern-primary,
+      #goToCheckout{
+        color:#fff !important;
+      }
+
+      .modern-screen .modern-summary{
+        text-align:center !important;
+      }
+      .modern-screen .modern-summary .summary-row{
+        font-family:'Mahboubeh Mehravar','mahboubehmehravar','Mahboubeh_mehravar',system-ui,sans-serif !important;
+      }
+      .modern-screen .modern-summary .summary-row span,
+      .modern-screen .modern-summary .summary-row strong{
+        text-align:center !important;
+      }
+
+      @media (max-width:520px){
+        .modern-cart-empty-text{
+          gap:10px !important;
+          font-size:10px !important;
+        }
+        .modern-cart-empty-text strong,
+        .modern-cart-empty-text span{
+          font-size:10px !important;
+        }
+      }
+
+    
+/* FINAL HEADER + DARK MODE FIX */
+.modern-close{right:18px !important;left:auto !important;position:absolute !important;top:50% !important;transform:translateY(-50%) !important;z-index:5 !important;}
+#backToCart{right:18px !important;left:auto !important;}
+.modern-cart-empty-text{justify-content:center !important;gap:0 !important;}
+.modern-cart-empty-icon{display:flex !important;align-items:center !important;justify-content:center !important;font-family:Arial,sans-serif !important;font-size:19px !important;line-height:1 !important;}
+
+/* دارک مود: همان رنگ‌بندی اصلی سایت، بدون مشکی کردن بخش‌ها */
+html.dark .modern-screen .modern-cart-empty,
+html.dark .modern-screen .modern-cart-item,
+html.dark .modern-screen .modern-summary,
+html.dark .modern-screen .modern-fields,
+html.dark .modern-screen .modern-item,
+html.dark .modern-screen .modern-cart-footer{
+  background:#153441 !important;
+  color:#000000 !important;
+  border-color:rgba(255,255,255,.08) !important;
+}
+html.dark .modern-screen .modern-cart-empty-icon{
+  background:#ffffff !important;
+  border-color:rgba(255,255,255,.08) !important;
+  box-shadow:0 3px 10px rgba(0,0,0,.15) !important;
+}
+html.dark .modern-screen .modern-total-row{
+  background:transparent !important;
+  color:#e8f9ff !important;
+}
+html.dark .modern-screen .modern-total-row span{
+  color:#e8f9ff !important;
+}
+html.dark .modern-screen .modern-total-row strong{
+  color:#63d1ee !important;
+  background:transparent !important;
+}
+html.dark .modern-screen .modern-primary,
+html.dark #goToCheckout{
+  background:linear-gradient(135deg,var(--sky-2),var(--sky-1)) !important;
+  color:#fff !important;
+}
+html.dark .modern-screen .modern-clear{
+  background:transparent !important;
+  color:#cfdfe5 !important;
+}
+html.dark .modern-screen .modern-head h2,
+html.dark .modern-screen .modern-total-row,
+html.dark .modern-screen .modern-item-name,
+html.dark .modern-screen .modern-item-price,
+html.dark .modern-screen .modern-cart-qty,
+html.dark .modern-screen .modern-summary *,
+html.dark .modern-screen .modern-cart-empty-text strong{
+  color:#e8f9ff !important;
+}
+html.dark .modern-screen .modern-total-row strong,
+html.dark .modern-screen .modern-summary .summary-row.total strong{
+  color:#63d1ee !important;
+}
+html.dark .modern-screen .modern-fields input,
+html.dark .modern-screen .modern-fields textarea,
+html.dark .modern-screen .modern-fields select{
+  background:#153441 !important;
+  color:#fff !important;
+  border-color:rgba(255,255,255,.08) !important;
+}
+html.dark .modern-screen .modern-fields input::placeholder,
+html.dark .modern-screen .modern-fields textarea::placeholder{
+  color:#91b4c0 !important;
+}
+html.dark .modern-screen .modern-close{color:#e8f9ff !important;}
 </style>
   </head>
 
@@ -3788,6 +3974,10 @@
 
       function persianNumber(value) {
         return Number(value || 0).toLocaleString("fa-IR");
+      }
+
+      function normalNumber(value) {
+        return `<span class="normal-number">${persianNumber(value)}</span>`;
       }
 
       function normalizeCategory(title = "") {
@@ -4746,28 +4936,28 @@
 
         const total = getCartTotal();
 
-        $("cartCount").textContent =
-          `${persianNumber(count)} آیتم`;
+        $("cartCount").innerHTML =
+          `${normalNumber(count)} آیتم`;
 
-        $("cartBadge").textContent =
-          persianNumber(count);
+        $("cartBadge").innerHTML =
+          normalNumber(count);
 
-        $("cartTotal").textContent =
-          `${persianNumber(total)} تومان`;
+        $("cartTotal").innerHTML =
+          `${normalNumber(total)} تومان`;
 
         if ($("cartPageTotal")) {
-          $("cartPageTotal").textContent =
-            `${persianNumber(total)} تومان`;
+          $("cartPageTotal").innerHTML =
+            `${normalNumber(total)} تومان`;
         }
 
-        $("summaryCount").textContent =
-          persianNumber(count);
+        $("summaryCount").innerHTML =
+          normalNumber(count);
 
-        $("summarySubtotal").textContent =
-          `${persianNumber(total)} تومان`;
+        $("summarySubtotal").innerHTML =
+          `${normalNumber(total)} تومان`;
 
-        $("summaryTotal").textContent =
-          `${persianNumber(total)} تومان`;
+        $("summaryTotal").innerHTML =
+          `${normalNumber(total)} تومان`;
       }
 
       /* ==============================
@@ -4782,7 +4972,17 @@
         if (!cart.length) {
           box.innerHTML = `
             <div class="modern-cart-empty">
-              <strong>سبد سفارش شما خالی است</strong>
+              <div class="modern-cart-empty-icon" aria-hidden="true">
+                         <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                           <path d="M3 4h2l2.1 10.1a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L20 7H6"></path>
+                           <circle cx="10" cy="20" r="1.2"></circle>
+                           <circle cx="18" cy="20" r="1.2"></circle>
+                       </svg>
+                </div>
+              <div class="modern-cart-empty-text">
+                <strong>سبد سفارش شما خالی است</strong>
+                
+              </div>
             </div>
           `;
           if (footer) footer.style.display = "none";
@@ -4800,12 +5000,12 @@
                    loading="lazy" decoding="async" onerror="this.src='no-image.jpg'">
               <div class="modern-item-text">
                 <div class="modern-item-name">${escapeHTML(item.name)}</div>
-                <div class="modern-item-price">${persianNumber(item.price)} تومان</div>
+                <div class="modern-item-price">${normalNumber(item.price)} تومان</div>
               </div>
             </div>
             <div class="modern-cart-controls" data-cart-controls-id="${escapeAttribute(item.id)}">
               <button type="button" data-cart-action="decrease">−</button>
-              <span class="modern-cart-qty">${persianNumber(item.qty)}</span>
+              <span class="modern-cart-qty">${normalNumber(item.qty)}</span>
               <button type="button" data-cart-action="increase">+</button>
             </div>
           </div>
