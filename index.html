@@ -4371,6 +4371,27 @@ html.dark .modern-screen .modern-close{color:#e8f9ff !important;}
 
           const grid = section.querySelector(".menu-grid,.hookah-grid");
 
+          /* =========================================================
+             SORT PRODUCTS:
+             اول محصولات موجود، بعد محصولات ناموجود
+             ترتیب sort_order داخل هر گروه حفظ می‌شود.
+          ========================================================= */
+          grouped[key].sort((a, b) => {
+            const aUnavailable =
+              a.is_available === false ||
+              (a.stock !== null &&
+                a.stock !== undefined &&
+                Number(a.stock) <= 0);
+
+            const bUnavailable =
+              b.is_available === false ||
+              (b.stock !== null &&
+                b.stock !== undefined &&
+                Number(b.stock) <= 0);
+
+            return Number(aUnavailable) - Number(bUnavailable);
+          });
+
           grouped[key].forEach((item) => {
             grid.insertAdjacentHTML(
               "beforeend",
